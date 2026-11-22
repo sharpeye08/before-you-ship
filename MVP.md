@@ -5,7 +5,7 @@ Goal: a free, no-login website where people who build with AI learn the software
 ## Audience
 **Main audience: complete beginners.** People building apps with AI who have never studied networking, databases, operating systems or security: students, founders, designers, career switchers. They bring most of the traffic.
 
-**The journey: beginner → production-ready engineer.** Lesson 1 assumes the reader knows only how to use a web browser and an AI chat tool. Each lesson builds on the ones before it, and the difficulty rises gradually through four levels.
+**The journey: beginner → production-ready engineer.** Lesson 1 assumes the reader knows only how to use a web browser and an AI chat tool. Each lesson builds on the ones before it, and the difficulty rises gradually through five levels.
 
 **Also served:** developers who already know some of this. They can start at a later level, follow cross-links to the lesson they need, and read the optional "Going deeper" sections.
 
@@ -16,7 +16,8 @@ Goal: a free, no-login website where people who build with AI learn the software
 | 1 | Foundations | Nothing technical | Explain what happens between clicking a link and seeing a page, where an app's code and data live, and how to undo and debug basic problems |
 | 2 | Builder | Level 1 | Build features that are safe and correct, and spot the common security holes in AI-written code |
 | 3 | Shipping | Levels 1–2 | Run an app for real users: test it, deploy it safely, know when it breaks, and control costs |
-| 4 | Reliability & scale | Levels 1–3 | Keep an app fast and correct under real load and real money, and make design decisions the AI can't make |
+| 4 | Reliability & scale | Levels 1–3 | Keep an app fast and correct under real load and real money: databases under pressure, concurrency, caching and limits |
+| 5 | Systems & architecture | Levels 1–4 | Understand how bigger systems stay reliable when many services talk to each other, and make design decisions the AI can't make |
 
 ## Website
 - **Pages:** homepage, lesson list (grouped by level, with completed checkmarks), lesson page, lesson complete page. Readable on phone and desktop.
@@ -33,7 +34,7 @@ Goal: a free, no-login website where people who build with AI learn the software
   - Don't put `labels=` in the link: GitHub shows a 404 page to anyone without permission to add labels. The label is set in the template instead (`.github/ISSUE_TEMPLATE/report-a-mistake.md`).
   - Needs a public repo and a `content-mistake` label created in it. Readers need a GitHub account to report.
 
-## Lessons: 54 at launch, read in this order
+## Lessons: 66 at launch, read in this order
 
 Each lesson is a real problem people hit when building with AI. Files are named by slug (`content/lessons/<slug>.md`) so numbers can change without breaking links.
 
@@ -48,7 +49,7 @@ Each lesson is a real problem people hit when building with AI. Files are named 
 | 5 | `website-errors` | "This site can't be reached": which step broke? | Reading browser errors by step: DNS, connection, status codes, blank pages |
 | 6 | `frontend-and-backend` | Your app runs in two places, and only one is safe | Frontend, backend, trust boundary |
 | 7 | `what-is-an-api` | How your app's pages talk to your server | API, endpoint, JSON |
-| 8 | `what-is-a-database` | Why not just save it to a JSON file? | Database, tables, rows, persistence |
+| 8 | `what-is-a-database` | Why not save it all in a JSON file? | Database, tables, rows, persistence |
 | 9 | `how-a-computer-runs-your-code` | What your computer does when you press Run | CPU, memory, disk, process |
 | 10 | `localhost-vs-production` | It works on my laptop. Why not on the internet? | Localhost, hosting, deploying, domains |
 | 11 | `environment-variables` | Where settings and secrets should live | Configuration, environment variables, `.env` |
@@ -103,15 +104,32 @@ Lessons 1–5 were one lesson in an earlier draft. They were split so each idea 
 |---|------|-------|---------------|
 | 44 | `database-indexes` | Why your app got slow at 10,000 users | Indexes, query speed |
 | 45 | `n-plus-one-queries` | One page, 500 database queries | N+1 queries |
-| 46 | `charged-twice` | Charged twice | Transactions, ACID, race conditions |
-| 47 | `event-loop` | One slow request froze the whole server | Async, event loop, threads |
-| 48 | `memory-leaks` | The server crashes every few days | Memory, leaks, limits |
-| 49 | `caching` | Fast, but showing old data | Caching, cache invalidation |
-| 50 | `latency-and-cdns` | Fast in the US, slow in India | Latency, CDNs |
-| 51 | `realtime-updates` | Live updates without refreshing | Polling, WebSockets |
-| 52 | `scaling` | Do you need to scale yet? | Vertical and horizontal scaling, load balancers |
-| 53 | `sql-vs-nosql` | SQL vs NoSQL without the hype | Relational vs document databases, trade-offs |
-| 54 | `decisions-ai-cant-make` | Decisions the AI can't make for you | Architecture trade-offs |
+| 46 | `pagination` | Loading 50,000 rows at once | Pagination, offset vs cursor, limits |
+| 47 | `charged-twice` | Charged twice | Transactions, ACID, race conditions |
+| 48 | `isolation-levels` | Two transactions, one wrong answer | Isolation levels, dirty reads, lost updates, serializable |
+| 49 | `event-loop` | One slow request froze the whole server | Async, event loop, threads |
+| 50 | `processes-and-threads` | Doing many things at once | Processes vs threads, concurrency vs parallelism, shared memory |
+| 51 | `locks-and-deadlocks` | Two tasks waiting for each other forever | Mutex, semaphore, deadlock, database deadlocks |
+| 52 | `memory-leaks` | The server crashes every few days | Memory, leaks, limits |
+| 53 | `caching` | Fast, but showing old data | Caching, cache invalidation |
+| 54 | `cache-strategies` | Which cache strategy, and when | Cache-aside, write-through, write-back, TTLs, cache stampedes |
+| 55 | `rate-limiting-algorithms` | How rate limiters actually count | Fixed window, sliding window, token bucket, leaky bucket |
+| 56 | `latency-and-cdns` | Fast in the US, slow in India | Latency, CDNs |
+| 57 | `realtime-updates` | Live updates without refreshing | Polling, WebSockets |
+| 58 | `scaling` | Do you need to scale yet? | Vertical and horizontal scaling, load balancers |
+| 59 | `sql-vs-nosql` | SQL vs NoSQL without the hype | Relational vs document databases, trade-offs |
+
+### Level 5 — Systems & architecture
+
+| # | Slug | Title | Core concepts |
+|---|------|-------|---------------|
+| 60 | `circuit-breakers` | When a service you depend on goes down | Circuit breaker, fallbacks, cascading failures |
+| 61 | `event-driven-architecture` | Events instead of direct calls | Events, message brokers, publish/subscribe, eventual consistency |
+| 62 | `outbox-pattern` | Saved to the database, but the message never went out | Dual writes, transactional outbox |
+| 63 | `change-data-capture` | Reacting to every change in your database | Change data capture (CDC), write-ahead log |
+| 64 | `event-sourcing` | Storing what happened, not only the result | Event sourcing, projections, CQRS |
+| 65 | `collaborative-editing` | Two people editing the same document | Operational transformation (OT), CRDTs |
+| 66 | `decisions-ai-cant-make` | Decisions the AI can't make for you | Architecture trade-offs |
 
 ## Outlines: cloud, hosting and Cloudflare lessons
 
@@ -166,7 +184,7 @@ These three lessons explain the services beginners hear about constantly. They c
 
 ## Writing style by level
 
-| | Level 1 Foundations | Level 2 Builder | Levels 3–4 |
+| | Level 1 Foundations | Level 2 Builder | Levels 3–5 |
 |---|---|---|---|
 | Assumes | Nothing | Level 1 lessons | All earlier lessons |
 | New terms | Explain every one | Explain every term not covered earlier | Explain every term not covered earlier |

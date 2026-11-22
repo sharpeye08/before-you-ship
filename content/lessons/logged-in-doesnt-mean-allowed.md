@@ -68,7 +68,7 @@ quiz:
 > This lesson uses a few words from earlier lessons:
 > - **Request:** a message your browser sends to a server, like "show me this page". *([What actually happens when you open a website](/lessons/what-happens-when-you-open-a-website))*
 > - **API route:** an address on your server that your app's pages talk to behind the scenes, like `/api/invoices`. *([How your app's pages talk to your server](/lessons/what-is-an-api))*
-> - **Database:** where your app keeps its data permanently, organized into tables. *([Why not just save it to a JSON file?](/lessons/what-is-a-database))*
+> - **Database:** where your app keeps its data permanently, organized into tables. *([Why not save it all in a JSON file?](/lessons/what-is-a-database))*
 > - **Session:** the server's record that a browser belongs to a logged-in user. *([Why you must never store passwords](/lessons/how-login-works))*
 
 ## Friday launch, Sunday email

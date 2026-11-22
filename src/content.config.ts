@@ -21,7 +21,7 @@ const lessons = defineCollection({
   schema: z.object({
     title: z.string(),
     order: z.number().int().positive(),
-    level: z.number().int().min(1).max(4),
+    level: z.number().int().min(1).max(5),
     levelName: z.string(),
     concepts: z.array(z.string()).default([]),
     readTime: z.union([z.string(), z.number()]).optional(),

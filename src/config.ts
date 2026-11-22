@@ -29,6 +29,11 @@ export const LEVELS = [
   {
     n: 4,
     name: 'Reliability & scale',
-    blurb: 'Stay fast and correct under real load and real money, and make the calls AI can\'t.',
+    blurb: 'Stay fast and correct under real load: databases under pressure, concurrency, caching and limits.',
+  },
+  {
+    n: 5,
+    name: 'Systems & architecture',
+    blurb: 'How bigger systems stay reliable when many services talk to each other, and the calls AI can\'t make.',
   },
 ] as const;

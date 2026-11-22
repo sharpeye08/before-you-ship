@@ -1,11 +1,11 @@
 # Brief for lesson writers
 
-You are writing lessons for a free, no-login website that teaches software engineering fundamentals to people who build apps with AI. Most readers are complete beginners. The site takes them from zero to production-ready across 4 levels.
+You are writing lessons for a free, no-login website that teaches software engineering fundamentals to people who build apps with AI. Most readers are complete beginners. The site takes them from zero to production-ready across 5 levels.
 
 ## Read these first, fully
 1. `D:\myfirstintern\MVP.md`: the source of truth. It has the levels, the full lesson table (number, slug, title, core concepts), outlines for some lessons, writing rules, the Level 1 "write for a kid" rules, cross-link rules, fact-checking rules and quiz rules. Follow all of them.
 2. `D:\myfirstintern\content\lessons\what-happens-when-you-open-a-website.md`: the approved Level 1 example. Copy its tone, pace and structure for Level 1 lessons.
-3. `D:\myfirstintern\content\lessons\logged-in-doesnt-mean-allowed.md`: the approved Level 2 example. Copy its structure for Level 2–4 lessons, raising depth gradually by level.
+3. `D:\myfirstintern\content\lessons\logged-in-doesnt-mean-allowed.md`: the approved Level 2 example. Copy its structure for Level 2–5 lessons, raising depth gradually by level.
 
 ## Output
 - One file per lesson: `D:\myfirstintern\content\lessons\<slug>.md`, slug exactly as in the MVP.md table.
@@ -17,8 +17,8 @@ You are writing lessons for a free, no-login website that teaches software engin
 title: "<title from the MVP table>"
 slug: <slug>
 order: <number from the MVP table>
-level: <1-4>
-levelName: <Foundations | Builder | Shipping | Reliability & scale>
+level: <1-5>
+levelName: <Foundations | Builder | Shipping | Reliability & scale | Systems & architecture>
 concepts: [<the core concepts>]
 readTime: <N> min
 quiz:
@@ -56,7 +56,7 @@ quiz:
 - Code: JavaScript/TypeScript (Node/Express or Next.js style) unless the topic needs SQL or shell. Snippets under 15 lines. Every snippet followed by a plain-English walkthrough.
 
 ## Level and length
-- Main text (not counting Going deeper or frontmatter): Level 1 about 1,500–2,200 words; Levels 2–4 about 1,800–2,500 words.
+- Main text (not counting Going deeper or frontmatter): Level 1 about 1,500–2,200 words; Levels 2–5 about 1,800–2,500 words.
 - Level 1: write for a curious 13-year-old who just got into programming. One idea per section, at most two new terms per section, short sentences, examples from a kid's world. Never use "simply", "just", "obviously" or "easy".
 - All levels: simple English, no idioms. Many readers aren't native English speakers.
 - **Jargon check before you finish:** list every technical word in order of first appearance. Each must be explained at or before that point, or be a core concept of an earlier lesson in the MVP table (and then linked in "Before you start" if it matters). Developer-basic words count: server, terminal, route, header, cache, deploy, repository, etc.

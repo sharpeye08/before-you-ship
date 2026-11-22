@@ -15,7 +15,7 @@ for (const m of mvp.matchAll(/^\| (\d+) \| `([a-z0-9-]+)` \| (.+?) \|/gm)) {
   plan.set(m[2], { order: Number(m[1]), title: m[3].trim() });
 }
 
-const LEVEL_NAMES = { 1: 'Foundations', 2: 'Builder', 3: 'Shipping', 4: 'Reliability & scale' };
+const LEVEL_NAMES = { 1: 'Foundations', 2: 'Builder', 3: 'Shipping', 4: 'Reliability & scale', 5: 'Systems & architecture' };
 const BANNED_L1 = /\b(simply|just|obviously|easy)\b/gi;
 
 const only = process.argv.slice(2);
@@ -55,7 +55,7 @@ for (const file of files) {
   if (planned && data.order !== planned.order) errors.push(`order ${data.order} should be ${planned.order}`);
   if (planned && data.title !== planned.title.replace(/^"|"$/g, '') && data.title !== planned.title)
     warnings.push(`title differs from plan: "${data.title}" vs "${planned.title}"`);
-  if (![1, 2, 3, 4].includes(data.level)) errors.push('level must be 1–4');
+  if (![1, 2, 3, 4, 5].includes(data.level)) errors.push('level must be 1–5');
   if (LEVEL_NAMES[data.level] !== data.levelName) errors.push(`levelName should be "${LEVEL_NAMES[data.level]}"`);
   if (!Array.isArray(data.concepts) || data.concepts.length === 0) errors.push('concepts missing');
 
