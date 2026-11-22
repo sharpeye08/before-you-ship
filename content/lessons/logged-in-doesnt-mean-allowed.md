@@ -1,5 +1,5 @@
 ---
-title: "Logged in doesn't mean allowed"
+title: "Change one number in the URL, see everyone's invoices"
 slug: logged-in-doesnt-mean-allowed
 order: 21
 level: 2
@@ -62,14 +62,14 @@ quiz:
     explanation: "Every feature that reads, changes or deletes data needs its own check on the server. Hiding a button doesn't help, because anyone can send the request without the button."
 ---
 
-# Logged in doesn't mean allowed
+# Change one number in the URL, see everyone's invoices
 
 > **Before you start**
 > This lesson uses a few words from earlier lessons:
-> - **Request:** a message your browser sends to a server, like "show me this page". *([What actually happens when you open a website](/lessons/what-happens-when-you-open-a-website))*
-> - **API route:** an address on your server that your app's pages talk to behind the scenes, like `/api/invoices`. *([How your app's pages talk to your server](/lessons/what-is-an-api))*
-> - **Database:** where your app keeps its data permanently, organized into tables. *([Why not save it all in a JSON file?](/lessons/what-is-a-database))*
-> - **Session:** the server's record that a browser belongs to a logged-in user. *([Why you must never store passwords](/lessons/how-login-works))*
+> - **Request:** a message your browser sends to a server, like "show me this page". *([You pressed Enter. What happened in the next second?](/lessons/what-happens-when-you-open-a-website))*
+> - **API route:** an address on your server that your app's pages talk to behind the scenes, like `/api/invoices`. *([The hidden conversation behind every button you tap](/lessons/what-is-an-api))*
+> - **Database:** where your app keeps its data permanently, organized into tables. *([Your app forgot everyone's messages overnight. Why?](/lessons/what-is-a-database))*
+> - **Session:** the server's record that a browser belongs to a logged-in user. *([Never store a password. Here's what to store instead](/lessons/how-login-works))*
 
 ## Friday launch, Sunday email
 
@@ -137,7 +137,7 @@ Here is the key idea: **the server created the session itself, so it can trust i
 
 It can't trust anything else the browser sends: the web address, the data in a form, the contents of a request. The user controls all of it. Every browser has built-in **developer tools** (press F12 on Windows, or Cmd+Option+I on Mac) that let anyone see and change what their browser sends. This isn't hacking. It's a normal browser feature.
 
-> **Go deeper:** [Why you must never store passwords](/lessons/how-login-works) (Level 2) covers sessions, cookies and tokens in full.
+> **Go deeper:** [Never store a password. Here's what to store instead](/lessons/how-login-works) (Level 2) covers sessions, cookies and tokens in full.
 
 So remember this rule:
 
@@ -238,7 +238,7 @@ Before, the database search meant *"find invoice 1041."* Now it means *"find inv
 
 Notice it says "Not found", not "You're not allowed". That's on purpose. "Not allowed" would tell a snoop that invoice 1041 exists. "Not found" tells them nothing.
 
-> **Go deeper:** [What GET, POST, 404 and 500 actually mean](/lessons/http-methods-and-status-codes) (Level 2) explains these replies, called status codes.
+> **Go deeper:** [The app said "Saved!". The note was never saved](/lessons/http-methods-and-status-codes) (Level 2) explains these replies, called status codes.
 
 ### Fix 2: Get the user from the session, never the browser
 
@@ -262,7 +262,7 @@ Every API route that shows, changes or deletes data needs its own check. Hiding 
 
 As your app grows, keep your rules in **one place** instead of copying them into every route.
 
-> **Go deeper:** [Never trust the browser](/lessons/never-trust-the-browser) (Level 2) shows how to put these rules inside the database itself.
+> **Go deeper:** [Can strangers read your whole database? Check in 5 minutes](/lessons/never-trust-the-browser) (Level 2) shows how to put these rules inside the database itself.
 
 ---
 
@@ -328,7 +328,7 @@ Use 404 when revealing that a record exists would leak information, as in this l
 **Keeping rules in one place.** Copying checks into every route doesn't scale. Common patterns:
 - A helper function such as `canAccessInvoice(user, invoice)` that every route calls.
 - A policy library that describes rules separately from routes (for example CASL in JavaScript or Pundit in Ruby).
-- Row Level Security in the database, covered in [Never trust the browser](/lessons/never-trust-the-browser).
+- Row Level Security in the database, covered in [Can strangers read your whole database? Check in 5 minutes](/lessons/never-trust-the-browser).
 
 **Fetching lists.** List pages need the same check. `findMany()` without a `userId` filter returns everyone's records, and it's easy to miss because it looks fine when you're the only user.
 

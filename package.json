@@ -7,7 +7,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check:lessons": "node scripts/check-lessons.mjs"
+    "check:lessons": "node scripts/check-lessons.mjs",
+    "sync:titles": "node scripts/sync-titles.mjs"
   },
   "dependencies": {
     "astro": "^5.18.2",

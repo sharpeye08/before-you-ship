@@ -36,6 +36,9 @@ quiz:
 - Quote every string. Escape inner double quotes as `\"`.
 - The site renders the quiz, the "Mark as completed" button and the "Report a mistake" link. Don't write them into the body.
 
+## Title
+Use the title from the MVP.md table exactly. Titles are deliberately catchy scenarios ("Bots signed up 10,000 times overnight. Now what?"); your hook section should deliver on the title's promise. Don't rename lessons yourself.
+
 ## Body
 - `# <title>` first, then the structure in MVP.md: Before you start → Hook → Mental model → How it goes wrong → What good looks like → Test it yourself → Takeaways → Going deeper (optional) → (quiz comes from frontmatter).
 - Section names can fit the topic (Level 1 lessons used "Try it yourself" instead of "Test your own app"), but keep the order.

@@ -1,5 +1,5 @@
 ---
-title: "Where does a website come from?"
+title: "You pressed Enter. What happened in the next second?"
 slug: what-happens-when-you-open-a-website
 order: 1
 level: 1
@@ -62,7 +62,7 @@ quiz:
     explanation: "To send you a 404, the server had to receive your request and reply. Its reply was: \"I don't have that page\". So the journey worked, but the page doesn't exist at that address."
 ---
 
-# Where does a website come from?
+# You pressed Enter. What happened in the next second?
 
 > **Before you start**
 > Nothing. This is the very first lesson. If you've ever watched a video on YouTube, you're ready.
@@ -133,7 +133,7 @@ The browser has three jobs:
 
 The answer the server sends isn't a picture of a page. It's more like a set of instructions: *"put this title at the top, this video here, this button there."* The browser reads the instructions and builds the page on your screen.
 
-> **Go deeper:** [What a web page is made of](/lessons/what-a-web-page-is-made-of) (Level 1) shows what these instructions look like.
+> **Go deeper:** [Take a web page apart and see what's inside](/lessons/what-a-web-page-is-made-of) (Level 1) shows what these instructions look like.
 
 > **In short:** the browser sends your questions to servers, receives their answers, and builds the page you see.
 
@@ -192,7 +192,7 @@ In a bit more detail:
 
 **Step 2: The browser finds the right server.** There are millions of servers on the internet. Your browser has to find out which one has YouTube. It looks this up using the internet's address book, called **DNS**.
 
-> **Go deeper:** [How your computer finds the right computer](/lessons/ip-addresses-and-dns) (Level 1) explains how DNS works.
+> **Go deeper:** [How does your browser find one computer out of billions?](/lessons/ip-addresses-and-dns) (Level 1) explains how DNS works.
 
 **Step 3: The browser sends a request.** "Please send me the home page."
 
@@ -220,7 +220,7 @@ See the difference? In the first case, nothing reached the server. In the second
 
 When you build your own app, you'll see more errors like these. If you can say *which step* broke, you can fix it much faster. And if you're building with an AI, you can tell it exactly what's wrong instead of "it doesn't work".
 
-> **Go deeper:** ["This site can't be reached": which step broke?](/lessons/website-errors) (Level 1) goes through the common errors one by one.
+> **Go deeper:** ["This site can't be reached": what broke, and where?](/lessons/website-errors) (Level 1) goes through the common errors one by one.
 
 > **In short:** each step fails in its own way. If nothing reached the server, it's a connection problem. If the server answered with an error, the problem is on the server's side.
 
@@ -249,7 +249,7 @@ Every browser has hidden panels called **developer tools**. They show what the b
 
 Watch the list fill up. **Every row is one request** your browser sent. At the bottom, you can see how many requests the page needed in total. That's how many times your browser asked and a server answered to show you one page.
 
-Don't worry about the other columns yet. [What a web page is made of](/lessons/what-a-web-page-is-made-of) explains them.
+Don't worry about the other columns yet. [Take a web page apart and see what's inside](/lessons/what-a-web-page-is-made-of) explains them.
 
 ---
 
@@ -284,7 +284,7 @@ Try these with any AI chat tool to practice:
 
 **Big websites keep copies close to you.** Popular websites store copies of their pages and videos on servers in many countries. When you open them, you usually get the copy from a server near you, which is faster than one on the other side of the world.
 
-**Any computer can be a server.** A server isn't a special kind of machine. It's any computer running a program that answers requests. When you build an app, your own laptop will act as a server while you test it. [It works on my laptop. Why not on the internet?](/lessons/localhost-vs-production) explains this.
+**Any computer can be a server.** A server isn't a special kind of machine. It's any computer running a program that answers requests. When you build an app, your own laptop will act as a server while you test it. [It works on my laptop. Why can't my friend open it?](/lessons/localhost-vs-production) explains this.
 
 **Source for the request count:** the HTTP Archive's *Web Almanac 2024*, Page Weight chapter, reports a median of 71 requests per page on desktop and 66 on mobile.
 

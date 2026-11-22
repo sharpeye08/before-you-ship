@@ -42,22 +42,22 @@ Each lesson is a real problem people hit when building with AI. Files are named 
 
 | # | Slug | Title | Core concepts |
 |---|------|-------|---------------|
-| 1 | `what-happens-when-you-open-a-website` | Where does a website come from? | Network, internet, browser, server, client, request and response (big picture only) |
-| 2 | `ip-addresses-and-dns` | How your computer finds the right computer | URL, domain name, IP address, DNS |
-| 3 | `http-requests-and-responses` | How computers ask and answer | HTTP, request, response, status codes, headers |
-| 4 | `what-a-web-page-is-made-of` | What a web page is made of | HTML, CSS, JavaScript, many requests per page, developer tools |
-| 5 | `website-errors` | "This site can't be reached": which step broke? | Reading browser errors by step: DNS, connection, status codes, blank pages |
-| 6 | `frontend-and-backend` | Your app runs in two places, and only one is safe | Frontend, backend, trust boundary |
-| 7 | `what-is-an-api` | How your app's pages talk to your server | API, endpoint, JSON |
-| 8 | `what-is-a-database` | Why not save it all in a JSON file? | Database, tables, rows, persistence |
-| 9 | `how-a-computer-runs-your-code` | What your computer does when you press Run | CPU, memory, disk, process |
-| 10 | `localhost-vs-production` | It works on my laptop. Why not on the internet? | Localhost, hosting, deploying, domains |
-| 11 | `environment-variables` | Where settings and secrets should live | Configuration, environment variables, `.env` |
-| 12 | `packages-and-dependencies` | The code you didn't write: packages | Packages, npm, versions, lockfiles |
-| 13 | `git-as-an-undo-button` | The AI broke my working app. How do I go back? | Git, commits, branches, GitHub |
-| 14 | `reading-error-messages` | Read the error before you paste it | Errors, stack traces, logs, terminal, browser console |
-| 15 | `what-is-the-cloud` | What is "the cloud"? Renting someone else's computers | Cloud providers (AWS, Google Cloud, Azure), pay-as-you-go, AWS building blocks |
-| 16 | `hosting-platforms` | How Vercel and Netlify put your app online | Hosting platforms, deploys from GitHub, builds, CDNs, serverless functions, preview links |
+| 1 | `what-happens-when-you-open-a-website` | You pressed Enter. What happened in the next second? | Network, internet, browser, server, client, request and response (big picture only) |
+| 2 | `ip-addresses-and-dns` | How does your browser find one computer out of billions? | URL, domain name, IP address, DNS |
+| 3 | `http-requests-and-responses` | Every website is a conversation. Here's how it goes | HTTP, request, response, status codes, headers |
+| 4 | `what-a-web-page-is-made-of` | Take a web page apart and see what's inside | HTML, CSS, JavaScript, many requests per page, developer tools |
+| 5 | `website-errors` | "This site can't be reached": what broke, and where? | Reading browser errors by step: DNS, connection, status codes, blank pages |
+| 6 | `frontend-and-backend` | A player scored 999,999 points by editing the page. How? | Frontend, backend, trust boundary |
+| 7 | `what-is-an-api` | The hidden conversation behind every button you tap | API, endpoint, JSON |
+| 8 | `what-is-a-database` | Your app forgot everyone's messages overnight. Why? | Database, tables, rows, persistence |
+| 9 | `how-a-computer-runs-your-code` | Your app restarted and all the likes vanished | CPU, memory, disk, process |
+| 10 | `localhost-vs-production` | It works on my laptop. Why can't my friend open it? | Localhost, hosting, deploying, domains |
+| 11 | `environment-variables` | Your app's secrets don't belong in your code. Here's where they go | Configuration, environment variables, `.env` |
+| 12 | `packages-and-dependencies` | It works on my machine, but not on yours. Blame the packages | Packages, npm, versions, lockfiles |
+| 13 | `git-as-an-undo-button` | The AI broke your working app. Here's your undo button | Git, commits, branches, GitHub |
+| 14 | `reading-error-messages` | The error message is telling you what's wrong. Read it first | Errors, stack traces, logs, terminal, browser console |
+| 15 | `what-is-the-cloud` | There is no cloud. It's someone else's computer | Cloud providers (AWS, Google Cloud, Azure), pay-as-you-go, AWS building blocks |
+| 16 | `hosting-platforms` | From your laptop to a real website in one push | Hosting platforms, deploys from GitHub, builds, CDNs, serverless functions, preview links |
 
 Lessons 1–5 were one lesson in an earlier draft. They were split so each idea gets enough room at a beginner's pace. The earlier draft is in `content/drafts/source-for-lessons-2-to-5.md` as source material.
 
@@ -65,71 +65,71 @@ Lessons 1–5 were one lesson in an earlier draft. They were split so each idea 
 
 | # | Slug | Title | Core concepts |
 |---|------|-------|---------------|
-| 17 | `http-methods-and-status-codes` | What GET, POST, 404 and 500 actually mean | HTTP methods, status codes, headers |
-| 18 | `designing-tables` | Why your data got out of sync | Data modeling, primary and foreign keys, relationships |
-| 19 | `api-key-ended-up-public` | How your API key ended up public | Secrets, frontend exposure, git history |
-| 20 | `how-login-works` | Why you must never store passwords | Password hashing, sessions, cookies, tokens |
-| 21 | `logged-in-doesnt-mean-allowed` | Logged in doesn't mean allowed | Authentication vs authorization, IDOR |
-| 22 | `never-trust-the-browser` | Never trust the browser | Server-side validation, Row Level Security |
-| 23 | `sql-injection` | When user input becomes a database command | SQL injection, parameterized queries |
-| 24 | `cross-site-scripting` | A user's comment ran code in everyone's browser | XSS, escaping output |
-| 25 | `cors` | "Blocked by CORS policy": what it actually means | Same-origin policy, CORS |
-| 26 | `https-and-certificates` | The padlock icon | HTTPS, TLS, certificates |
-| 27 | `cloudflare` | Cloudflare: the security guard in front of your website | Reverse proxy, DNS, CDN, DDoS protection, firewall, Cloudflare's own hosting |
-| 28 | `rate-limiting` | Bots signed up 10,000 times overnight | Rate limiting, abuse prevention |
-| 29 | `webhooks` | A fake "payment succeeded" message | Webhooks, signature verification |
-| 30 | `file-uploads` | Letting users upload files safely | File size and type limits, storage |
-| 31 | `dangerous-packages` | The package the AI made up | Supply chain attacks, typosquatting, hallucinated packages |
-| 32 | `handling-errors` | What users see when something breaks | Error handling, not leaking internal details |
-| 33 | `database-migrations` | Changing your database without losing data | Migrations, schema changes |
-| 34 | `backups` | I deleted my production data | Backups, restore testing |
+| 17 | `http-methods-and-status-codes` | The app said "Saved!". The note was never saved | HTTP methods, status codes, headers |
+| 18 | `designing-tables` | You changed your name. Half the app still shows the old one | Data modeling, primary and foreign keys, relationships |
+| 19 | `api-key-ended-up-public` | Your API key leaked, and strangers are spending your money | Secrets, frontend exposure, git history |
+| 20 | `how-login-works` | Never store a password. Here's what to store instead | Password hashing, sessions, cookies, tokens |
+| 21 | `logged-in-doesnt-mean-allowed` | Change one number in the URL, see everyone's invoices | Authentication vs authorization, IDOR |
+| 22 | `never-trust-the-browser` | Can strangers read your whole database? Check in 5 minutes | Server-side validation, Row Level Security |
+| 23 | `sql-injection` | How one line of text can dump your whole database | SQL injection, parameterized queries |
+| 24 | `cross-site-scripting` | A comment that runs code in every visitor's browser | XSS, escaping output |
+| 25 | `cors` | "Blocked by CORS policy": why the browser said no | Same-origin policy, CORS |
+| 26 | `https-and-certificates` | What the padlock icon really protects, and what it doesn't | HTTPS, TLS, certificates |
+| 27 | `cloudflare` | One company went down, and a big chunk of the internet went with it | Reverse proxy, DNS, CDN, DDoS protection, firewall, Cloudflare's own hosting |
+| 28 | `rate-limiting` | Bots signed up 10,000 times overnight. Now what? | Rate limiting, abuse prevention |
+| 29 | `webhooks` | Free stuff with one fake "payment succeeded" message | Webhooks, signature verification |
+| 30 | `file-uploads` | The profile picture that ran code on your site | File size and type limits, storage |
+| 31 | `dangerous-packages` | The AI suggested a package that didn't exist. Then someone made it | Supply chain attacks, typosquatting, hallucinated packages |
+| 32 | `handling-errors` | Your error page showed your database details to everyone | Error handling, not leaking internal details |
+| 33 | `database-migrations` | You renamed one column and the live app crashed | Migrations, schema changes |
+| 34 | `backups` | The AI deleted your production database. Now what? | Backups, restore testing |
 
 ### Level 3 — Shipping
 
 | # | Slug | Title | Core concepts |
 |---|------|-------|---------------|
-| 35 | `dev-staging-production` | Never test on your real users | Environments: development, staging, production |
-| 36 | `tests-worth-writing` | The AI fixed one thing and broke another | Automated tests, regression |
-| 37 | `ci-cd` | Checks that run before every deploy | CI/CD, automated pipelines |
-| 38 | `logging-and-monitoring` | How do you know your app is broken? | Logging, monitoring, alerts |
-| 39 | `debugging-production` | It only breaks in production | Reproducing, isolating, debugging |
+| 35 | `dev-staging-production` | Why you should never test on your real users | Environments: development, staging, production |
+| 36 | `tests-worth-writing` | The AI fixed one bug and quietly broke three others | Automated tests, regression |
+| 37 | `ci-cd` | Stop broken code before it ever goes live | CI/CD, automated pipelines |
+| 38 | `logging-and-monitoring` | Your app was down for six hours and nobody noticed | Logging, monitoring, alerts |
+| 39 | `debugging-production` | It only breaks in production. How do you find out why? | Reproducing, isolating, debugging |
 | 40 | `background-jobs` | Sign-up takes 10 seconds because of one email | Background jobs, queues |
-| 41 | `timeouts-and-retries` | The request timed out. Did it work? | Timeouts, retries, idempotency |
-| 42 | `surprise-cloud-bill` | The surprise cloud bill | Usage-based pricing, spending limits, AI API costs |
-| 43 | `reading-code-you-didnt-write` | Reading code you didn't write | Reviewing AI-written code |
+| 41 | `timeouts-and-retries` | The payment timed out. Did it go through? | Timeouts, retries, idempotency |
+| 42 | `surprise-cloud-bill` | You woke up to a $10,000 cloud bill. What happened? | Usage-based pricing, spending limits, AI API costs |
+| 43 | `reading-code-you-didnt-write` | The AI wrote 500 lines. How do you know they're safe? | Reviewing AI-written code |
 
 ### Level 4 — Reliability & scale
 
 | # | Slug | Title | Core concepts |
 |---|------|-------|---------------|
-| 44 | `database-indexes` | Why your app got slow at 10,000 users | Indexes, query speed |
+| 44 | `database-indexes` | Fast with 100 users, frozen at 10,000. The missing index | Indexes, query speed |
 | 45 | `n-plus-one-queries` | One page, 500 database queries | N+1 queries |
-| 46 | `pagination` | Loading 50,000 rows at once | Pagination, offset vs cursor, limits |
-| 47 | `charged-twice` | Charged twice | Transactions, ACID, race conditions |
+| 46 | `pagination` | Your app tried to load 50,000 rows at once | Pagination, offset vs cursor, limits |
+| 47 | `charged-twice` | A customer got charged twice. How? | Transactions, ACID, race conditions |
 | 48 | `isolation-levels` | Two transactions, one wrong answer | Isolation levels, dirty reads, lost updates, serializable |
 | 49 | `event-loop` | One slow request froze the whole server | Async, event loop, threads |
-| 50 | `processes-and-threads` | Doing many things at once | Processes vs threads, concurrency vs parallelism, shared memory |
+| 50 | `processes-and-threads` | How one server handles thousands of users at once | Processes vs threads, concurrency vs parallelism, shared memory |
 | 51 | `locks-and-deadlocks` | Two tasks waiting for each other forever | Mutex, semaphore, deadlock, database deadlocks |
-| 52 | `memory-leaks` | The server crashes every few days | Memory, leaks, limits |
-| 53 | `caching` | Fast, but showing old data | Caching, cache invalidation |
-| 54 | `cache-strategies` | Which cache strategy, and when | Cache-aside, write-through, write-back, TTLs, cache stampedes |
-| 55 | `rate-limiting-algorithms` | How rate limiters actually count | Fixed window, sliding window, token bucket, leaky bucket |
-| 56 | `latency-and-cdns` | Fast in the US, slow in India | Latency, CDNs |
-| 57 | `realtime-updates` | Live updates without refreshing | Polling, WebSockets |
-| 58 | `scaling` | Do you need to scale yet? | Vertical and horizontal scaling, load balancers |
-| 59 | `sql-vs-nosql` | SQL vs NoSQL without the hype | Relational vs document databases, trade-offs |
+| 52 | `memory-leaks` | Your server crashes every few days, like clockwork | Memory, leaks, limits |
+| 53 | `caching` | Fast, but showing yesterday's data | Caching, cache invalidation |
+| 54 | `cache-strategies` | Your cache expired and the database collapsed | Cache-aside, write-through, write-back, TTLs, cache stampedes |
+| 55 | `rate-limiting-algorithms` | How does a rate limiter count to 100? | Fixed window, sliding window, token bucket, leaky bucket |
+| 56 | `latency-and-cdns` | Fast in the US, painfully slow in India | Latency, CDNs |
+| 57 | `realtime-updates` | How chat apps update without you refreshing | Polling, WebSockets |
+| 58 | `scaling` | Your app went viral. Will it survive? | Vertical and horizontal scaling, load balancers |
+| 59 | `sql-vs-nosql` | SQL or NoSQL? The AI chose for you. Was it right? | Relational vs document databases, trade-offs |
 
 ### Level 5 — Systems & architecture
 
 | # | Slug | Title | Core concepts |
 |---|------|-------|---------------|
-| 60 | `circuit-breakers` | When a service you depend on goes down | Circuit breaker, fallbacks, cascading failures |
-| 61 | `event-driven-architecture` | Events instead of direct calls | Events, message brokers, publish/subscribe, eventual consistency |
-| 62 | `outbox-pattern` | Saved to the database, but the message never went out | Dual writes, transactional outbox |
-| 63 | `change-data-capture` | Reacting to every change in your database | Change data capture (CDC), write-ahead log |
-| 64 | `event-sourcing` | Storing what happened, not only the result | Event sourcing, projections, CQRS |
-| 65 | `collaborative-editing` | Two people editing the same document | Operational transformation (OT), CRDTs |
-| 66 | `decisions-ai-cant-make` | Decisions the AI can't make for you | Architecture trade-offs |
+| 60 | `circuit-breakers` | One slow service took your whole app down | Circuit breaker, fallbacks, cascading failures |
+| 61 | `event-driven-architecture` | When everything calls everything, everything breaks | Events, message brokers, publish/subscribe, eventual consistency |
+| 62 | `outbox-pattern` | The order was saved, but the email never went out | Dual writes, transactional outbox |
+| 63 | `change-data-capture` | Your search results are an hour out of date. Why? | Change data capture (CDC), write-ahead log |
+| 64 | `event-sourcing` | What if your database remembered everything that ever happened? | Event sourcing, projections, CQRS |
+| 65 | `collaborative-editing` | Two people typed in the same document at once. Who wins? | Operational transformation (OT), CRDTs |
+| 66 | `decisions-ai-cant-make` | The decisions your AI can't make for you | Architecture trade-offs |
 
 ## Outlines: cloud, hosting and Cloudflare lessons
 
@@ -204,6 +204,8 @@ Picture a curious 13-year-old who has used apps and websites but has never studi
 - **Never say "simply", "just", "obviously" or "easy".** If it were obvious, they wouldn't be reading.
 
 ## Writing rules (all levels)
+- **Catchy, honest titles.** Every title is a real problem the reader might hit, phrased as a scenario or a question: "Your API key leaked, and strangers are spending your money", "The payment timed out. Did it go through?". The title must match what the lesson actually covers. Hypothetical numbers are fine; invented "real" events are not. Keep titles under 70 characters, and in Level 1 use no term the reader doesn't know yet. The concepts show as tags under the title, so the title doesn't need to name them.
+- **Titles live in the MVP.md tables.** After changing one, run `node scripts/sync-titles.mjs` to copy it into the lesson file and into callout links in other lessons.
 - **Never use a term before it's explained.** This includes the hook, headings, code, takeaways and quiz. The hook is the most dangerous place: it's the first thing a beginner reads, so it must make sense with zero knowledge. If the hook shows something unfamiliar (like an error code), say plainly that it's normal not to understand it yet and that the lesson will explain it.
 - **Jargon check before finishing a lesson:** go through it top to bottom and list every technical word in the order it first appears. Each one must be explained at or before that point, or be in the "Before you start" box. Words that feel basic to developers count too: server, localhost, terminal, route, header, cache, hosting provider.
 - **Name it, explain it, use it:** plain English first, then the real term in bold, then always use the real term. Never drop the real term; readers need it to talk to their AI and to other developers.
