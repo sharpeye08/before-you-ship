@@ -52,7 +52,7 @@ quiz:
 
   </details>
   ```
-- No other raw HTML. Tables, fenced code blocks with a language (`js`, `ts`, `sql`, `bash`, `text`) and blockquotes are fine.
+- No other raw HTML. Tables, fenced code blocks with a language (`js`, `ts`, `json`, `sql`, `bash`, `yaml`, `text`) and blockquotes are fine.
 - Code: JavaScript/TypeScript (Node/Express or Next.js style) unless the topic needs SQL or shell. Snippets under 15 lines. Every snippet followed by a plain-English walkthrough.
 
 ## Level and length
@@ -68,4 +68,6 @@ quiz:
 - Prefer facts that won't go stale. Use example values that can't be wrong: `example.com`, `203.0.113.x`, `2001:db8::`.
 
 ## When you finish
-Reply with a short report: files written, main-text word count for each, any claims you removed because you couldn't verify them, and anything you're unsure about.
+Run `node scripts/check-lessons.mjs <your-slugs>` from `D:\myfirstintern` and fix every ERROR line. Fix warnings too where you reasonably can.
+
+Then reply with a short report: files written, main-text word count for each, any claims you removed because you couldn't verify them, and anything you're unsure about.

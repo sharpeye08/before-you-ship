@@ -25,6 +25,12 @@ export async function getLessons(): Promise<Lesson[]> {
   return all.sort((a, b) => a.data.order - b.data.order);
 }
 
+export function issueUrl(repo: string, lessonTitle?: string) {
+  const params = new URLSearchParams({ template: 'report-a-mistake.md' });
+  if (lessonTitle) params.set('title', `Mistake in: ${lessonTitle}`);
+  return `https://github.com/${repo}/issues/new?${params}`;
+}
+
 export function summarize(lesson: Lesson): LessonSummary {
   return {
     slug: lesson.id,

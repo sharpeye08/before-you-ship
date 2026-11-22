@@ -1,0 +1,170 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import Search from '../../components/Search.astro';
+import { getSummaries, groupByLevel } from '../../lib/lessons';
+
+const lessons = await getSummaries();
+const levels = groupByLevel(lessons);
+---
+
+<Base title="All lessons" active="lessons">
+  <header class="list-head">
+    <h1>All lessons</h1>
+    <p class="muted">
+      {lessons.length} lessons in 4 levels, easiest first. Each one takes 10–15 minutes. Start at the top, or jump to
+      what you need.
+    </p>
+    <div class="overall">
+      <div class="overall-label"><span>Your progress</span><span data-overall>0 / {lessons.length}</span></div>
+      <div class="progress-track"><div class="progress-fill" data-overall-fill></div></div>
+    </div>
+    <Search lessons={lessons} mode="filter" placeholder="Filter lessons: DNS, git, login, CORS…" />
+  </header>
+
+  <p class="muted empty" data-search-empty hidden>No lessons match that. Try a different word.</p>
+
+  {
+    levels.map((level) => (
+      <section class="level glass" id={`level-${level.n}`} data-level-section>
+        <div class="level-head">
+          <div>
+            <p class="level-kicker">Level {level.n}</p>
+            <h2>{level.name}</h2>
+            <p class="muted">{level.blurb}</p>
+          </div>
+          <span class="level-count" data-level-count={JSON.stringify(level.lessons.map((l) => l.slug))}>
+            {level.lessons.length} lessons
+          </span>
+        </div>
+        {level.lessons.length === 0 ? (
+          <p class="muted">Lessons for this level are being written.</p>
+        ) : (
+          <ul class="rows">
+            {level.lessons.map((l) => (
+              <li data-search={`${l.title} ${l.concepts.join(' ')} ${l.levelName}`}>
+                <a class="row" href={`/lessons/${l.slug}`} data-row={l.slug}>
+                  <span class="row-num">{l.order}</span>
+                  <span class="row-main">
+                    <span class="row-title">{l.title}</span>
+                    <span class="row-sub">{l.concepts.join(' · ')}</span>
+                  </span>
+                  <span class="row-meta">{l.minutes} min</span>
+                  <Icon name="chevron-right" size={18} />
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+    ))
+  }
+</Base>
+
+<style>
+  .list-head {
+    max-width: 760px;
+    margin: 12px auto 28px;
+    text-align: center;
+  }
+  h1 {
+    margin: 0 0 8px;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+  }
+  .list-head > p {
+    margin: 0 auto 22px;
+    max-width: 560px;
+  }
+  .overall {
+    max-width: 420px;
+    margin: 0 auto 22px;
+    text-align: left;
+  }
+  .overall-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--text-soft);
+    margin-bottom: 8px;
+  }
+  .empty {
+    text-align: center;
+  }
+  .level {
+    max-width: 860px;
+    margin: 0 auto 22px;
+    padding: 24px;
+  }
+  .level[hidden] {
+    display: none;
+  }
+  .level-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .level-kicker {
+    margin: 0 0 2px;
+    color: var(--accent-text);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .level h2 {
+    margin: 0 0 4px;
+    font-size: 1.35rem;
+  }
+  .level-head p.muted {
+    margin: 0;
+    font-size: 0.92rem;
+  }
+  .level-count {
+    flex: none;
+    font-size: 0.82rem;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    padding: 4px 10px;
+  }
+  li[hidden] {
+    display: none;
+  }
+  @media (max-width: 760px) {
+    .level {
+      padding: 16px;
+    }
+    .level-head {
+      flex-direction: column;
+      gap: 8px;
+    }
+    .row-meta {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  import { getCompleted } from '../../lib/progress';
+  const done = new Set(getCompleted());
+  const rows = [...document.querySelectorAll<HTMLElement>('[data-row]')];
+  let count = 0;
+  for (const row of rows) {
+    if (done.has(row.dataset.row!)) {
+      row.classList.add('is-done');
+      row.setAttribute('aria-label', `${row.querySelector('.row-title')?.textContent} (completed)`);
+      count++;
+    }
+  }
+  document.querySelector('[data-overall]')!.textContent = `${count} / ${rows.length}`;
+  document.querySelector<HTMLElement>('[data-overall-fill]')!.style.width = `${(count / Math.max(rows.length, 1)) * 100}%`;
+  document.querySelectorAll<HTMLElement>('[data-level-count]').forEach((el) => {
+    const slugs: string[] = JSON.parse(el.dataset.levelCount || '[]');
+    const n = slugs.filter((s) => done.has(s)).length;
+    if (n) el.textContent = `${n} / ${slugs.length} done`;
+  });
+</script>

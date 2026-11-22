@@ -1,0 +1,524 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import Search from '../components/Search.astro';
+import { getSummaries, groupByLevel, issueUrl } from '../lib/lessons';
+import { SITE } from '../config';
+
+const lessons = await getSummaries();
+const levels = groupByLevel(lessons);
+const bySlug = new Map(lessons.map((l) => [l.slug, l]));
+
+const topicCandidates = [
+  { label: 'Websites', icon: 'globe', slug: 'what-happens-when-you-open-a-website' },
+  { label: 'DNS', icon: 'server', slug: 'ip-addresses-and-dns' },
+  { label: 'Databases', icon: 'database', slug: 'what-is-a-database' },
+  { label: 'Git', icon: 'git', slug: 'git-as-an-undo-button' },
+  { label: 'Login', icon: 'lock', slug: 'how-login-works' },
+  { label: 'Security', icon: 'shield', slug: 'logged-in-doesnt-mean-allowed' },
+  { label: 'Cloud', icon: 'cloud', slug: 'what-is-the-cloud' },
+  { label: 'Hosting', icon: 'rocket', slug: 'hosting-platforms' },
+  { label: 'Errors', icon: 'alert', slug: 'reading-error-messages' },
+] as const;
+const topics = topicCandidates.filter((t) => bySlug.has(t.slug)).slice(0, 8);
+
+const first = lessons[0];
+const clientIndex = lessons.map((l) => ({ s: l.slug, t: l.title, n: l.order, m: l.minutes, lv: l.levelName }));
+---
+
+<Base active="home">
+  <div class="top">
+    <p class="greeting glass" data-greeting>Welcome 👋</p>
+    <div class="top-actions glass">
+      <a href="/lessons" aria-label="All lessons" title="All lessons"><Icon name="book" /></a>
+      <span aria-hidden="true"></span>
+      <a href={issueUrl(SITE.githubRepo)} target="_blank" rel="noopener noreferrer" aria-label="Report a mistake" title="Report a mistake"
+        ><Icon name="flag" /></a
+      >
+      <span aria-hidden="true"></span>
+      <a href={`https://github.com/${SITE.githubRepo}`} target="_blank" rel="noopener noreferrer" aria-label="GitHub" title="GitHub"
+        ><Icon name="github" /></a
+      >
+    </div>
+  </div>
+
+  <section class="hero">
+    <h1>Know what you're building.</h1>
+    <p class="hero-sub">
+      Free lessons on how software really works, for people who build with AI. From your first website to production.
+      No login.
+    </p>
+    <Search lessons={lessons} />
+  </section>
+
+  <div class="grid">
+    <!-- Levels -->
+    <section class="card glass levels" aria-labelledby="levels-title">
+      <div class="card-head">
+        <h2 class="card-title" id="levels-title">Levels</h2>
+        <a class="chip-btn" href="/lessons">View all</a>
+      </div>
+      <ul class="rows">
+        {
+          levels.map((level) => (
+            <li>
+              <a class="row" href={`/lessons#level-${level.n}`}>
+                <span class="row-num">{level.n}</span>
+                <span class="row-main">
+                  <span class="row-title">{level.name}</span>
+                  <span class="row-sub">{level.lessons.length} lessons</span>
+                </span>
+                <Icon name="chevron-right" size={18} />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- Topics -->
+    <section class="card glass topics" aria-labelledby="topics-title">
+      <div class="card-head">
+        <h2 class="card-title" id="topics-title">Jump to a topic</h2>
+      </div>
+      <ul class="tiles">
+        {
+          topics.map((t) => (
+            <li>
+              <a class="tile" href={`/lessons/${t.slug}`} title={bySlug.get(t.slug)?.title}>
+                <span class="tile-icon">
+                  <Icon name={t.icon} size={22} />
+                </span>
+                <span>{t.label}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- Up next -->
+    <section class="card glass upnext" aria-labelledby="upnext-title">
+      <div class="card-head">
+        <h2 class="card-title" id="upnext-title">Up next</h2>
+      </div>
+      <ul class="checklist" data-upnext>
+        {
+          lessons.slice(0, 4).map((l) => (
+            <li>
+              <a href={`/lessons/${l.slug}`}>
+                <Icon name="circle" size={18} />
+                <span>{l.title}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="checklist-foot">
+        <span class="muted" data-progress-label>Completed 0 / {lessons.length}</span>
+        <div class="progress-track"><div class="progress-fill" data-progress-fill></div></div>
+      </div>
+    </section>
+
+    <!-- Continue -->
+    <section class="card glass continue" aria-labelledby="continue-title">
+      <div class="continue-art" aria-hidden="true">
+        <Icon name="moon" size={26} />
+      </div>
+      <div class="continue-body">
+        <p class="muted small" data-continue-kicker>Start here</p>
+        <h2 class="continue-title" id="continue-title" data-continue-title>{first?.title}</h2>
+        <p class="muted small" data-continue-meta>{first ? `Lesson ${first.order} · ${first.minutes} min` : ''}</p>
+        <a class="btn btn-accent" href={first ? `/lessons/${first.slug}` : '/lessons'} data-continue-link>
+          <span data-continue-cta>Start</span> <Icon name="arrow-right" size={18} />
+        </a>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="card glass how" aria-labelledby="how-title">
+      <div class="card-head">
+        <h2 class="card-title" id="how-title">How it works</h2>
+      </div>
+      <ol class="steps">
+        <li><span>1</span> Read a lesson in 10–15 minutes, on your phone or laptop.</li>
+        <li><span>2</span> Check yourself with a short quiz.</li>
+        <li><span>3</span> Mark it complete. Progress stays in your browser.</li>
+      </ol>
+    </section>
+
+    <!-- Quote -->
+    <section class="card glass quote">
+      <Icon name="quote" size={28} class="quote-icon" />
+      <p>AI can write the code. Understanding it is still your job, and it's the part that keeps your users safe.</p>
+    </section>
+
+    <!-- Recently read -->
+    <section class="card glass recent" aria-labelledby="recent-title">
+      <div class="card-head">
+        <h2 class="card-title" id="recent-title">Recently read</h2>
+        <button type="button" class="chip-btn" data-clear-recent hidden>Clear all</button>
+      </div>
+      <ul class="rows" data-recent></ul>
+      <p class="muted small" data-recent-empty>Lessons you open will show up here.</p>
+    </section>
+  </div>
+
+  <script type="application/json" data-home-index set:html={JSON.stringify(clientIndex)} />
+</Base>
+
+<style>
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+  .greeting {
+    margin: 0;
+    padding: 12px 20px;
+    border-radius: 18px;
+    font-size: 0.95rem;
+  }
+  .top-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 8px;
+    border-radius: 18px;
+  }
+  .top-actions a {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    color: var(--text-soft);
+  }
+  .top-actions a:hover {
+    background: var(--glass-hover);
+    color: var(--text);
+  }
+  .top-actions span {
+    width: 1px;
+    height: 22px;
+    background: var(--border);
+  }
+  .hero {
+    text-align: center;
+    margin: 6vh auto 7vh;
+    max-width: 760px;
+  }
+  .hero h1 {
+    margin: 0 0 14px;
+    font-size: clamp(2.4rem, 7vw, 5rem);
+    font-weight: 200;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+  }
+  .hero-sub {
+    margin: 0 auto 30px;
+    max-width: 560px;
+    color: var(--text-soft);
+    font-size: 1.05rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 20px;
+  }
+  .levels {
+    grid-column: span 4;
+  }
+  .topics {
+    grid-column: span 3;
+  }
+  .upnext {
+    grid-column: span 3;
+  }
+  .continue {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+  .how {
+    grid-column: span 3;
+  }
+  .quote {
+    grid-column: span 3;
+  }
+  .recent {
+    grid-column: span 4;
+  }
+  .small {
+    font-size: 0.82rem;
+    margin: 0;
+  }
+
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 4px;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    font-size: 0.8rem;
+    color: var(--text-soft);
+    text-align: center;
+  }
+  .tile:hover {
+    background: var(--glass-hover);
+    color: var(--text);
+  }
+  .tile-icon {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    background: var(--row);
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .checklist {
+    list-style: none;
+    margin: 0 0 16px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .checklist a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: var(--row);
+    text-decoration: none;
+    font-size: 0.86rem;
+    line-height: 1.35;
+  }
+  .checklist a:hover {
+    background: var(--glass-hover);
+  }
+  .checklist .icon {
+    flex: none;
+    color: var(--muted);
+  }
+  .checklist-foot {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 0.8rem;
+  }
+
+  .continue {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 340px;
+    background:
+      linear-gradient(180deg, rgba(10, 13, 20, 0) 0%, rgba(10, 13, 20, 0.85) 70%),
+      radial-gradient(circle at 70% 25%, rgba(233, 237, 245, 0.18), rgba(233, 237, 245, 0) 30%),
+      linear-gradient(180deg, #121a2b 0%, #0b1019 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .continue-art {
+    position: absolute;
+    top: 22px;
+    right: 22px;
+    color: #e9edf5;
+    opacity: 0.85;
+  }
+  .continue-body {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .continue-title {
+    margin: 0;
+    font-size: 1.05rem;
+    line-height: 1.3;
+  }
+  .continue .btn {
+    margin-top: 10px;
+    padding: 9px 14px;
+  }
+
+  .steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 0.88rem;
+    color: var(--text-soft);
+  }
+  .steps li {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .steps span {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 7px;
+    background: var(--accent-soft);
+    color: var(--accent-text);
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  .quote p {
+    margin: 10px 0 0;
+    color: var(--text-soft);
+    line-height: 1.6;
+  }
+  .quote :global(.quote-icon) {
+    color: var(--accent);
+  }
+
+  @media (max-width: 1100px) {
+    .levels,
+    .topics,
+    .upnext,
+    .how,
+    .quote,
+    .recent {
+      grid-column: span 6;
+    }
+    .continue {
+      grid-column: span 12;
+      grid-row: auto;
+      min-height: 200px;
+    }
+  }
+  @media (max-width: 760px) {
+    .grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 14px;
+    }
+    .grid > * {
+      grid-column: auto !important;
+    }
+    .hero {
+      margin: 36px auto 40px;
+    }
+    .greeting {
+      padding: 10px 14px;
+      font-size: 0.88rem;
+    }
+  }
+</style>
+
+<script>
+  import { getCompleted, getRecent, timeAgo } from '../lib/progress';
+
+  type Entry = { s: string; t: string; n: number; m: number; lv: string };
+  const index: Entry[] = JSON.parse(document.querySelector('[data-home-index]')!.textContent || '[]');
+  const bySlug = new Map(index.map((e) => [e.s, e]));
+  const done = new Set(getCompleted().filter((s) => bySlug.has(s)));
+
+  // Greeting by time of day.
+  const h = new Date().getHours();
+  document.querySelector('[data-greeting]')!.textContent =
+    h < 5 ? 'Up late? 🌙' : h < 12 ? 'Good morning 👋' : h < 18 ? 'Good afternoon 👋' : 'Good evening 👋';
+
+  // Progress.
+  document.querySelector('[data-progress-label]')!.textContent = `Completed ${done.size} / ${index.length}`;
+  document.querySelector<HTMLElement>('[data-progress-fill]')!.style.width =
+    `${(done.size / Math.max(index.length, 1)) * 100}%`;
+
+  // Up next: the next 4 lessons not yet completed.
+  const remaining = index.filter((e) => !done.has(e.s));
+  const upnext = document.querySelector<HTMLElement>('[data-upnext]')!;
+  if (done.size) {
+    upnext.innerHTML = '';
+    const items = remaining.length ? remaining.slice(0, 4) : [];
+    for (const e of items) {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = `/lessons/${e.s}`;
+      a.innerHTML =
+        '<svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg>';
+      const span = document.createElement('span');
+      span.textContent = e.t;
+      a.append(span);
+      li.append(a);
+      upnext.append(li);
+    }
+    if (!items.length) {
+      const li = document.createElement('li');
+      li.className = 'muted';
+      li.textContent = 'You have completed every lesson. 🎉';
+      upnext.append(li);
+    }
+  }
+
+  // Continue card: the most recent unfinished lesson you opened, or the next one in order.
+  const recent = getRecent().filter((r) => bySlug.has(r.slug));
+  const resume = recent.find((r) => !done.has(r.slug));
+  const target = resume ? bySlug.get(resume.slug)! : remaining[0];
+  if (target && (resume || done.size)) {
+    document.querySelector('[data-continue-kicker]')!.textContent = resume ? 'Continue reading' : 'Up next';
+    document.querySelector('[data-continue-title]')!.textContent = target.t;
+    document.querySelector('[data-continue-meta]')!.textContent = `Lesson ${target.n} · ${target.m} min`;
+    document.querySelector<HTMLAnchorElement>('[data-continue-link]')!.href = `/lessons/${target.s}`;
+    document.querySelector('[data-continue-cta]')!.textContent = resume ? 'Resume' : 'Start';
+  }
+
+  // Recently read.
+  const list = document.querySelector<HTMLElement>('[data-recent]')!;
+  const empty = document.querySelector<HTMLElement>('[data-recent-empty]')!;
+  const clear = document.querySelector<HTMLButtonElement>('[data-clear-recent]')!;
+  const renderRecent = (items: typeof recent) => {
+    list.innerHTML = '';
+    for (const r of items.slice(0, 3)) {
+      const e = bySlug.get(r.slug)!;
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.className = 'row' + (done.has(e.s) ? ' is-done' : '');
+      a.href = `/lessons/${e.s}`;
+      const num = document.createElement('span');
+      num.className = 'row-num';
+      num.textContent = String(e.n);
+      const main = document.createElement('span');
+      main.className = 'row-main';
+      const title = document.createElement('span');
+      title.className = 'row-title';
+      title.textContent = e.t;
+      main.append(title);
+      const meta = document.createElement('span');
+      meta.className = 'row-meta';
+      meta.textContent = timeAgo(r.at);
+      a.append(num, main, meta);
+      li.append(a);
+      list.append(li);
+    }
+    empty.hidden = items.length > 0;
+    clear.hidden = items.length === 0;
+  };
+  renderRecent(recent);
+  clear.addEventListener('click', () => {
+    try {
+      localStorage.removeItem('bys:recent');
+    } catch {}
+    renderRecent([]);
+  });
+</script>

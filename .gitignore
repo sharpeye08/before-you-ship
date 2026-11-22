@@ -17,3 +17,6 @@ Thumbs.db
 .vscode/
 .idea/
 *.log
+
+# Local editor/preview config
+.claude/

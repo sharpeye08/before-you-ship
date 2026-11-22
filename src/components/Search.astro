@@ -1,0 +1,167 @@
+---
+// Lesson search. "dropdown" shows matching lessons under the box (home page).
+// "filter" hides non-matching rows on the page (lesson list), using [data-search] on each row.
+import Icon from './Icon.astro';
+import type { LessonSummary } from '../lib/lessons';
+
+interface Props {
+  lessons: LessonSummary[];
+  mode?: 'dropdown' | 'filter';
+  placeholder?: string;
+}
+
+const { lessons, mode = 'dropdown', placeholder = 'Find a lesson: DNS, git, login, CORS…' } = Astro.props;
+const index = lessons.map((l) => ({
+  s: l.slug,
+  t: l.title,
+  c: l.concepts.join(', '),
+  n: l.order,
+  lv: l.levelName,
+}));
+---
+
+<div class="search" data-search-root data-mode={mode}>
+  <label class="search-box glass">
+    <Icon name="search" />
+    <span class="sr-only">Search lessons</span>
+    <input
+      type="search"
+      placeholder={placeholder}
+      autocomplete="off"
+      spellcheck="false"
+      aria-controls={mode === 'dropdown' ? 'search-results' : undefined}
+    />
+    <span class="kbd" data-kbd>Ctrl K</span>
+  </label>
+  {mode === 'dropdown' && <ul id="search-results" class="search-results glass" role="listbox" hidden />}
+  <script type="application/json" data-search-index set:html={JSON.stringify(index)} />
+</div>
+
+<style>
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+</style>
+
+<script>
+  type Entry = { s: string; t: string; c: string; n: number; lv: string };
+
+  const norm = (s: string) => s.toLowerCase().normalize('NFKD');
+
+  function matches(entry: Entry, words: string[]) {
+    const hay = norm(`${entry.t} ${entry.c} ${entry.lv}`);
+    return words.every((w) => hay.includes(w));
+  }
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-search-root]')) {
+    const input = root.querySelector('input')!;
+    const mode = root.dataset.mode;
+    const index: Entry[] = JSON.parse(root.querySelector('[data-search-index]')!.textContent || '[]');
+    const kbd = root.querySelector<HTMLElement>('[data-kbd]');
+    if (kbd && /Mac|iPhone|iPad/.test(navigator.platform)) kbd.textContent = '⌘ K';
+
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        input.focus();
+        input.select();
+      }
+    });
+
+    if (mode === 'filter') {
+      const params = new URLSearchParams(location.search);
+      if (params.get('q')) input.value = params.get('q')!;
+      const apply = () => {
+        const words = norm(input.value).split(/\s+/).filter(Boolean);
+        let shown = 0;
+        document.querySelectorAll<HTMLElement>('[data-search]').forEach((row) => {
+          const hit = words.every((w) => norm(row.dataset.search || '').includes(w));
+          row.hidden = !hit;
+          if (hit) shown++;
+        });
+        document.querySelectorAll<HTMLElement>('[data-level-section]').forEach((sec) => {
+          sec.hidden = !sec.querySelector('[data-search]:not([hidden])');
+        });
+        const empty = document.querySelector<HTMLElement>('[data-search-empty]');
+        if (empty) empty.hidden = shown > 0;
+      };
+      input.addEventListener('input', apply);
+      apply();
+      continue;
+    }
+
+    const list = root.querySelector<HTMLUListElement>('.search-results')!;
+    let active = -1;
+
+    const render = () => {
+      const words = norm(input.value).split(/\s+/).filter(Boolean);
+      if (!words.length) {
+        list.hidden = true;
+        return;
+      }
+      const hits = index.filter((e) => matches(e, words)).slice(0, 8);
+      active = hits.length ? 0 : -1;
+      list.innerHTML = '';
+      if (!hits.length) {
+        const li = document.createElement('li');
+        li.className = 'search-empty';
+        li.textContent = 'No lessons match that yet.';
+        list.append(li);
+      }
+      hits.forEach((h, i) => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = `/lessons/${h.s}`;
+        a.setAttribute('role', 'option');
+        a.setAttribute('aria-selected', String(i === active));
+        const num = document.createElement('span');
+        num.className = 'row-num';
+        num.textContent = String(h.n);
+        const text = document.createElement('span');
+        text.className = 'row-main';
+        const title = document.createElement('span');
+        title.className = 'row-title';
+        title.textContent = h.t;
+        const sub = document.createElement('span');
+        sub.className = 'row-sub';
+        sub.textContent = `${h.lv} · ${h.c}`;
+        text.append(title, sub);
+        a.append(num, text);
+        li.append(a);
+        list.append(li);
+      });
+      list.hidden = false;
+    };
+
+    const select = (i: number) => {
+      const links = [...list.querySelectorAll('a')];
+      if (!links.length) return;
+      active = (i + links.length) % links.length;
+      links.forEach((a, j) => a.setAttribute('aria-selected', String(j === active)));
+    };
+
+    input.addEventListener('input', render);
+    input.addEventListener('keydown', (e) => {
+      const links = [...list.querySelectorAll('a')];
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        select(active + 1);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        select(active - 1);
+      } else if (e.key === 'Enter' && links[active]) {
+        e.preventDefault();
+        location.href = links[active].href;
+      } else if (e.key === 'Escape') {
+        list.hidden = true;
+      }
+    });
+    document.addEventListener('click', (e) => {
+      if (!root.contains(e.target as Node)) list.hidden = true;
+    });
+  }
+</script>

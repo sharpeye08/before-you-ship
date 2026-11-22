@@ -1,0 +1,249 @@
+---
+// Multiple-choice quiz, graded in the browser against the fixed answer key.
+// Options are shuffled on every load so the correct answer isn't always in the same place.
+import Icon from './Icon.astro';
+
+interface Props {
+  questions: { question: string; options: { text: string; correct?: boolean }[]; explanation: string }[];
+}
+
+const { questions } = Astro.props;
+
+// Render inline `code` in quiz text safely (everything else is escaped).
+const escape = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const fmt = (s: string) => escape(s).replace(/`([^`]+)`/g, '<code>$1</code>');
+---
+
+<section class="quiz glass" aria-labelledby="quiz-title" data-quiz>
+  <div class="quiz-head">
+    <div>
+      <h2 id="quiz-title">Check yourself</h2>
+      <p class="muted">{questions.length} quick questions. Pick an answer to see if you're right.</p>
+    </div>
+    <p class="quiz-score" data-score aria-live="polite"></p>
+  </div>
+
+  <ol class="quiz-list">
+    {
+      questions.map((q, qi) => (
+        <li class="quiz-q" data-question>
+          <p class="quiz-question" set:html={fmt(q.question)} />
+          <div class="quiz-options" role="group" aria-label={`Question ${qi + 1} options`}>
+            {q.options.map((o) => (
+              <button type="button" class="quiz-option" data-correct={o.correct ? 'true' : 'false'}>
+                <span class="quiz-mark" aria-hidden="true" />
+                <span set:html={fmt(o.text)} />
+              </button>
+            ))}
+          </div>
+          <p class="quiz-explain" hidden>
+            <strong data-verdict />
+            <span set:html={fmt(q.explanation)} />
+          </p>
+        </li>
+      ))
+    }
+  </ol>
+
+  <div class="quiz-foot" data-quiz-foot hidden>
+    <button type="button" class="btn" data-retry><Icon name="refresh" size={18} /> Try again</button>
+  </div>
+</section>
+
+<style>
+  .quiz {
+    padding: 28px;
+    margin-top: 28px;
+  }
+  .quiz-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+  .quiz-head h2 {
+    margin: 0 0 4px;
+    font-size: 1.35rem;
+  }
+  .quiz-head p {
+    margin: 0;
+  }
+  .quiz-score {
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+  }
+  .quiz-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: q;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+  .quiz-q {
+    counter-increment: q;
+  }
+  .quiz-question {
+    margin: 0 0 10px;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+  .quiz-question::before {
+    content: counter(q) '. ';
+    color: var(--muted);
+  }
+  .quiz-options {
+    display: grid;
+    gap: 8px;
+  }
+  .quiz-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+    text-align: left;
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: var(--row);
+    color: var(--text-soft);
+    font: inherit;
+    font-size: 0.97rem;
+    line-height: 1.5;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .quiz-option:hover:not(:disabled) {
+    background: var(--glass-hover);
+    border-color: var(--border);
+  }
+  .quiz-option:disabled {
+    cursor: default;
+  }
+  .quiz-mark {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    border-radius: 50%;
+    border: 1.5px solid var(--muted);
+  }
+  .quiz-option.is-correct {
+    border-color: rgba(61, 214, 140, 0.45);
+    background: var(--good-soft);
+    color: var(--text);
+  }
+  .quiz-option.is-correct .quiz-mark {
+    border-color: var(--good);
+    background: var(--good);
+    box-shadow: inset 0 0 0 3px #0e1a14;
+  }
+  .quiz-option.is-wrong {
+    border-color: rgba(229, 72, 77, 0.5);
+    background: var(--accent-soft);
+    color: var(--text);
+  }
+  .quiz-option.is-wrong .quiz-mark {
+    border-color: var(--accent);
+    background: var(--accent);
+    box-shadow: inset 0 0 0 3px #1c0d0e;
+  }
+  .quiz-explain {
+    margin: 10px 0 0;
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-soft);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  .quiz-explain strong {
+    margin-right: 6px;
+  }
+  .quiz-foot {
+    margin-top: 22px;
+  }
+  :global(.quiz code) {
+    font-family: var(--mono);
+    font-size: 0.88em;
+    background: rgba(255, 255, 255, 0.07);
+    padding: 0.1em 0.35em;
+    border-radius: 5px;
+  }
+  @media (max-width: 760px) {
+    .quiz {
+      padding: 20px 16px;
+    }
+  }
+</style>
+
+<script>
+  function shuffle<T>(items: T[]): T[] {
+    const a = [...items];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  for (const quiz of document.querySelectorAll<HTMLElement>('[data-quiz]')) {
+    const questions = [...quiz.querySelectorAll<HTMLElement>('[data-question]')];
+    const score = quiz.querySelector<HTMLElement>('[data-score]')!;
+    const foot = quiz.querySelector<HTMLElement>('[data-quiz-foot]')!;
+
+    const update = () => {
+      const answered = questions.filter((q) => q.dataset.answered);
+      const right = answered.filter((q) => q.dataset.answered === 'right').length;
+      score.textContent = answered.length ? `${right} / ${questions.length} correct` : '';
+      foot.hidden = answered.length !== questions.length;
+    };
+
+    const reset = () => {
+      for (const q of questions) {
+        delete q.dataset.answered;
+        const group = q.querySelector<HTMLElement>('.quiz-options')!;
+        const options = shuffle([...group.querySelectorAll<HTMLButtonElement>('button')]);
+        options.forEach((b) => {
+          b.disabled = false;
+          b.classList.remove('is-correct', 'is-wrong');
+          b.removeAttribute('aria-pressed');
+          group.append(b);
+        });
+        q.querySelector<HTMLElement>('.quiz-explain')!.hidden = true;
+      }
+      update();
+    };
+
+    for (const q of questions) {
+      const explain = q.querySelector<HTMLElement>('.quiz-explain')!;
+      const verdict = q.querySelector<HTMLElement>('[data-verdict]')!;
+      q.querySelectorAll<HTMLButtonElement>('.quiz-option').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          if (q.dataset.answered) return;
+          const right = btn.dataset.correct === 'true';
+          q.dataset.answered = right ? 'right' : 'wrong';
+          btn.setAttribute('aria-pressed', 'true');
+          q.querySelectorAll<HTMLButtonElement>('.quiz-option').forEach((b) => {
+            b.disabled = true;
+            if (b.dataset.correct === 'true') b.classList.add('is-correct');
+          });
+          if (!right) btn.classList.add('is-wrong');
+          verdict.textContent = right ? 'Correct.' : 'Not quite.';
+          explain.hidden = false;
+          update();
+        });
+      });
+    }
+
+    quiz.querySelector('[data-retry]')!.addEventListener('click', () => {
+      reset();
+      quiz.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    reset();
+  }
+</script>

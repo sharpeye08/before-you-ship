@@ -5,7 +5,7 @@ export const SITE = {
   description:
     'Free, no-login lessons on how software really works: the web, databases, security and running apps in production. Written for complete beginners.',
   // "owner/repo" of the public GitHub repository that receives "Report a mistake" issues.
-  githubRepo: import.meta.env.PUBLIC_GITHUB_REPO || 'your-username/your-repo',
+  githubRepo: import.meta.env.PUBLIC_GITHUB_REPO || 'sharpeye08/before-you-ship',
   // Cloudflare Web Analytics token. Analytics are off when this is empty.
   cfBeaconToken: import.meta.env.PUBLIC_CF_BEACON_TOKEN || '',
 };

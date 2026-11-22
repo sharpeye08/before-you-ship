@@ -140,7 +140,7 @@ These three lessons explain the services beginners hear about constantly. They c
 - **Preview links:** each branch or pull request gets its own test web address before it goes live.
 - **Connecting your own domain:** the DNS records from lesson 2, in practice.
 - **Environment variables:** set in the platform's dashboard, not in your code.
-- **Under the hood:** these platforms are built on top of big cloud providers. Both Vercel's and Netlify's functions run on AWS Lambda (Netlify's docs say Netlify Functions are powered by AWS Lambda; Vercel says it has used AWS Lambda since it started). You pay more per unit than raw AWS in exchange for not managing anything.
+- **Under the hood:** these platforms are built on top of big cloud providers. Vercel has written that its functions run on AWS Lambda (July 2025 engineering post). Netlify launched its functions in 2018 as a way to use AWS Lambda without an AWS account; its current docs still mention Lambda runtimes but don't state the current architecture plainly. You pay more per unit than raw AWS in exchange for not managing anything.
 - **How it goes wrong:** build fails (read the build logs), function timeouts, free-plan limits, environment variable missing in production but present on your laptop.
 - **Try it:** deploy a one-page site and watch the build logs.
 

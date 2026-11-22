@@ -1,0 +1,395 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import Quiz from '../../components/Quiz.astro';
+import { getLessons, summarize, issueUrl } from '../../lib/lessons';
+import { SITE } from '../../config';
+
+export async function getStaticPaths() {
+  const lessons = await getLessons();
+  return lessons.map((lesson, i) => ({
+    params: { slug: lesson.id },
+    props: {
+      lesson,
+      prev: lessons[i - 1] ? summarize(lessons[i - 1]) : null,
+      next: lessons[i + 1] ? summarize(lessons[i + 1]) : null,
+      total: lessons.length,
+    },
+  }));
+}
+
+const { lesson, prev, next, total } = Astro.props;
+const { Content, headings } = await render(lesson);
+const info = summarize(lesson);
+const toc = headings.filter((h) => h.depth === 2);
+const firstPara = (lesson.body ?? '')
+  .split('\n')
+  .find((l) => l.trim() && !/^[#>|`<-]/.test(l.trim()));
+const description = firstPara ? firstPara.replace(/[*_`]/g, '').slice(0, 155) : SITE.description;
+---
+
+<Base title={info.title} description={description} active="lessons">
+  <div class="read-progress" aria-hidden="true"><div class="read-progress-fill" data-read-progress></div></div>
+
+  <div class="lesson-layout">
+    <article class="lesson">
+      <header class="lesson-header">
+        <a class="chip-btn" href={`/lessons#level-${info.level}`}>
+          <Icon name="arrow-left" size={14} /> Level {info.level} · {info.levelName}
+        </a>
+        <p class="lesson-kicker">Lesson {info.order}</p>
+        <h1>{info.title}</h1>
+        <p class="lesson-meta">
+          <span><Icon name="clock" size={16} /> {info.minutes} min read</span>
+          <span class="done-badge" data-done-badge hidden><Icon name="check" size={16} /> Completed</span>
+        </p>
+        {
+          info.concepts.length > 0 && (
+            <ul class="concepts" aria-label="Concepts covered">
+              {info.concepts.map((c) => (
+                <li>{c}</li>
+              ))}
+            </ul>
+          )
+        }
+      </header>
+
+      <div class="lesson-body glass">
+        <div class="prose">
+          <Content />
+        </div>
+      </div>
+
+      <Quiz questions={lesson.data.quiz} />
+
+      <section class="finish glass" aria-label="Finish this lesson">
+        <div>
+          <h2>Finished reading?</h2>
+          <p class="muted">Mark it as completed to track your progress. It's saved only in this browser.</p>
+        </div>
+        <div class="finish-actions">
+          <button type="button" class="btn btn-accent" data-complete data-slug={info.slug}>
+            <Icon name="check-circle" size={18} /> <span data-complete-label>Mark as completed</span>
+          </button>
+          <a class="chip-btn" href={issueUrl(SITE.githubRepo, info.title)} target="_blank" rel="noopener noreferrer">
+            <Icon name="flag" size={14} /> Report a mistake
+          </a>
+        </div>
+      </section>
+
+      <nav class="pager" aria-label="Other lessons">
+        {
+          prev ? (
+            <a class="pager-link glass" href={`/lessons/${prev.slug}`}>
+              <span class="muted"><Icon name="arrow-left" size={14} /> Previous</span>
+              <span class="pager-title">{prev.title}</span>
+            </a>
+          ) : (
+            <span />
+          )
+        }
+        {
+          next && (
+            <a class="pager-link glass next" href={`/lessons/${next.slug}`}>
+              <span class="muted">Next <Icon name="arrow-right" size={14} /></span>
+              <span class="pager-title">{next.title}</span>
+            </a>
+          )
+        }
+      </nav>
+    </article>
+
+    {
+      toc.length > 0 && (
+        <aside class="toc" aria-label="On this page">
+          <div class="toc-inner glass">
+            <p class="toc-title">On this page</p>
+            <ol>
+              {toc.map((h) => (
+                <li>
+                  <a href={`#${h.slug}`} data-toc-link={h.slug}>
+                    {h.text}
+                  </a>
+                </li>
+              ))}
+              <li>
+                <a href="#quiz-title">Check yourself</a>
+              </li>
+            </ol>
+          </div>
+        </aside>
+      )
+    }
+  </div>
+</Base>
+
+<style>
+  .read-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    z-index: 50;
+  }
+  .read-progress-fill {
+    height: 100%;
+    width: 0;
+    background: var(--accent);
+    box-shadow: 0 0 10px rgba(229, 72, 77, 0.6);
+  }
+  .lesson-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 240px;
+    gap: 28px;
+    align-items: start;
+  }
+  .lesson {
+    min-width: 0;
+    width: 100%;
+    max-width: 800px;
+  }
+  .lesson-header {
+    padding: 8px 4px 24px;
+  }
+  .lesson-kicker {
+    margin: 22px 0 6px;
+    color: var(--accent-text);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .lesson-header h1 {
+    margin: 0 0 14px;
+    font-size: clamp(2rem, 4.5vw, 3rem);
+    line-height: 1.12;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .lesson-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin: 0 0 14px;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+  .lesson-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .done-badge {
+    color: var(--good);
+  }
+  .done-badge[hidden] {
+    display: none !important;
+  }
+  .concepts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .concepts li {
+    font-size: 0.78rem;
+    padding: 4px 10px;
+    border-radius: 99px;
+    border: 1px solid var(--border);
+    color: var(--text-soft);
+    background: rgba(255, 255, 255, 0.04);
+  }
+  .lesson-body {
+    padding: 36px 40px;
+    background: var(--glass-strong);
+  }
+  .finish {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 24px 28px;
+    margin-top: 28px;
+  }
+  .finish h2 {
+    margin: 0 0 4px;
+    font-size: 1.2rem;
+  }
+  .finish p {
+    margin: 0;
+  }
+  .finish-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .pager {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 28px;
+  }
+  .pager-link {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 18px 20px;
+    text-decoration: none;
+    transition: border-color 0.15s;
+  }
+  .pager-link:hover {
+    border-color: var(--border-strong);
+  }
+  .pager-link .muted {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+  }
+  .pager-link.next {
+    text-align: right;
+    align-items: flex-end;
+  }
+  .pager-title {
+    font-weight: 600;
+  }
+  .toc {
+    position: sticky;
+    top: 28px;
+  }
+  .toc-inner {
+    padding: 18px;
+  }
+  .toc-title {
+    margin: 0 0 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .toc ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .toc a {
+    display: block;
+    padding: 6px 10px;
+    border-radius: 9px;
+    font-size: 0.86rem;
+    line-height: 1.35;
+    color: var(--muted);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+  }
+  .toc a:hover {
+    color: var(--text);
+    background: var(--glass-hover);
+  }
+  .toc a.is-current {
+    color: var(--text);
+    border-left-color: var(--accent);
+    border-radius: 0 9px 9px 0;
+  }
+  @media (max-width: 1100px) {
+    .lesson-layout {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .toc {
+      display: none;
+    }
+    .lesson {
+      margin: 0 auto;
+    }
+  }
+  @media (max-width: 760px) {
+    .lesson-body {
+      padding: 22px 18px;
+      border-radius: 18px;
+    }
+    .finish {
+      padding: 20px;
+    }
+    .pager {
+      grid-template-columns: 1fr;
+    }
+    .pager-link.next {
+      text-align: left;
+      align-items: flex-start;
+    }
+  }
+</style>
+
+<script>
+  import { isCompleted, setCompleted, recordVisit } from '../../lib/progress';
+
+  const button = document.querySelector<HTMLButtonElement>('[data-complete]')!;
+  const label = button.querySelector<HTMLElement>('[data-complete-label]')!;
+  const badge = document.querySelector<HTMLElement>('[data-done-badge]')!;
+  const slug = button.dataset.slug!;
+
+  recordVisit(slug);
+
+  const paint = () => {
+    const done = isCompleted(slug);
+    button.classList.toggle('btn-accent', !done);
+    button.classList.toggle('btn-done', done);
+    label.textContent = done ? 'Completed · click to undo' : 'Mark as completed';
+    badge.hidden = !done;
+  };
+  paint();
+
+  button.addEventListener('click', () => {
+    if (isCompleted(slug)) {
+      // Un-marking doesn't open the "complete" page, so completion counts stay honest.
+      setCompleted(slug, false);
+      paint();
+      return;
+    }
+    setCompleted(slug, true);
+    location.href = `/lessons/${slug}/complete`;
+  });
+
+  // Reading progress bar.
+  const bar = document.querySelector<HTMLElement>('[data-read-progress]')!;
+  const article = document.querySelector<HTMLElement>('.lesson-body')!;
+  const onScroll = () => {
+    const rect = article.getBoundingClientRect();
+    const total = rect.height - window.innerHeight * 0.6;
+    const pct = Math.min(1, Math.max(0, -rect.top / Math.max(total, 1)));
+    bar.style.width = `${pct * 100}%`;
+  };
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Highlight the current section in the table of contents.
+  const links = new Map(
+    [...document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]')].map((a) => [a.dataset.tocLink!, a]),
+  );
+  if (links.size && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          links.forEach((a) => a.classList.remove('is-current'));
+          links.get(e.target.id)?.classList.add('is-current');
+        }
+      },
+      { rootMargin: '0px 0px -70% 0px' },
+    );
+    links.forEach((_, id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+  }
+</script>
