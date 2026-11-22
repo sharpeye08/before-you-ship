@@ -1,0 +1,146 @@
+---
+// Prompt library: every "Ask your AI" prompt from every lesson, grouped by level, with copy buttons.
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { getLessons } from '../lib/lessons';
+import { extract, plain } from '../lib/extract';
+import { LEVELS } from '../config';
+
+const lessons = await getLessons();
+const { prompts } = extract(lessons);
+const groups = LEVELS.map((lv) => {
+  const inLevel = prompts.filter((p) => p.level === lv.n);
+  const bySlug = new Map<string, typeof inLevel>();
+  for (const p of inLevel) bySlug.set(p.slug, [...(bySlug.get(p.slug) ?? []), p]);
+  return { ...lv, lessons: [...bySlug.values()] };
+}).filter((g) => g.lessons.length);
+---
+
+<Base title="Prompt library" active="prompts" description="Every 'Ask your AI' prompt from every lesson, ready to copy into your AI tool.">
+  <header class="tool-head">
+    <p class="kicker"><Icon name="sparkles" size={16} /> {prompts.length} prompts</p>
+    <h1>Prompt library</h1>
+    <p class="muted">
+      Questions to paste into your AI tool to check your own app, collected from every lesson. Replace anything in
+      [square brackets] with your details.
+    </p>
+    <label class="search-box glass pl-search">
+      <Icon name="search" />
+      <input type="search" placeholder="Find a prompt: secrets, cache, login…" autocomplete="off" data-pl-filter aria-label="Filter prompts" />
+    </label>
+  </header>
+
+  <p class="muted center" data-pl-empty hidden>No prompts match that.</p>
+
+  {
+    groups.map((g) => (
+      <section class="tool-section glass" data-pl-section>
+        <p class="kicker">Level {g.n}</p>
+        <h2>{g.name}</h2>
+        {g.lessons.map((items) => (
+          <div class="pl-group" data-pl-group>
+            <h3>
+              <a href={`/lessons/${items[0].slug}`}>
+                {items[0].order}. {items[0].title}
+              </a>
+            </h3>
+            <ul class="pl-list">
+              {items.map((p) => (
+                <li data-pl={plain(p.text).toLowerCase()}>
+                  <p>{plain(p.text)}</p>
+                  <button type="button" class="chip-btn" data-copy={plain(p.text)}>
+                    <Icon name="copy" size={14} /> <span>Copy</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </section>
+    ))
+  }
+</Base>
+
+<style>
+  .pl-search {
+    max-width: 520px;
+    margin: 0 auto;
+  }
+  .center {
+    text-align: center;
+  }
+  .pl-group + .pl-group {
+    margin-top: 18px;
+  }
+  .pl-group h3 {
+    margin: 0 0 8px;
+    font-size: 0.98rem;
+  }
+  .pl-group h3 a {
+    text-decoration: none;
+  }
+  .pl-group h3 a:hover {
+    color: var(--accent-text);
+  }
+  .pl-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 6px;
+  }
+  .pl-list li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: var(--row);
+  }
+  .pl-list p {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    margin: 0;
+    font-size: 0.94rem;
+    line-height: 1.55;
+    color: var(--text-soft);
+  }
+  .pl-list .chip-btn {
+    flex: none;
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const label = btn.querySelector('span')!;
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy!);
+        label.textContent = 'Copied';
+      } catch {
+        label.textContent = 'Failed';
+      }
+      setTimeout(() => (label.textContent = 'Copy'), 1500);
+    });
+  });
+
+  const input = document.querySelector<HTMLInputElement>('[data-pl-filter]')!;
+  const empty = document.querySelector<HTMLElement>('[data-pl-empty]')!;
+  input.addEventListener('input', () => {
+    const words = input.value.toLowerCase().split(/\s+/).filter(Boolean);
+    let shown = 0;
+    document.querySelectorAll<HTMLElement>('[data-pl]').forEach((li) => {
+      const hit = words.every((w) => li.dataset.pl!.includes(w));
+      li.hidden = !hit;
+      if (hit) shown++;
+    });
+    document.querySelectorAll<HTMLElement>('[data-pl-group]').forEach((g) => {
+      g.hidden = !g.querySelector('[data-pl]:not([hidden])');
+    });
+    document.querySelectorAll<HTMLElement>('[data-pl-section]').forEach((s) => {
+      s.hidden = !s.querySelector('[data-pl-group]:not([hidden])');
+    });
+    empty.hidden = shown > 0;
+  });
+</script>

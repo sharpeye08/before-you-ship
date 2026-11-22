@@ -8,7 +8,7 @@ import { issueUrl } from '../lib/lessons';
 interface Props {
   title?: string;
   description?: string;
-  active?: 'home' | 'lessons' | 'none';
+  active?: 'home' | 'lessons' | 'checklist' | 'review' | 'glossary' | 'prompts' | 'start' | 'none';
 }
 
 const { title, description = SITE.description, active = 'none' } = Astro.props;
@@ -57,6 +57,18 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         title="All lessons"
       >
         <Icon name="book" />
+      </a>
+      <a href="/checklist" class:list={['side-btn', { active: active === 'checklist' }]} aria-label="Pre-ship checklist" title="Pre-ship checklist">
+        <Icon name="list-check" />
+      </a>
+      <a href="/review" class:list={['side-btn', { active: active === 'review' }]} aria-label="Review mode" title="Review mode">
+        <Icon name="brain" />
+      </a>
+      <a href="/glossary" class:list={['side-btn', { active: active === 'glossary' }]} aria-label="Glossary" title="Glossary">
+        <Icon name="glossary" />
+      </a>
+      <a href="/prompts" class:list={['side-btn', { active: active === 'prompts' }]} aria-label="Prompt library" title="Prompt library">
+        <Icon name="sparkles" />
       </a>
       <span class="side-divider" aria-hidden="true"></span>
       <a

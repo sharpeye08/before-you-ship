@@ -1,0 +1,185 @@
+---
+// Pre-ship checklist: every "Red flags" item from every lesson, as one checklist.
+// Ticks are saved only in this browser.
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { getLessons } from '../lib/lessons';
+import { extract, inline, plain } from '../lib/extract';
+import { LEVELS } from '../config';
+
+const lessons = await getLessons();
+const { flags } = extract(lessons);
+
+// Group: level → lesson → flags
+const groups = LEVELS.map((level) => {
+  const inLevel = flags.filter((f) => f.level === level.n);
+  const bySlug = new Map<string, typeof inLevel>();
+  for (const f of inLevel) bySlug.set(f.slug, [...(bySlug.get(f.slug) ?? []), f]);
+  return {
+    ...level,
+    lessons: [...bySlug.values()].map((items) => ({ slug: items[0].slug, title: items[0].title, order: items[0].order, items })),
+  };
+}).filter((g) => g.lessons.length);
+
+const total = flags.length;
+const promptText =
+  'Review my app for each of these problems. For every item, tell me whether my code has it, where, and how to fix it:\n\n' +
+  flags.map((f) => `- ${plain(f.text)}`).join('\n');
+---
+
+<Base title="Pre-ship checklist" active="checklist" description="Every red flag from every lesson in one checklist to run before you launch.">
+  <header class="tool-head">
+    <p class="kicker"><Icon name="list-check" size={16} /> Before you launch</p>
+    <h1>Pre-ship checklist</h1>
+    <p class="muted">
+      Every red flag from every lesson, in one list. Go through your app (or ask your AI to), and tick each item once
+      you've checked that your code doesn't have it. Each item links to the lesson that explains it.
+    </p>
+    <div class="tool-progress">
+      <div class="tool-progress-label"><span>Checked</span><span data-count>0 / {total}</span></div>
+      <div class="progress-track"><div class="progress-fill" data-fill></div></div>
+    </div>
+    <div class="tool-actions">
+      <button type="button" class="btn btn-accent" data-copy-prompt><Icon name="copy" size={18} /> <span>Copy as a prompt for your AI</span></button>
+      <button type="button" class="btn" data-reset>Reset ticks</button>
+    </div>
+    <textarea hidden data-prompt>{promptText}</textarea>
+  </header>
+
+  {
+    groups.map((g) => (
+      <section class="tool-section glass">
+        <p class="kicker">Level {g.n}</p>
+        <h2>{g.name}</h2>
+        {g.lessons.map((l) => (
+          <div class="check-group">
+            <h3>
+              <a href={`/lessons/${l.slug}`}>
+                {l.order}. {l.title}
+              </a>
+            </h3>
+            <ul class="checks">
+              {l.items.map((f, i) => (
+                <li>
+                  <label>
+                    <input type="checkbox" data-check={`${f.slug}#${i}`} />
+                    <span set:html={inline(f.text)} />
+                  </label>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </section>
+    ))
+  }
+</Base>
+
+<style>
+  .check-group + .check-group {
+    margin-top: 18px;
+  }
+  .check-group h3 {
+    margin: 0 0 8px;
+    font-size: 0.98rem;
+  }
+  .check-group h3 a {
+    text-decoration: none;
+  }
+  .check-group h3 a:hover {
+    color: var(--accent-text);
+  }
+  .checks {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 6px;
+  }
+  .checks label {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: var(--row);
+    cursor: pointer;
+    font-size: 0.93rem;
+    line-height: 1.5;
+    color: var(--text-soft);
+  }
+  .checks input {
+    margin-top: 3px;
+    accent-color: var(--accent);
+    width: 16px;
+    height: 16px;
+    flex: none;
+  }
+  .checks input:checked + span {
+    color: var(--muted);
+    text-decoration: line-through;
+  }
+  .checks :global(code) {
+    font-family: var(--mono);
+    font-size: 0.88em;
+    background: rgba(255, 255, 255, 0.07);
+    padding: 0.1em 0.35em;
+    border-radius: 5px;
+  }
+</style>
+
+<script>
+  const KEY = 'bys:checklist';
+  const load = (): Record<string, boolean> => {
+    try {
+      return JSON.parse(localStorage.getItem(KEY) || '{}');
+    } catch {
+      return {};
+    }
+  };
+  const save = (v: Record<string, boolean>) => {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(v));
+    } catch {}
+  };
+  const boxes = [...document.querySelectorAll<HTMLInputElement>('[data-check]')];
+  const count = document.querySelector<HTMLElement>('[data-count]')!;
+  const fill = document.querySelector<HTMLElement>('[data-fill]')!;
+  const paint = () => {
+    const n = boxes.filter((b) => b.checked).length;
+    count.textContent = `${n} / ${boxes.length}`;
+    fill.style.width = `${(n / Math.max(boxes.length, 1)) * 100}%`;
+  };
+  const state = load();
+  boxes.forEach((b) => {
+    b.checked = !!state[b.dataset.check!];
+    b.addEventListener('change', () => {
+      const s = load();
+      if (b.checked) s[b.dataset.check!] = true;
+      else delete s[b.dataset.check!];
+      save(s);
+      paint();
+    });
+  });
+  paint();
+
+  document.querySelector('[data-reset]')!.addEventListener('click', () => {
+    if (!confirm('Untick every item?')) return;
+    save({});
+    boxes.forEach((b) => (b.checked = false));
+    paint();
+  });
+
+  const copyBtn = document.querySelector<HTMLButtonElement>('[data-copy-prompt]')!;
+  copyBtn.addEventListener('click', async () => {
+    const text = document.querySelector<HTMLTextAreaElement>('[data-prompt]')!.value;
+    const label = copyBtn.querySelector('span')!;
+    try {
+      await navigator.clipboard.writeText(text);
+      label.textContent = 'Copied. Paste it into your AI';
+    } catch {
+      label.textContent = 'Copy failed. Select the text manually';
+    }
+    setTimeout(() => (label.textContent = 'Copy as a prompt for your AI'), 2500);
+  });
+</script>

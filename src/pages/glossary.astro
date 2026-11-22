@@ -1,0 +1,128 @@
+---
+// Glossary: every "Key terms" entry from every lesson, A–Z, linked to the lesson that teaches it.
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { getLessons } from '../lib/lessons';
+import { extract, glossary, inline, plain } from '../lib/extract';
+
+const lessons = await getLessons();
+const entries = glossary(extract(lessons).terms);
+const letters = [...new Set(entries.map((e) => e.term[0].toUpperCase()))].filter((c) => /[A-Z]/.test(c));
+const letterOf = (t: string) => (/[A-Z]/i.test(t[0]) ? t[0].toUpperCase() : '#');
+---
+
+<Base title="Glossary" active="glossary" description="Every key term from every lesson, in plain English, with a link to the lesson that explains it.">
+  <header class="tool-head">
+    <p class="kicker"><Icon name="glossary" size={16} /> {entries.length} terms</p>
+    <h1>Glossary</h1>
+    <p class="muted">Every key term from every lesson, in plain English. Each one links to the lesson that teaches it.</p>
+    <label class="search-box glass gl-search">
+      <Icon name="search" />
+      <input type="search" placeholder="Find a term: cache, IDOR, mutex…" autocomplete="off" data-gl-filter aria-label="Filter terms" />
+    </label>
+    <nav class="letters" aria-label="Jump to letter">
+      {letters.map((c) => <a href={`#letter-${c}`}>{c}</a>)}
+    </nav>
+  </header>
+
+  <section class="tool-section glass">
+    <p class="muted" data-gl-empty hidden>No terms match that.</p>
+    <dl class="gl">
+      {
+        entries.map((e, i) => (
+          <div
+            class="gl-item"
+            id={i === entries.findIndex((x) => letterOf(x.term) === letterOf(e.term)) ? `letter-${letterOf(e.term)}` : undefined}
+            data-gl={`${e.term} ${plain(e.def)}`.toLowerCase()}
+          >
+            <dt>{e.term}</dt>
+            <dd>
+              <span set:html={inline(e.def)} />
+              <span class="gl-from">
+                Taught in <a href={`/lessons/${e.slug}`}>{e.order}. {e.title}</a>
+                {e.also.length > 0 && <> · also in {e.also.length} other {e.also.length === 1 ? 'lesson' : 'lessons'}</>}
+              </span>
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+</Base>
+
+<style>
+  .gl-search {
+    max-width: 520px;
+    margin: 0 auto 14px;
+  }
+  .letters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+  }
+  .letters a {
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: var(--text-soft);
+    text-decoration: none;
+  }
+  .letters a:hover {
+    background: var(--glass-hover);
+    color: var(--text);
+  }
+  .gl {
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .gl-item {
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: var(--row);
+    scroll-margin-top: 20px;
+  }
+  dt {
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  dd {
+    margin: 0;
+    color: var(--text-soft);
+    font-size: 0.94rem;
+    line-height: 1.55;
+  }
+  .gl-from {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+  .gl-from a {
+    color: var(--text-soft);
+  }
+  .gl :global(code) {
+    font-family: var(--mono);
+    font-size: 0.88em;
+    background: rgba(255, 255, 255, 0.07);
+    padding: 0.1em 0.35em;
+    border-radius: 5px;
+  }
+</style>
+
+<script>
+  const input = document.querySelector<HTMLInputElement>('[data-gl-filter]')!;
+  const items = [...document.querySelectorAll<HTMLElement>('[data-gl]')];
+  const empty = document.querySelector<HTMLElement>('[data-gl-empty]')!;
+  input.addEventListener('input', () => {
+    const words = input.value.toLowerCase().split(/\s+/).filter(Boolean);
+    let shown = 0;
+    for (const item of items) {
+      const hit = words.every((w) => item.dataset.gl!.includes(w));
+      item.hidden = !hit;
+      if (hit) shown++;
+    }
+    empty.hidden = shown > 0;
+  });
+</script>
