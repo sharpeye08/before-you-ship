@@ -112,6 +112,17 @@ for (const file of files) {
   const [min, max] = data.level === 1 ? [1300, 2600] : [1500, 2900];
   if (words < min || words > max) warnings.push(`main text is ${words} words (aim ${min}–${max})`);
 
+  // Leftover tool output and raw HTML that would render as real markup.
+  if (/<\/?(invoke|parameter|function_calls)\b|<\/content>/i.test(body)) errors.push('leftover tool-call text in the body');
+  {
+    const prose = body
+      .replace(/```[\s\S]*?```/g, '')
+      .replace(/`[^`\n]*`/g, '')
+      .replace(/<\/?(details|summary|strong)>/g, '');
+    const raw = prose.match(/<\/?[a-zA-Z][a-zA-Z0-9-]*(\s[^>]*)?>/g);
+    if (raw) errors.push(`raw HTML outside code (wrap it in backticks): ${[...new Set(raw)].slice(0, 3).join(' ')}`);
+  }
+
   // Code snippets: short and minimal. `text` blocks (output, diagrams) are not code.
   for (const m of body.matchAll(/```(\w*)\n([\s\S]*?)```/g)) {
     const lang = m[1] || 'text';
