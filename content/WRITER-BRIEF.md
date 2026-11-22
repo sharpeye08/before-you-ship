@@ -61,7 +61,7 @@ Use the title from the MVP.md table exactly. Titles are deliberately catchy scen
 
   - [Page title](https://...): Publisher. What it supports in this lesson.
   ```
-  3–8 entries. Prefer primary sources (official docs, RFCs, MDN, OWASP, vendor docs, a company's own incident report). Every specific number, date, incident, error message or quote in the lesson must be backed by one. Only list pages you actually opened; never guess a URL. Don't put a separate sources list inside Going deeper.
+  3–12 entries (never cut a true, important claim just to keep the list short). Prefer primary sources (official docs, RFCs, MDN, OWASP, vendor docs, a company's own incident report). Every specific number, date, incident, error message or quote in the lesson must be backed by one. Only list pages you actually opened; never guess a URL. Don't put a separate sources list inside Going deeper.
 - No other raw HTML. Tables, fenced code blocks with a language (`js`, `ts`, `json`, `sql`, `bash`, `yaml`, `text`) and blockquotes are fine.
 - Code: JavaScript/TypeScript (Node/Express or Next.js style) unless the topic needs SQL or shell. Snippets must be short and minimal: aim for 8 lines or fewer, never more than 12 (the checker fails anything longer). Show only the lines that make the point; cut imports, setup and boilerplate, and use `// ...` for skipped parts. One idea per snippet. Every snippet is followed by a plain-English walkthrough.
 

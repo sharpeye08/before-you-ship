@@ -225,8 +225,8 @@ Lessons link to each other so readers can move at their own level:
 - Always link by slug, never by lesson number. Every link must point to a lesson in the list above.
 
 ## References
-Every lesson ends with a `## References` section, after "Going deeper", so readers can check the facts themselves.
-- 3–8 entries, as a bullet list: `- [Page title](https://...): Publisher. What it supports in this lesson.`
+Every lesson ends with a `## References` section, after "Going deeper", so readers can check the facts themselves. Never cut a true, important claim only to stay under the limit; use up to 12 entries if needed.
+- 3–12 entries, as a bullet list: `- [Page title](https://...): Publisher. What it supports in this lesson.`
 - Prefer primary sources: official docs, specs and RFCs, MDN, OWASP, vendor docs, a company's own incident report. Use news articles only when no primary source exists, and say so.
 - Every specific number, date, incident, error message and quote in the lesson must be backed by one of these references.
 - Only list pages you actually opened and confirmed exist. No guessed URLs.
