@@ -94,10 +94,33 @@ for (const file of files) {
     }
   }
 
-  const main = body.replace(/<details>[\s\S]*?<\/details>/g, '');
+  // References: last section, after Going deeper, with at least 3 real links.
+  const refIndex = body.search(/^## References\s*$/m);
+  if (refIndex < 0) errors.push('no "## References" section');
+  else {
+    const refs = body.slice(refIndex);
+    const links = [...refs.matchAll(/\]\((https?:\/\/[^)\s]+)\)/g)].map((m) => m[1]);
+    if (links.length < 3) errors.push(`References has ${links.length} links (need at least 3)`);
+    if (links.some((u) => u.startsWith('http://'))) warnings.push('a reference uses http:// instead of https://');
+    const detailsEnd = body.lastIndexOf('</details>');
+    if (detailsEnd > refIndex) errors.push('References must come after the Going deeper section');
+    if (/^## /m.test(refs.slice(refs.indexOf('\n') + 1))) errors.push('References must be the last section');
+  }
+
+  const main = body.replace(/<details>[\s\S]*?<\/details>/g, '').replace(/^## References[\s\S]*$/m, '');
   const words = main.split(/\s+/).filter(Boolean).length;
   const [min, max] = data.level === 1 ? [1300, 2600] : [1500, 2900];
   if (words < min || words > max) warnings.push(`main text is ${words} words (aim ${min}–${max})`);
+
+  // Code snippets: short and minimal. `text` blocks (output, diagrams) are not code.
+  for (const m of body.matchAll(/```(\w*)\n([\s\S]*?)```/g)) {
+    const lang = m[1] || 'text';
+    if (lang === 'text') continue;
+    const lines = m[2].replace(/\n+$/, '').split('\n').length;
+    const firstLine = m[2].split('\n')[0].trim().slice(0, 40);
+    if (lines > 12) errors.push(`${lang} snippet is ${lines} lines (max 12): "${firstLine}"`);
+    else if (lines > 8) warnings.push(`${lang} snippet is ${lines} lines (aim ≤8): "${firstLine}"`);
+  }
 
   if (data.level === 1) {
     const prose = main.replace(/```[\s\S]*?```/g, '').replace(/`[^`]*`/g, '');

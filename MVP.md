@@ -177,9 +177,9 @@ These three lessons explain the services beginners hear about constantly. They c
 
 ## Lesson format
 - 10–15 minute read for the main lesson (about 1,800–2,500 words, not counting "Going deeper")
-- Structure: Before you start → Hook → Mental model → How it goes wrong → What good looks like → Test your own app → Takeaways → Going deeper (optional) → Quiz
+- Structure: Before you start → Hook → Mental model → How it goes wrong → What good looks like → Test your own app → Takeaways → Going deeper (optional) → References → Quiz
 - Every lesson gives the reader: one mental model, one red flag, one question to ask their AI
-- Code snippets under 15 lines
+- Code snippets short and minimal: aim for 8 lines or fewer, never more than 12. Show only the lines that make the point; cut imports, setup and boilerplate, and use `// ...` for skipped parts. One idea per snippet. Terminal output and error messages in `text` blocks don't count as code but should also be trimmed to the lines that matter.
 - Frontmatter: `title`, `slug`, `order`, `level`, `levelName`, `concepts`, `readTime`, `quiz`
 
 ## Writing style by level
@@ -223,6 +223,14 @@ Lessons link to each other so readers can move at their own level:
   `> **Go deeper:** [Lesson title](/lessons/<slug>) (Level N)`
   Intermediate readers can jump straight to the lesson that matters to them.
 - Always link by slug, never by lesson number. Every link must point to a lesson in the list above.
+
+## References
+Every lesson ends with a `## References` section, after "Going deeper", so readers can check the facts themselves.
+- 3–8 entries, as a bullet list: `- [Page title](https://...): Publisher. What it supports in this lesson.`
+- Prefer primary sources: official docs, specs and RFCs, MDN, OWASP, vendor docs, a company's own incident report. Use news articles only when no primary source exists, and say so.
+- Every specific number, date, incident, error message and quote in the lesson must be backed by one of these references.
+- Only list pages you actually opened and confirmed exist. No guessed URLs.
+- Don't repeat a separate "Sources" list inside "Going deeper"; the References section replaces it.
 
 ## Fact-checking
 - List every factual claim in a lesson (rankings, dates, tool behavior, error messages, protocol details) and check each one against an authoritative source: official docs, specs, MDN, OWASP.

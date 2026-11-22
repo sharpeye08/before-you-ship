@@ -40,7 +40,7 @@ quiz:
 Use the title from the MVP.md table exactly. Titles are deliberately catchy scenarios ("Bots signed up 10,000 times overnight. Now what?"); your hook section should deliver on the title's promise. Don't rename lessons yourself.
 
 ## Body
-- `# <title>` first, then the structure in MVP.md: Before you start → Hook → Mental model → How it goes wrong → What good looks like → Test it yourself → Takeaways → Going deeper (optional) → (quiz comes from frontmatter).
+- `# <title>` first, then the structure in MVP.md: Before you start → Hook → Mental model → How it goes wrong → What good looks like → Test it yourself → Takeaways → Going deeper (optional) → References → (quiz comes from frontmatter).
 - Section names can fit the topic (Level 1 lessons used "Try it yourself" instead of "Test your own app"), but keep the order.
 - **Before you start:** a blockquote starting `> **Before you start**`, listing at most 4 terms from earlier lessons with one-line meanings and links.
 - **Level 1 only:** end each main section with `> **In short:** ...`.
@@ -55,8 +55,15 @@ Use the title from the MVP.md table exactly. Titles are deliberately catchy scen
 
   </details>
   ```
+- **References:** the very last thing in the body, after `</details>`:
+  ```
+  ## References
+
+  - [Page title](https://...): Publisher. What it supports in this lesson.
+  ```
+  3–8 entries. Prefer primary sources (official docs, RFCs, MDN, OWASP, vendor docs, a company's own incident report). Every specific number, date, incident, error message or quote in the lesson must be backed by one. Only list pages you actually opened; never guess a URL. Don't put a separate sources list inside Going deeper.
 - No other raw HTML. Tables, fenced code blocks with a language (`js`, `ts`, `json`, `sql`, `bash`, `yaml`, `text`) and blockquotes are fine.
-- Code: JavaScript/TypeScript (Node/Express or Next.js style) unless the topic needs SQL or shell. Snippets under 15 lines. Every snippet followed by a plain-English walkthrough.
+- Code: JavaScript/TypeScript (Node/Express or Next.js style) unless the topic needs SQL or shell. Snippets must be short and minimal: aim for 8 lines or fewer, never more than 12 (the checker fails anything longer). Show only the lines that make the point; cut imports, setup and boilerplate, and use `// ...` for skipped parts. One idea per snippet. Every snippet is followed by a plain-English walkthrough.
 
 ## Level and length
 - Main text (not counting Going deeper or frontmatter): Level 1 about 1,500–2,200 words; Levels 2–5 about 1,800–2,500 words.
@@ -67,7 +74,7 @@ Use the title from the MVP.md table exactly. Titles are deliberately catchy scen
 ## Fact-checking (mandatory)
 - Check every factual claim twice with WebSearch, preferring official docs, MDN, OWASP, RFCs, vendor docs. This includes error messages, tool names and behavior, rankings, dates, numbers and prices.
 - If you can't verify a claim, cut it or rewrite it so it's true without the detail. Don't invent statistics, incidents or quotes.
-- If you use a specific number or incident, name the source at the end of "Going deeper".
+- If you use a specific number or incident, list its source in the References section.
 - Prefer facts that won't go stale. Use example values that can't be wrong: `example.com`, `203.0.113.x`, `2001:db8::`.
 
 ## When you finish
