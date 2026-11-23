@@ -2,6 +2,7 @@
 import { render } from 'astro:content';
 import Editorial from '../../layouts/Editorial.astro';
 import Quiz from '../../components/Quiz.astro';
+import Icon from '../../components/Icon.astro';
 import Cover from '../../components/Cover.astro';
 import { getLessons, summarize, issueUrl } from '../../lib/lessons';
 import { extract, glossary, plain } from '../../lib/extract';
@@ -41,7 +42,7 @@ const color = LEVEL_COLORS[info.level] ?? '#f2c94c';
 <Editorial title={info.title} description={description}>
   <div class="read-progress" aria-hidden="true"><div class="read-progress-fill" data-read-progress></div></div>
 
-  <a class="back" href={`/lessons#level-${info.level}`}><span aria-hidden="true">↖</span> Back to Level {info.level} · {info.levelName}</a>
+  <a class="back" href={`/lessons#level-${info.level}`}><Icon name="arrow-left" size={15} /> Back to Level {info.level} · {info.levelName}</a>
   <h1>{info.title}</h1>
 
   <div class="cover-wrap">
@@ -57,7 +58,7 @@ const color = LEVEL_COLORS[info.level] ?? '#f2c94c';
           <span>Level {info.level} · {info.levelName}</span>
         </div>
       </div>
-      <p class="read"><b>{info.minutes} MIN</b> read <span class="done-badge" data-done-badge hidden>· ✓ completed</span></p>
+      <p class="read"><b>{info.minutes} MIN</b> read <span class="done-badge" data-done-badge hidden><Icon name="check" size={14} /> Completed</span></p>
       {
         info.concepts.length > 0 && (
           <ul class="tags" aria-label="Concepts covered">
@@ -115,7 +116,7 @@ const color = LEVEL_COLORS[info.level] ?? '#f2c94c';
         {
           prev ? (
             <a class="pager-link" href={`/lessons/${prev.slug}`}>
-              <span class="muted">↖ Previous · lesson {prev.order}</span>
+              <span class="muted pager-dir"><Icon name="arrow-left" size={14} /> Previous · lesson {prev.order}</span>
               <span class="pager-title">{prev.title}</span>
             </a>
           ) : (
@@ -125,7 +126,7 @@ const color = LEVEL_COLORS[info.level] ?? '#f2c94c';
         {
           next && (
             <a class="pager-link next" href={`/lessons/${next.slug}`}>
-              <span class="muted">Next · lesson {next.order} ↗</span>
+              <span class="muted pager-dir">Next · lesson {next.order} <Icon name="arrow-right" size={14} /></span>
               <span class="pager-title">{next.title}</span>
             </a>
           )
@@ -151,6 +152,7 @@ const color = LEVEL_COLORS[info.level] ?? '#f2c94c';
   }
   .back {
     display: inline-flex;
+    align-items: center;
     gap: 8px;
     font-size: 0.82rem;
     color: var(--text-soft);
@@ -218,7 +220,16 @@ const color = LEVEL_COLORS[info.level] ?? '#f2c94c';
     font-weight: 600;
   }
   .done-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: 6px;
     color: var(--good);
+  }
+  .pager-dir {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
   }
   .tags {
     list-style: none;

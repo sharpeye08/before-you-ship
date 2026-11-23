@@ -11,6 +11,7 @@
     "sync:titles": "node scripts/sync-titles.mjs"
   },
   "dependencies": {
+    "@lucide/astro": "^1.78.0",
     "astro": "^5.18.2",
     "js-yaml": "^4.3.2"
   }

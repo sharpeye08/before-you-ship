@@ -2,6 +2,7 @@
 // Home page in the editorial theme used by lesson pages.
 import Editorial from '../layouts/Editorial.astro';
 import Search from '../components/Search.astro';
+import Icon from '../components/Icon.astro';
 import { getSummaries, groupByLevel } from '../lib/lessons';
 import { LEVEL_COLORS } from '../config';
 
@@ -118,7 +119,7 @@ const tools = [
                 <span class="lv-name">{lv.name}</span>
                 <span class="lv-blurb">{lv.blurb}</span>
               </span>
-              <span class="lv-count">{lv.lessons.length} lessons ↗</span>
+              <span class="lv-count">{lv.lessons.length} lessons <Icon name="chevron-right" size={16} /></span>
             </a>
           </li>
         ))
@@ -133,7 +134,7 @@ const tools = [
         tools.map((t) => (
           <li>
             <a href={t.href}>
-              <span class="t-title">{t.title} ↗</span>
+              <span class="t-title">{t.title} <Icon name="arrow-right" size={16} /></span>
               <span class="t-text">{t.text}</span>
             </a>
           </li>
@@ -271,6 +272,9 @@ const tools = [
     line-height: 1.5;
   }
   .lv-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
     color: var(--text-soft);
     font-size: 0.85rem;
     white-space: nowrap;
@@ -300,6 +304,9 @@ const tools = [
     border-color: var(--border-strong);
   }
   .t-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     font-weight: 600;
   }
   .t-text {
@@ -431,7 +438,7 @@ const tools = [
     line.textContent = recent ? 'Continue reading: ' : 'Up next: ';
     const a = document.createElement('a');
     a.href = `/lessons/${target.s}`;
-    a.textContent = `Lesson ${target.n}. ${target.t} ↗`;
+    a.textContent = `Lesson ${target.n}. ${target.t}`;
     line.append(a);
     line.hidden = false;
   }

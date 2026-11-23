@@ -3,6 +3,7 @@
 // Defines the same CSS variable names as the old design, so shared components
 // (Quiz) keep working without changes.
 import '../styles/editorial-tools.css';
+import Icon from '../components/Icon.astro';
 import { SITE } from '../config';
 import { issueUrl } from '../lib/lessons';
 
@@ -52,7 +53,7 @@ const repoUrl = `https://github.com/${SITE.githubRepo}`;
       <header class="top">
         <a class="logo" href="/">before<span>/</span>you<span>/</span>ship</a>
         <nav aria-label="Main">
-          <a class="hide-sm" href="/lessons">All lessons <span aria-hidden="true">↗</span></a>
+          <a class="hide-sm nav-link" href="/lessons">All lessons <Icon name="arrow-right" size={15} /></a>
           <details class="menu">
             <summary>Menu <span class="dot" aria-hidden="true"></span></summary>
             <ul>
@@ -63,7 +64,7 @@ const repoUrl = `https://github.com/${SITE.githubRepo}`;
               <li><a href="/review">Review mode</a></li>
               <li><a href="/glossary">Glossary</a></li>
               <li><a href="/prompts">Prompt library</a></li>
-              <li><a href={repoUrl} target="_blank" rel="noopener noreferrer">GitHub ↗</a></li>
+              <li><a href={repoUrl} target="_blank" rel="noopener noreferrer" class="nav-link">GitHub <Icon name="external" size={14} /></a></li>
             </ul>
           </details>
         </nav>
@@ -168,6 +169,11 @@ const repoUrl = `https://github.com/${SITE.githubRepo}`;
   }
   .top nav > a {
     text-decoration: none;
+  }
+  .nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
   }
   .menu {
     position: relative;
