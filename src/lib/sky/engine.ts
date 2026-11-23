@@ -1,4 +1,4 @@
-// Space sky for the /space page: gas waves drifting across a night sky, drawn as a grid of cells.
+// Sky for the home page: gas waves drifting across a night sky, drawn as a grid of cells.
 //
 // How it stays fast (the idea studied from Aria's sky):
 // - The shader runs once per CELL, not once per screen pixel. The canvas is the size of the grid

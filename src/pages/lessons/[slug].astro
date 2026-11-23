@@ -1,679 +1,244 @@
 ---
+// Lesson reading page, modelled on a Hashnode article (see READING-PAGE-PLAN.md).
+// One centred reading column, an app bar that hides while you scroll down, a table of contents that
+// stays collapsed until you point at it, and the footer. Nothing else.
+import '@fontsource-variable/dm-sans/opsz.css';
+import '../../styles/space.css';
+import '../../styles/reading.css';
 import { render } from 'astro:content';
-import Editorial from '../../layouts/Editorial.astro';
 import Quiz from '../../components/Quiz.astro';
-import Icon from '../../components/Icon.astro';
-import Cover from '../../components/Cover.astro';
 import { getLessons, summarize, issueUrl } from '../../lib/lessons';
-import { extract, glossary, plain } from '../../lib/extract';
-import { SITE, LEVEL_COLORS } from '../../config';
+import { SITE } from '../../config';
 
 export async function getStaticPaths() {
   const lessons = await getLessons();
-  const entries = glossary(extract(lessons).terms).filter(
-    (e) => e.term.length >= 3 && !/ vs |\/|\(/i.test(e.term),
-  );
   return lessons.map((lesson, i) => ({
     params: { slug: lesson.id },
     props: {
       lesson,
-      prev: lessons[i - 1] ? summarize(lessons[i - 1]) : null,
       next: lessons[i + 1] ? summarize(lessons[i + 1]) : null,
       total: lessons.length,
-      // Hover definitions: only terms taught in earlier lessons.
-      terms: entries
-        .filter((e) => e.order < lesson.data.order)
-        .map((e) => ({ t: e.term, d: `${plain(e.def)} (from lesson ${e.order})` })),
     },
   }));
 }
 
-const { lesson, prev, next, total, terms } = Astro.props;
+const { lesson, next, total } = Astro.props;
 const { Content, headings } = await render(lesson);
 const info = summarize(lesson);
-const toc = headings.filter((h) => h.depth === 2);
-const firstPara = (lesson.body ?? '')
-  .split('\n')
-  .find((l) => l.trim() && !/^[#>|`<-]/.test(l.trim()));
+const toc = [
+  ...headings.filter((h) => h.depth === 2 || h.depth === 3).map((h) => ({ id: h.slug, text: h.text, depth: h.depth })),
+  { id: 'quiz-title', text: 'Check yourself', depth: 2 },
+];
+// Collapsed contents: a short line per heading, its length following the title's length.
+const lineWidth = (text: string) => Math.round(Math.min(40, Math.max(12, text.length * 0.9)));
+const firstPara = (lesson.body ?? '').split('\n').find((l) => l.trim() && !/^[#>|`<-]/.test(l.trim()));
 const description = firstPara ? firstPara.replace(/[*_`]/g, '').slice(0, 155) : SITE.description;
-const color = LEVEL_COLORS[info.level] ?? '#f2c94c';
+const pageTitle = `${info.title} · ${SITE.name}`;
+const repoUrl = `https://github.com/${SITE.githubRepo}`;
 ---
 
-<Editorial title={info.title} description={description}>
-  <div class="read-progress" aria-hidden="true"><div class="read-progress-fill" data-read-progress></div></div>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#08090a" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body class="reading-page">
+    <a href="#lesson" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-lg focus:bg-white focus:px-3 focus:py-2 focus:text-black">Skip to the lesson</a>
 
-  <a class="back" href={`/lessons#level-${info.level}`}><Icon name="arrow-left" size={15} /> Back to Level {info.level} · {info.levelName}</a>
-  <h1>{info.title}</h1>
-
-  <div class="cover-wrap">
-    <Cover slug={info.slug} order={info.order} level={info.level} levelName={info.levelName} />
-  </div>
-
-  <div class="layout">
-    <aside class="meta" aria-label="About this lesson">
-      <div class="who">
-        <span class="badge" style={`background:${color}`}>{info.order}</span>
-        <div>
-          <strong>Lesson {info.order} of {total}</strong>
-          <span>Level {info.level} · {info.levelName}</span>
-        </div>
+    <!-- App bar: minimal. Hides on scroll down, shows on scroll up. -->
+    <header data-appbar class="appbar sticky top-0 z-50 border-b border-line bg-[#08090a]/85 backdrop-blur-md">
+      <div class="mx-auto flex h-16 max-w-[1120px] items-center justify-between px-5">
+        <a href="/" class="font-semibold tracking-tight">Before you ship</a>
+        <a href="/lessons" class="rounded-full px-3 py-1.5 text-sm hover:bg-white/8">All lessons</a>
       </div>
-      <p class="read"><b>{info.minutes} MIN</b> read <span class="done-badge" data-done-badge hidden><Icon name="check" size={14} /> Completed</span></p>
-      {
-        info.concepts.length > 0 && (
-          <ul class="tags" aria-label="Concepts covered">
-            {info.concepts.map((c) => (
-              <li>{c}</li>
-            ))}
-          </ul>
-        )
-      }
-      {
-        toc.length > 0 && (
-          <nav class="toc" aria-label="On this page">
-            <p>On this page</p>
-            <ol>
-              {toc.map((h) => (
-                <li>
-                  <a href={`#${h.slug}`} data-toc-link={h.slug}>
-                    {h.text}
-                  </a>
-                </li>
-              ))}
-              <li>
-                <a href="#quiz-title">Check yourself</a>
-              </li>
-            </ol>
-          </nav>
-        )
-      }
-    </aside>
+    </header>
 
-    <div class="main-col">
-      <article class="lesson-body">
-        <div class="prose" data-prose>
+    <div class="relative mx-auto max-w-[1120px] px-5">
+      <!-- Contents, wide screens: collapsed lines; the full list appears on hover or keyboard focus. -->
+      <aside class="absolute top-0 right-0 hidden h-full w-52 xl:block" aria-label="Contents">
+        <div class="group/toc sticky top-24 mt-16">
+          <div class="grid">
+            <div class="max-h-[calc(100vh-8rem)] overflow-y-auto opacity-0 transition-opacity duration-200 [grid-area:1/1] group-focus-within/toc:opacity-100 group-hover/toc:opacity-100">
+              <p class="mb-3 text-sm font-semibold">On this page</p>
+              <nav aria-label="On this page">
+                {
+                  toc.map((h) => (
+                    <a href={`#${h.id}`} data-toc-link={h.id} class={`toc-link block py-1 text-sm leading-snug hover:underline ${h.depth === 3 ? 'pl-3' : ''}`}>
+                      {h.text}
+                    </a>
+                  ))
+                }
+              </nav>
+            </div>
+            <div aria-hidden="true" class="pointer-events-none flex flex-col gap-px self-start pl-3 transition-opacity duration-200 [grid-area:1/1] group-focus-within/toc:opacity-0 group-hover/toc:opacity-0">
+              {
+                toc.map((h) => (
+                  <div class="toc-mini-row flex h-3 items-center" data-toc-mini={h.id} style={`padding-left:${h.depth === 3 ? 8 : 0}px`}>
+                    <div class="toc-mini-line" style={`width:${lineWidth(h.text)}px`} />
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <main id="lesson" class="mx-auto max-w-[680px] pt-14 pb-24">
+        <p class="text-sm">Level {info.level} · {info.levelName} · Lesson {info.order} of {total}</p>
+        <h1 class="mt-4 text-[clamp(2rem,4.4vw,2.75rem)] leading-[1.15] font-medium tracking-[-0.03em] text-balance">{info.title}</h1>
+        <p class="mt-4 text-sm">{info.minutes} min read</p>
+        <hr class="my-10 border-line" />
+
+        <article class="prose-read" data-prose>
           <Content />
-        </div>
-        <script type="application/json" data-terms set:html={JSON.stringify(terms)} />
-      </article>
+        </article>
 
-      <Quiz questions={lesson.data.quiz} />
+        <Quiz questions={lesson.data.quiz} />
 
-      <section class="finish" aria-label="Finish this lesson">
-        <div>
-          <h2>Finished reading?</h2>
-          <p class="muted">Mark it as completed to track your progress. It's saved only in this browser.</p>
+        <div class="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-8">
+          <button type="button" class="btn btn-light" data-complete data-slug={info.slug}><span data-complete-label>Mark as completed</span></button>
+          {
+            next && (
+              <a href={`/lessons/${next.slug}`} class="max-w-sm text-right">
+                <span class="block text-sm">Next lesson</span>
+                <span class="mt-1 block font-medium underline decoration-white/30 underline-offset-4 hover:decoration-white">{next.title}</span>
+              </a>
+            )
+          }
         </div>
-        <div class="finish-actions">
-          <button type="button" class="btn btn-accent" data-complete data-slug={info.slug}>
-            <span data-complete-label>Mark as completed</span>
-          </button>
-          <a class="report" href={issueUrl(SITE.githubRepo, info.title)} target="_blank" rel="noopener noreferrer">Report a mistake</a>
-        </div>
-      </section>
+      </main>
+    </div>
 
-      <nav class="pager" aria-label="Other lessons">
+    <!-- Contents, small screens: a floating button that opens the list. -->
+    <button type="button" data-toc-open class="glass fixed right-4 bottom-4 z-40 flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium xl:hidden" aria-haspopup="dialog">
+      <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M4 6h16M4 12h10M4 18h13" /></svg>
+      Contents
+    </button>
+    <dialog data-toc-sheet class="m-0 mt-auto max-h-[70vh] w-full max-w-none rounded-t-3xl border border-line bg-[#0e0f11] p-0 text-white backdrop:bg-black/60 sm:mx-auto sm:max-w-lg">
+      <div class="flex items-center justify-between border-b border-line px-6 py-4">
+        <p class="font-semibold">On this page</p>
+        <button type="button" data-toc-close class="rounded-full px-3 py-1 text-sm hover:bg-white/8">Close</button>
+      </div>
+      <nav aria-label="On this page" class="max-h-[56vh] overflow-y-auto px-6 py-3">
         {
-          prev ? (
-            <a class="pager-link" href={`/lessons/${prev.slug}`}>
-              <span class="muted pager-dir"><Icon name="arrow-left" size={14} /> Previous · lesson {prev.order}</span>
-              <span class="pager-title">{prev.title}</span>
+          toc.map((h) => (
+            <a href={`#${h.id}`} data-toc-link={h.id} data-toc-sheet-link class={`toc-link block py-2 ${h.depth === 3 ? 'pl-4 text-[0.95rem]' : ''}`}>
+              {h.text}
             </a>
-          ) : (
-            <span />
-          )
-        }
-        {
-          next && (
-            <a class="pager-link next" href={`/lessons/${next.slug}`}>
-              <span class="muted pager-dir">Next · lesson {next.order} <Icon name="arrow-right" size={14} /></span>
-              <span class="pager-title">{next.title}</span>
-            </a>
-          )
+          ))
         }
       </nav>
-    </div>
-  </div>
-</Editorial>
+    </dialog>
 
-<style>
-  .read-progress {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    z-index: 50;
-  }
-  .read-progress-fill {
-    height: 100%;
-    width: 0;
-    background: var(--text);
-  }
-  .back {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.82rem;
-    color: var(--text-soft);
-    text-decoration: none;
-  }
-  .back:hover {
-    color: var(--text);
-  }
-  h1 {
-    font-family: 'Inter Tight', Inter, sans-serif;
-    font-weight: 500;
-    font-size: clamp(2.1rem, 5.2vw, 4rem);
-    line-height: 1.08;
-    letter-spacing: -0.025em;
-    margin: 14px 0 48px;
-    max-width: 20ch;
-  }
-  .cover-wrap {
-    margin-bottom: 64px;
-  }
-  .layout {
-    display: grid;
-    grid-template-columns: 230px minmax(0, 1fr);
-    gap: 72px;
-    align-items: start;
-  }
-  .meta {
-    position: sticky;
-    top: 24px;
-    font-size: 0.82rem;
-    color: var(--text-soft);
-  }
-  .who {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    padding-bottom: 14px;
-    border-bottom: 1px solid var(--line);
-    margin-bottom: 14px;
-  }
-  .who strong {
-    display: block;
-    color: var(--text);
-    font-weight: 500;
-  }
-  .who span {
-    color: var(--muted);
-  }
-  .badge {
-    display: grid;
-    place-items: center;
-    flex: none;
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    color: #111;
-    font-weight: 600;
-    font-size: 0.85rem;
-  }
-  .read {
-    margin: 0;
-  }
-  .read b {
-    color: var(--text);
-    font-weight: 600;
-  }
-  .done-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    margin-left: 6px;
-    color: var(--good);
-  }
-  .pager-dir {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .tags {
-    list-style: none;
-    padding: 0;
-    margin: 14px 0 20px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-  .tags li {
-    padding: 3px 9px;
-    border-radius: 99px;
-    border: 1px solid var(--line);
-    color: var(--text-soft);
-  }
-  .toc {
-    border-top: 1px solid var(--line);
-    padding-top: 14px;
-  }
-  .toc p {
-    margin: 0 0 8px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    font-size: 0.72rem;
-  }
-  .toc ol {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: 2px;
-  }
-  .toc a {
-    display: block;
-    padding: 5px 0 5px 10px;
-    border-left: 1px solid var(--line);
-    color: var(--muted);
-    text-decoration: none;
-    line-height: 1.35;
-  }
-  .toc a:hover,
-  .toc a.is-current {
-    color: var(--text);
-    border-left-color: var(--text);
-  }
-  .main-col {
-    min-width: 0;
-    max-width: 720px;
-  }
-  .finish {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin-top: 48px;
-    padding: 28px 0;
-    border-top: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-  }
-  .finish h2 {
-    margin: 0 0 4px;
-    font-family: 'Inter Tight', Inter, sans-serif;
-    font-weight: 500;
-    font-size: 1.5rem;
-  }
-  .finish p {
-    margin: 0;
-  }
-  .finish-actions {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-  .report {
-    color: var(--muted);
-    font-size: 0.85rem;
-  }
-  .pager {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    margin-top: 32px;
-  }
-  .pager-link {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    text-decoration: none;
-  }
-  .pager-link .muted {
-    font-size: 0.8rem;
-  }
-  .pager-title {
-    font-family: 'Inter Tight', Inter, sans-serif;
-    font-size: 1.15rem;
-    font-weight: 500;
-    line-height: 1.3;
-  }
-  .pager-link:hover .pager-title {
-    text-decoration: underline;
-    text-underline-offset: 4px;
-  }
-  .pager-link.next {
-    text-align: right;
-    align-items: flex-end;
-  }
+    <footer class="border-t border-line">
+      <div class="mx-auto grid max-w-[1120px] grid-cols-2 gap-8 px-5 py-12 md:grid-cols-4">
+        <div class="col-span-2 md:col-span-1">
+          <p class="font-semibold tracking-tight">Before you ship</p>
+          <p class="mt-3 max-w-[26ch] text-sm">Free and open source. No login, no tracking cookies.</p>
+        </div>
+        <div class="flex flex-col gap-2 text-sm">
+          <p class="mb-1 font-semibold">Learn</p>
+          <a class="hover:underline" href="/lessons">All lessons</a>
+          <a class="hover:underline" href="/start">Where should I start?</a>
+          <a class="hover:underline" href="/review">Review mode</a>
+        </div>
+        <div class="flex flex-col gap-2 text-sm">
+          <p class="mb-1 font-semibold">Tools</p>
+          <a class="hover:underline" href="/checklist">Pre-ship checklist</a>
+          <a class="hover:underline" href="/glossary">Glossary</a>
+          <a class="hover:underline" href="/prompts">Prompt library</a>
+        </div>
+        <div class="flex flex-col gap-2 text-sm">
+          <p class="mb-1 font-semibold">Project</p>
+          <a class="hover:underline" href={repoUrl} target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a class="hover:underline" href={issueUrl(SITE.githubRepo, info.title)} target="_blank" rel="noopener noreferrer">Report a mistake</a>
+        </div>
+      </div>
+    </footer>
 
-  /* Quiz restyle for this layout */
-  .main-col :global(.quiz) {
-    margin-top: 48px;
-    padding: 28px;
-    border: 1px solid var(--line);
-    border-radius: 16px;
-  }
-  .main-col :global(.quiz h2) {
-    font-family: 'Inter Tight', Inter, sans-serif;
-    font-weight: 500;
-    font-size: 1.6rem;
-  }
+    <script>
+      import { isCompleted, setCompleted, recordVisit } from '../../lib/progress';
 
-  /* Article typography */
-  .prose {
-    font-size: 1.1rem;
-    line-height: 1.75;
-    color: var(--text-soft);
-    overflow-wrap: break-word;
-  }
-  .prose :global(h1) {
-    display: none;
-  }
-  .prose > :global(:first-child) {
-    margin-top: 0;
-  }
-  .prose :global(h2) {
-    font-family: 'Inter Tight', Inter, sans-serif;
-    font-weight: 500;
-    font-size: 2.1rem;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-    color: var(--text);
-    margin: 2.2em 0 0.6em;
-    scroll-margin-top: 20px;
-  }
-  .prose :global(h3) {
-    color: var(--text);
-    font-size: 1.25rem;
-    margin: 1.8em 0 0.5em;
-  }
-  .prose :global(h4) {
-    color: var(--text);
-    margin: 1.5em 0 0.4em;
-  }
-  .prose :global(p),
-  .prose :global(ul),
-  .prose :global(ol) {
-    margin: 0 0 1.05em;
-  }
-  .prose :global(li) {
-    margin: 0.3em 0;
-  }
-  .prose :global(strong) {
-    color: var(--text);
-    font-weight: 600;
-  }
-  .prose :global(a) {
-    color: var(--text);
-    text-underline-offset: 3px;
-    text-decoration-color: rgba(255, 255, 255, 0.4);
-  }
-  .prose :global(a:hover) {
-    text-decoration-color: var(--text);
-  }
-  .prose :global(hr) {
-    border: 0;
-    border-top: 1px solid var(--line);
-    margin: 3em 0;
-  }
-  .prose :global(blockquote) {
-    margin: 1.6em 0;
-    padding: 2px 0 2px 18px;
-    border-left: 3px solid var(--text);
-    color: var(--text);
-  }
-  .prose :global(blockquote p) {
-    margin: 0.4em 0;
-  }
-  .prose :global(.callout-short) {
-    font-size: 1.2rem;
-    line-height: 1.55;
-  }
-  .prose :global(.callout-start) {
-    border-left-color: #f2c94c;
-    font-size: 1rem;
-    color: var(--text-soft);
-  }
-  .prose :global(.callout-start > p:first-child > strong:first-child) {
-    display: block;
-    margin-bottom: 4px;
-  }
-  .prose :global(.callout-deeper) {
-    font-size: 0.98rem;
-    border-left-color: #4f6bd8;
-    color: var(--text-soft);
-  }
-  .prose :global(code) {
-    font-family: var(--mono);
-    font-size: 0.86em;
-    background: rgba(255, 255, 255, 0.07);
-    padding: 0.1em 0.35em;
-    border-radius: 5px;
-    color: var(--text);
-  }
-  .prose :global(pre) {
-    margin: 0 0 1.3em;
-    padding: 18px 20px;
-    border-radius: 12px;
-    border: 1px solid var(--line);
-    overflow-x: auto;
-    font-size: 0.9rem;
-    line-height: 1.6;
-  }
-  .prose :global(pre code) {
-    background: none;
-    padding: 0;
-    font-size: inherit;
-  }
-  .prose :global(img) {
-    display: block;
-    max-width: 100%;
-    height: auto;
-    margin: 1.8em auto;
-    border-radius: 14px;
-  }
-  .prose :global(.table-wrap) {
-    overflow-x: auto;
-    margin: 0 0 1.3em;
-  }
-  .prose :global(table) {
-    border-collapse: collapse;
-    width: 100%;
-    font-size: 0.95rem;
-    line-height: 1.55;
-  }
-  .prose :global(th),
-  .prose :global(td) {
-    border-bottom: 1px solid var(--line);
-    padding: 10px 12px;
-    text-align: left;
-    vertical-align: top;
-  }
-  .prose :global(td) {
-    min-width: 110px;
-  }
-  .prose :global(th) {
-    color: var(--text);
-    font-weight: 600;
-  }
-  .prose :global(details) {
-    margin-top: 2.4em;
-    border-top: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-    padding: 14px 0;
-  }
-  .prose :global(summary) {
-    cursor: pointer;
-    color: var(--text);
-  }
-  .prose :global(details > summary + *) {
-    margin-top: 16px;
-  }
-  /* Hover definitions for terms from earlier lessons */
-  .prose :global(.term) {
-    position: relative;
-    border-bottom: 1px dotted var(--muted);
-    cursor: help;
-  }
-  .prose :global(.term:hover::after),
-  .prose :global(.term:focus::after) {
-    content: attr(data-def);
-    position: absolute;
-    left: 0;
-    top: calc(100% + 6px);
-    z-index: 40;
-    width: max-content;
-    max-width: min(300px, 80vw);
-    padding: 10px 12px;
-    border-radius: 10px;
-    border: 1px solid var(--border-strong);
-    background: #161616;
-    color: var(--text-soft);
-    font-size: 0.85rem;
-    line-height: 1.5;
-    white-space: normal;
-    pointer-events: none;
-  }
-  .prose :global(.term:focus) {
-    outline: none;
-    border-bottom-color: var(--text);
-  }
+      // App bar: hide while scrolling down, show while scrolling up or near the top.
+      const bar = document.querySelector<HTMLElement>('[data-appbar]')!;
+      let lastY = scrollY;
+      let ticking = false;
+      const onScroll = () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          const y = scrollY;
+          const dy = y - lastY;
+          if (y < 80) bar.classList.remove('is-hidden');
+          else if (dy > 6) bar.classList.add('is-hidden');
+          else if (dy < -6) bar.classList.remove('is-hidden');
+          if (Math.abs(dy) > 6 || y < 80) lastY = y;
+          ticking = false;
+          markCurrent();
+        });
+      };
+      addEventListener('scroll', onScroll, { passive: true });
+      bar.addEventListener('focusin', () => bar.classList.remove('is-hidden'));
 
-  @media (max-width: 860px) {
-    h1 {
-      margin-bottom: 26px;
-    }
-    .cover-wrap {
-      margin-bottom: 26px;
-    }
-    .layout {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 28px;
-    }
-    .meta {
-      position: static;
-    }
-    .toc {
-      display: none;
-    }
-    .prose {
-      font-size: 1.04rem;
-    }
-    .prose :global(h2) {
-      font-size: 1.65rem;
-    }
-    .main-col :global(.quiz) {
-      padding: 20px 16px;
-    }
-    .pager {
-      grid-template-columns: 1fr;
-    }
-    .pager-link.next {
-      text-align: left;
-      align-items: flex-start;
-    }
-  }
-</style>
+      // Current section: the last heading above 30% of the screen. Positions are measured once, not per frame.
+      const ids = [...new Set([...document.querySelectorAll<HTMLElement>('[data-toc-link]')].map((a) => a.dataset.tocLink!))];
+      let tops: number[] = [];
+      const measure = () => {
+        tops = ids.map((id) => {
+          const el = document.getElementById(id);
+          return el ? el.getBoundingClientRect().top + scrollY : Infinity;
+        });
+      };
+      let current = '';
+      const markCurrent = () => {
+        const line = scrollY + innerHeight * 0.3;
+        let id = '';
+        tops.forEach((t, i) => {
+          if (t <= line) id = ids[i];
+        });
+        if (id === current) return;
+        current = id;
+        document.querySelectorAll('[data-toc-link]').forEach((a) => a.classList.toggle('is-current', (a as HTMLElement).dataset.tocLink === id));
+        document.querySelectorAll('[data-toc-mini]').forEach((r) => r.classList.toggle('is-current', (r as HTMLElement).dataset.tocMini === id));
+      };
+      measure();
+      markCurrent();
+      new ResizeObserver(() => {
+        measure();
+        markCurrent();
+      }).observe(document.body);
 
-<script>
-  // Hover definitions for terms taught in earlier lessons: first mention of each term only,
-  // in normal paragraphs and list items (not in code, links, headings or callout boxes).
-  {
-    const MAX_TERMS = 30;
-    const terms: { t: string; d: string }[] = JSON.parse(document.querySelector('[data-terms]')?.textContent || '[]');
-    const prose = document.querySelector<HTMLElement>('[data-prose]');
-    if (prose && terms.length) {
-      const sorted = [...terms].sort((a, b) => b.t.length - a.t.length);
-      const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      const patterns = sorted.map((x) => ({ ...x, re: new RegExp(`\\b${escapeRe(x.t)}\\b`, 'i') }));
-      const used = new Set<string>();
-      const SKIP = 'code, pre, a, h1, h2, h3, h4, strong, summary, .callout-start, .term, details, table';
-      const walker = document.createTreeWalker(prose, NodeFilter.SHOW_TEXT, {
-        acceptNode: (n) => {
-          const el = n.parentElement;
-          if (!el || el.closest(SKIP) || !el.closest('p, li')) return NodeFilter.FILTER_REJECT;
-          return NodeFilter.FILTER_ACCEPT;
-        },
+      // Small screens: the contents sheet.
+      const sheet = document.querySelector<HTMLDialogElement>('[data-toc-sheet]')!;
+      document.querySelector('[data-toc-open]')!.addEventListener('click', () => sheet.showModal());
+      document.querySelector('[data-toc-close]')!.addEventListener('click', () => sheet.close());
+      sheet.addEventListener('click', (e) => {
+        if (e.target === sheet) sheet.close();
       });
-      const nodes: Text[] = [];
-      while (walker.nextNode()) nodes.push(walker.currentNode as Text);
-      for (const node of nodes) {
-        if (used.size >= MAX_TERMS) break;
-        let current: Text | null = node;
-        for (const p of patterns) {
-          if (!current || used.has(p.t.toLowerCase())) continue;
-          const m = current.data.match(p.re);
-          if (!m || m.index === undefined) continue;
-          used.add(p.t.toLowerCase());
-          const hit = current.splitText(m.index);
-          const after = hit.splitText(m[0].length);
-          const span = document.createElement('span');
-          span.className = 'term';
-          span.tabIndex = 0;
-          span.dataset.def = p.d;
-          span.textContent = hit.data;
-          hit.replaceWith(span);
-          current = after;
-          if (used.size >= MAX_TERMS) break;
-        }
-      }
-    }
-  }
-</script>
+      document.querySelectorAll('[data-toc-sheet-link]').forEach((a) => a.addEventListener('click', () => sheet.close()));
 
-<script>
-  import { isCompleted, setCompleted, recordVisit } from '../../lib/progress';
-
-  const button = document.querySelector<HTMLButtonElement>('[data-complete]')!;
-  const label = button.querySelector<HTMLElement>('[data-complete-label]')!;
-  const badge = document.querySelector<HTMLElement>('[data-done-badge]')!;
-  const slug = button.dataset.slug!;
-
-  recordVisit(slug);
-
-  const paint = () => {
-    const done = isCompleted(slug);
-    button.classList.toggle('btn-accent', !done);
-    button.classList.toggle('btn-done', done);
-    label.textContent = done ? 'Completed · click to undo' : 'Mark as completed';
-    badge.hidden = !done;
-  };
-  paint();
-
-  button.addEventListener('click', () => {
-    if (isCompleted(slug)) {
-      // Un-marking doesn't open the "complete" page, so completion counts stay honest.
-      setCompleted(slug, false);
+      // Mark as completed (saved only in this browser).
+      const button = document.querySelector<HTMLButtonElement>('[data-complete]')!;
+      const label = button.querySelector<HTMLElement>('[data-complete-label]')!;
+      const slug = button.dataset.slug!;
+      recordVisit(slug);
+      const paint = () => {
+        const done = isCompleted(slug);
+        label.textContent = done ? 'Completed' : 'Mark as completed';
+        button.classList.toggle('btn-light', !done);
+        button.classList.toggle('btn-ghost', done);
+      };
       paint();
-      return;
-    }
-    setCompleted(slug, true);
-    location.href = `/lessons/${slug}/complete`;
-  });
-
-  // Reading progress bar.
-  const bar = document.querySelector<HTMLElement>('[data-read-progress]')!;
-  const article = document.querySelector<HTMLElement>('.lesson-body')!;
-  const onScroll = () => {
-    const rect = article.getBoundingClientRect();
-    const total = rect.height - window.innerHeight * 0.6;
-    const pct = Math.min(1, Math.max(0, -rect.top / Math.max(total, 1)));
-    bar.style.width = `${pct * 100}%`;
-  };
-  document.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
-
-  // Highlight the current section in the table of contents.
-  const links = new Map(
-    [...document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]')].map((a) => [a.dataset.tocLink!, a]),
-  );
-  if (links.size && 'IntersectionObserver' in window) {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          if (!e.isIntersecting) continue;
-          links.forEach((a) => a.classList.remove('is-current'));
-          links.get(e.target.id)?.classList.add('is-current');
-        }
-      },
-      { rootMargin: '0px 0px -70% 0px' },
-    );
-    links.forEach((_, id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-  }
-</script>
+      button.addEventListener('click', () => {
+        setCompleted(slug, !isCompleted(slug));
+        paint();
+      });
+    </script>
+  </body>
+</html>

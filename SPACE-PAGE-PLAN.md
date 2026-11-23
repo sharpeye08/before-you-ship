@@ -1,8 +1,8 @@
-# New home page plan: "space" (route `/space`)
+# Home page plan: "space" (now the home page at `/`)
 
-Built from scratch on a new route. The live home page, `/nova` and the prism stay as they are.
+Built from scratch. It replaced the earlier prism home page.
 Stack: Astro page + React components + Tailwind CSS v4 (scoped to this page only).
-Fonts: Geist for text, Geist Mono for small labels.
+Font: DM Sans (self-hosted from Fontsource) for everything.
 
 ## 1. What Aria does (studied from joinariapp.com)
 
@@ -82,7 +82,7 @@ mono chip in the bottom-left corner that shows the current section, like Aria's 
 
 ## 5. Files
 
-- `src/pages/space.astro`: the page. Reads lessons at build time and passes data to the components.
+- `src/pages/index.astro`: the page. Reads lessons at build time and passes data to the components.
 - `src/styles/space.css`: Tailwind import and the page's theme (used only by this page).
 - `src/lib/sky/engine.ts`: the cell renderer (WebGL2), the tone ladders and the scene blending.
 - `src/components/space/*.tsx`: Sky, Nav, Chip, PathRow, LessonWindow (quiz), LessonIndex (tabs), Tools,

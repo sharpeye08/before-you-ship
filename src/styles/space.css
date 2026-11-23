@@ -1,4 +1,4 @@
-/* Styles for the /space page only. Tailwind (with its reset) loads here, so other pages are not affected. */
+/* Styles for the main build (home page and lesson pages). Tailwind (with its reset) loads here; older pages that use the Editorial layout do not load it. */
 /* Scan src/ for class names (explicit, so it also works when the dev server starts in another folder). */
 @import 'tailwindcss' source('..');
 
