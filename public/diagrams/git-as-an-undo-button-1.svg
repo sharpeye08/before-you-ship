@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 260" role="img" aria-labelledby="t d">
+  <title id="t">Commits are save points in a line</title>
+  <desc id="d">Three commits in a line, from oldest to newest: First version, Sign-in page works, and Add high-score board. The newest commit broke the sign-in page. An arrow goes back from it to the commit where the sign-in page works.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="260" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <text x="40" y="44" font-size="12" fill="#a0a0a0">OLDER</text>
+    <text x="680" y="44" font-size="12" fill="#a0a0a0" text-anchor="end">NEWER</text>
+
+    <!-- Commit 1 -->
+    <rect x="40" y="62" width="180" height="84" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="130" y="94" font-size="12" fill="#a0a0a0" text-anchor="middle">1a2b3c4</text>
+    <text x="130" y="120" font-size="15" fill="#f2f2f2" text-anchor="middle">First version</text>
+
+    <!-- Commit 2 -->
+    <rect x="270" y="62" width="180" height="84" rx="10" fill="#1f9d6b"/>
+    <text x="360" y="94" font-size="12" fill="#dff5ec" text-anchor="middle">9f3b7d0</text>
+    <text x="360" y="120" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Sign-in page works</text>
+
+    <!-- Commit 3 -->
+    <rect x="500" y="62" width="180" height="84" rx="10" fill="#1f1f1f" stroke="#e5484d" stroke-width="1.5"/>
+    <text x="590" y="94" font-size="12" fill="#a0a0a0" text-anchor="middle">c4e81a2</text>
+    <text x="590" y="120" font-size="15" fill="#f2f2f2" text-anchor="middle">Add high-score board</text>
+    <text x="590" y="166" font-size="12" fill="#e5484d" text-anchor="middle">Sign-in page broke</text>
+
+    <!-- Arrows between commits -->
+    <line x1="224" y1="104" x2="264" y2="104" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="454" y1="104" x2="494" y2="104" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <!-- Go back -->
+    <path d="M590 178 L590 206 L360 206 L360 154" fill="none" stroke="#cfcfcf" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrow)"/>
+    <text x="475" y="230" font-size="12" fill="#a0a0a0" text-anchor="middle">Git can take you back to a save point that works</text>
+  </g>
+</svg>

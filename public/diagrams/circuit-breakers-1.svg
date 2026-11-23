@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" role="img" aria-labelledby="t d">
+  <title id="t">One slow service fills every thread</title>
+  <desc id="d">Product page requests arrive at 50 per second. Each one waits 30 seconds for the slow recommendations service, so all 200 threads of your server are busy waiting. A checkout request arrives, finds no free thread, and fails, even though checkout never calls the recommendations service.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="330" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Product page visitors -->
+    <rect x="40" y="50" width="170" height="64" rx="10" fill="#f2c94c"/>
+    <text x="125" y="80" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Product pages</text>
+    <text x="125" y="100" font-size="12" fill="#111111" text-anchor="middle">50 per second</text>
+
+    <!-- Checkout -->
+    <rect x="40" y="216" width="170" height="64" rx="10" fill="#f2c94c"/>
+    <text x="125" y="253" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Checkout</text>
+    <text x="125" y="304" font-size="12" fill="#e5484d" text-anchor="middle">No free thread. It fails.</text>
+
+    <!-- Server with threads -->
+    <rect x="270" y="40" width="200" height="250" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="370" y="66" font-size="15" fill="#f2f2f2" text-anchor="middle">Your server</text>
+    <text x="370" y="86" font-size="12" fill="#a0a0a0" text-anchor="middle">200 threads</text>
+    <g fill="#f08a4b">
+      <rect x="294" y="100" width="19" height="19" rx="3"/><rect x="319" y="100" width="19" height="19" rx="3"/><rect x="344" y="100" width="19" height="19" rx="3"/><rect x="369" y="100" width="19" height="19" rx="3"/><rect x="394" y="100" width="19" height="19" rx="3"/><rect x="419" y="100" width="19" height="19" rx="3"/><rect x="444" y="100" width="19" height="19" rx="3"/>
+      <rect x="294" y="125" width="19" height="19" rx="3"/><rect x="319" y="125" width="19" height="19" rx="3"/><rect x="344" y="125" width="19" height="19" rx="3"/><rect x="369" y="125" width="19" height="19" rx="3"/><rect x="394" y="125" width="19" height="19" rx="3"/><rect x="419" y="125" width="19" height="19" rx="3"/><rect x="444" y="125" width="19" height="19" rx="3"/>
+      <rect x="294" y="150" width="19" height="19" rx="3"/><rect x="319" y="150" width="19" height="19" rx="3"/><rect x="344" y="150" width="19" height="19" rx="3"/><rect x="369" y="150" width="19" height="19" rx="3"/><rect x="394" y="150" width="19" height="19" rx="3"/><rect x="419" y="150" width="19" height="19" rx="3"/><rect x="444" y="150" width="19" height="19" rx="3"/>
+      <rect x="294" y="175" width="19" height="19" rx="3"/><rect x="319" y="175" width="19" height="19" rx="3"/><rect x="344" y="175" width="19" height="19" rx="3"/><rect x="369" y="175" width="19" height="19" rx="3"/><rect x="394" y="175" width="19" height="19" rx="3"/><rect x="419" y="175" width="19" height="19" rx="3"/><rect x="444" y="175" width="19" height="19" rx="3"/>
+      <rect x="294" y="200" width="19" height="19" rx="3"/><rect x="319" y="200" width="19" height="19" rx="3"/><rect x="344" y="200" width="19" height="19" rx="3"/><rect x="369" y="200" width="19" height="19" rx="3"/><rect x="394" y="200" width="19" height="19" rx="3"/><rect x="419" y="200" width="19" height="19" rx="3"/><rect x="444" y="200" width="19" height="19" rx="3"/>
+    </g>
+    <text x="370" y="248" font-size="12" fill="#f08a4b" text-anchor="middle">All busy. All waiting.</text>
+
+    <!-- Slow service -->
+    <rect x="530" y="110" width="150" height="80" rx="10" fill="#1f1f1f" stroke="#f08a4b" stroke-width="1.5"/>
+    <text x="605" y="146" font-size="15" fill="#f2f2f2" text-anchor="middle">Recommendations</text>
+    <text x="605" y="168" font-size="12" fill="#f08a4b" text-anchor="middle">30 s per answer</text>
+
+    <!-- Arrows -->
+    <line x1="216" y1="82" x2="264" y2="82" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="476" y1="150" x2="524" y2="150" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="216" y1="248" x2="244" y2="248" stroke="#e5484d" stroke-width="2" stroke-dasharray="6 5"/>
+    <line x1="246" y1="240" x2="262" y2="256" stroke="#e5484d" stroke-width="3"/>
+    <line x1="246" y1="256" x2="262" y2="240" stroke="#e5484d" stroke-width="3"/>
+  </g>
+</svg>

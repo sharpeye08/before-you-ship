@@ -123,6 +123,66 @@ for (const file of files) {
     if (raw) errors.push(`raw HTML outside code (wrap it in backticks): ${[...new Set(raw)].slice(0, 3).join(' ')}`);
   }
 
+  // Punctuation: no em dashes anywhere, and no en dash used as a dash between words.
+  {
+    const all = fm[1] + '\n' + body;
+    const em = (all.match(/—/g) || []).length;
+    if (em) errors.push(`${em} em dash(es) — rewrite as separate sentences, commas or a colon`);
+    const enDash = (all.replace(/```[\s\S]*?```/g, '').match(/\s–\s/g) || []).length;
+    if (enDash) errors.push(`${enDash} spaced en dash(es) used as a dash; rewrite the sentence`);
+  }
+
+  // Diagrams: at least one real diagram image per lesson, with alt text, and the file must exist.
+  {
+    const imgs = [...body.matchAll(/!\[([^\]]*)\]\(([^)\s]+)\)/g)];
+    const diagrams = imgs.filter((m) => m[2].startsWith('/diagrams/'));
+    if (!diagrams.length) errors.push('no diagram (add at least one ![alt](/diagrams/<slug>-1.svg))');
+    for (const m of imgs) {
+      if (!m[1].trim()) errors.push(`image without alt text: ${m[2]}`);
+      if (m[2].startsWith('/diagrams/') && !fs.existsSync(path.join(root, 'public', m[2])))
+        errors.push(`diagram file missing: public${m[2]}`);
+    }
+  }
+
+  // ASD-STE100 style: descriptive sentences ≤25 words, paragraphs ≤6 sentences (main text only).
+  {
+    const text = body
+      .replace(/<details>[\s\S]*?<\/details>/g, '')
+      .replace(/^## References[\s\S]*$/m, '')
+      .replace(/```[\s\S]*?```/g, '')
+      .replace(/^\s*\|.*$/gm, '')
+      .replace(/^#.*$/gm, '')
+      .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
+      .replace(/\]\([^)]*\)/g, ']');
+    // Split into units: each list item (also inside a blockquote) is its own unit,
+    // so a normal bulleted list is never read as one long sentence.
+    const LIST_ITEM = /^\s*(?:>\s*)*(?:[-*+]|\d+\.)\s+/;
+    const units = [];
+    for (const block of text.split(/\n\s*\n/)) {
+      let current = null;
+      for (const line of block.split('\n')) {
+        if (!line.trim()) continue;
+        if (LIST_ITEM.test(line) || current === null) {
+          current = { list: LIST_ITEM.test(line), text: '' };
+          units.push(current);
+        }
+        current.text += ' ' + line.replace(LIST_ITEM, '').replace(/^\s*(?:>\s*)+/, '');
+      }
+    }
+    const longSentences = [];
+    for (const u of units) {
+      const p = u.text.replace(/\s+/g, ' ').trim();
+      if (!p) continue;
+      const sentences = p.split(/(?<=[.!?]\**)\s+(?=[A-Z0-9"*`(\[])/).filter((s) => s.split(/\s+/).length > 2);
+      for (const s of sentences) {
+        const words = s.split(/\s+/).filter(Boolean).length;
+        if (words > 25) longSentences.push(`${words}w: "${s.slice(0, 60)}…"`);
+      }
+      if (!u.list && sentences.length > 6) warnings.push(`paragraph has ${sentences.length} sentences (STE max 6): "${p.slice(0, 50)}…"`);
+    }
+    if (longSentences.length) errors.push(`${longSentences.length} sentence(s) over 25 words (STE). First: ${longSentences[0]}`);
+  }
+
   // Code snippets: short and minimal. `text` blocks (output, diagrams) are not code.
   for (const m of body.matchAll(/```(\w*)\n([\s\S]*?)```/g)) {
     const lang = m[1] || 'text';

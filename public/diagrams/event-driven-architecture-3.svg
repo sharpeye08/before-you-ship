@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" role="img" aria-labelledby="t d">
+  <title id="t">An idempotent consumer</title>
+  <desc id="d">The same event, with the same event ID, arrives two times. The first time, the loyalty consumer sees a new ID, records it and adds the points. The second time, the ID is already recorded, so the consumer skips the work. The customer gets the points once.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="300" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Events -->
+    <rect x="30" y="50" width="170" height="64" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="115" y="78" font-size="15" fill="#f2f2f2" text-anchor="middle">Event ID 42</text>
+    <text x="115" y="98" font-size="12" fill="#a0a0a0" text-anchor="middle">first delivery</text>
+
+    <rect x="30" y="186" width="170" height="64" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="115" y="214" font-size="15" fill="#f2f2f2" text-anchor="middle">Event ID 42</text>
+    <text x="115" y="234" font-size="12" fill="#a0a0a0" text-anchor="middle">delivered again</text>
+
+    <!-- Consumer -->
+    <rect x="275" y="104" width="170" height="92" rx="10" fill="#4f6bd8"/>
+    <text x="360" y="140" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Loyalty consumer</text>
+    <text x="360" y="162" font-size="12" fill="#e8ecff" text-anchor="middle">Is this ID already</text>
+    <text x="360" y="178" font-size="12" fill="#e8ecff" text-anchor="middle">recorded?</text>
+
+    <!-- Results -->
+    <rect x="520" y="50" width="170" height="64" rx="10" fill="#1f9d6b"/>
+    <text x="605" y="78" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">New: record ID</text>
+    <text x="605" y="98" font-size="12" fill="#e6fff4" text-anchor="middle">and add the points</text>
+
+    <rect x="520" y="186" width="170" height="64" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="605" y="214" font-size="15" fill="#f2f2f2" text-anchor="middle">Seen: skip</text>
+    <text x="605" y="234" font-size="12" fill="#a0a0a0" text-anchor="middle">do nothing</text>
+
+    <!-- Arrows -->
+    <line x1="204" y1="90" x2="269" y2="128" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="204" y1="210" x2="269" y2="172" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="449" y1="128" x2="514" y2="90" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="490" y="132" font-size="12" fill="#a0a0a0">1st</text>
+    <line x1="449" y1="172" x2="514" y2="210" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="490" y="176" font-size="12" fill="#a0a0a0">2nd</text>
+
+    <text x="360" y="282" font-size="12" fill="#a0a0a0" text-anchor="middle">The customer gets the points once, however many times the event arrives.</text>
+  </g>
+</svg>

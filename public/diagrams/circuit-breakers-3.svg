@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" role="img" aria-labelledby="t d">
+  <title id="t">Bulkheads: a separate share for each service</title>
+  <desc id="d">Your server gives each outside service its own share of at most 20 calls at once. The recommendations share is full, 20 of 20, so call 21 gets the fallback. The payments share has 3 of 20 in use and the email share has 1 of 20 in use, so those calls still work.</desc>
+  <rect width="720" height="320" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <text x="40" y="36" font-size="12" fill="#a0a0a0">YOUR SERVER: ONE SHARE OF 20 CALLS FOR EACH SERVICE</text>
+    <rect x="40" y="50" width="640" height="200" rx="12" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+
+    <!-- Recommendations -->
+    <rect x="60" y="74" width="190" height="156" rx="10" fill="#141414" stroke="#f08a4b" stroke-width="1.5"/>
+    <text x="155" y="104" font-size="15" fill="#f2f2f2" text-anchor="middle">Recommendations</text>
+    <rect x="80" y="126" width="150" height="18" rx="4" fill="#f08a4b"/>
+    <text x="155" y="172" font-size="12" fill="#f08a4b" text-anchor="middle">20 of 20 in use</text>
+    <text x="155" y="196" font-size="12" fill="#a0a0a0" text-anchor="middle">Call 21 gets</text>
+    <text x="155" y="212" font-size="12" fill="#a0a0a0" text-anchor="middle">the fallback.</text>
+
+    <!-- Payments -->
+    <rect x="265" y="74" width="190" height="156" rx="10" fill="#141414" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="360" y="104" font-size="15" fill="#f2f2f2" text-anchor="middle">Payments</text>
+    <rect x="285" y="126" width="150" height="18" rx="4" fill="#2a2a2a"/>
+    <rect x="285" y="126" width="22.5" height="18" rx="4" fill="#1f9d6b"/>
+    <text x="360" y="172" font-size="12" fill="#1f9d6b" text-anchor="middle">3 of 20 in use</text>
+    <text x="360" y="196" font-size="12" fill="#a0a0a0" text-anchor="middle">Still works.</text>
+
+    <!-- Email -->
+    <rect x="470" y="74" width="190" height="156" rx="10" fill="#141414" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="565" y="104" font-size="15" fill="#f2f2f2" text-anchor="middle">Email</text>
+    <rect x="490" y="126" width="150" height="18" rx="4" fill="#2a2a2a"/>
+    <rect x="490" y="126" width="7.5" height="18" rx="3" fill="#1f9d6b"/>
+    <text x="565" y="172" font-size="12" fill="#1f9d6b" text-anchor="middle">1 of 20 in use</text>
+    <text x="565" y="196" font-size="12" fill="#a0a0a0" text-anchor="middle">Still works.</text>
+
+    <text x="360" y="284" font-size="15" fill="#f2f2f2" text-anchor="middle">A slow service fills only its own share.</text>
+    <text x="360" y="304" font-size="12" fill="#a0a0a0" text-anchor="middle">Like the walls between sections of a ship.</text>
+  </g>
+</svg>

@@ -77,7 +77,7 @@ It wasn't inside your phone or laptop. You didn't download it earlier. A second 
 
 This lesson explains that trip, in simple steps. It matters because one day you'll build your own website or app, maybe with an AI helping you. When something goes wrong, the error messages will talk about this trip: *"server not found"*, *"request failed"*, *"404"*. Don't worry if those mean nothing to you yet. By the end of this lesson, they'll start to make sense.
 
-This lesson gives you the big picture. The next four lessons zoom in on each part.
+This lesson gives you the big picture. The next four lessons explain each part in more detail.
 
 ---
 
@@ -131,7 +131,7 @@ The browser has three jobs:
 2. **Receive:** get the server's answer.
 3. **Show:** turn that answer into a page you can see, with text, pictures and buttons.
 
-The answer the server sends isn't a picture of a page. It's more like a set of instructions: *"put this title at the top, this video here, this button there."* The browser reads the instructions and builds the page on your screen.
+The answer from the server isn't a picture of a page. It's more like a set of instructions. For example: *"Put this title at the top. Put this video here."* The browser reads the instructions and builds the page on your screen.
 
 > **Go deeper:** [Take a web page apart and see what's inside](/lessons/what-a-web-page-is-made-of) (Level 1) shows what these instructions look like.
 
@@ -160,10 +160,12 @@ Or sometimes:
 | **Request** | "Please send me the page called *secret-page*." |
 | **Response** | "Sorry, I don't have a page with that name." |
 
-This ask-and-answer pattern is the heart of the web. Almost everything you do online works this way:
+This ask-and-answer pattern is the most important idea of the web. Almost everything you do online works this way:
 
 - **Watching a video:** a request for the video, a response with the video.
+
 - **Liking a post:** a request that says "save this like", a response that says "done".
+
 - **Sending a message in a group chat:** a request that says "deliver this", a response that says "delivered".
 
 > **In short:** your browser sends a request, and the server sends back a response. Almost everything online is requests and responses.
@@ -174,17 +176,7 @@ This ask-and-answer pattern is the heart of the web. Almost everything you do on
 
 Now let's put it all together. Here's what happens when you type `youtube.com` into your browser and press Enter:
 
-```
- YOU                                                   YOUTUBE
-┌────────────┐                                     ┌────────────┐
-│  Browser   │ ── 1. Request: "send me the page" ─▶│   Server   │
-│ (client)   │                                     │            │
-│            │ ◀── 2. Response: "here it is" ───── │            │
-└────────────┘                                     └────────────┘
-       │
-       ▼
- 3. Browser builds the page on your screen
-```
+![Your browser sends a request across the internet to a server in a data center. The server sends back a response, and then the browser builds the page on your screen.](/diagrams/what-happens-when-you-open-a-website-1.svg)
 
 In a bit more detail:
 
@@ -218,6 +210,8 @@ This one is different. The request *did* reach the server, and the server *did* 
 
 See the difference? In the first case, nothing reached the server. In the second, the server got your request and replied with an error. These need different fixes.
 
+![Top: with no internet, the request stops at your device. Bottom: with 404 Not Found, the request reaches the server, and the server answers that it does not have that page.](/diagrams/what-happens-when-you-open-a-website-2.svg)
+
 When you build your own app, you'll see more errors like these. If you can say *which step* broke, you can fix it much faster. And if you're building with an AI, you can tell it exactly what's wrong instead of "it doesn't work".
 
 > **Go deeper:** ["This site can't be reached": what broke, and where?](/lessons/website-errors) (Level 1) goes through the common errors one by one.
@@ -240,7 +234,7 @@ You'll see an error, because your request can't leave your device. Turn your con
 
 You need a laptop or desktop computer with Chrome for this one.
 
-Every browser has hidden panels called **developer tools**. They show what the browser is doing behind the scenes.
+Every browser has hidden panels called **developer tools**. They show what the browser does while it loads a page.
 
 1. Open any website, like `wikipedia.org`.
 2. Open developer tools: press **F12** on Windows, or **Cmd+Option+I** on Mac.
@@ -256,21 +250,28 @@ Don't worry about the other columns yet. [Take a web page apart and see what's i
 ## Takeaways
 
 **Key terms**
-- **Network:** devices connected so they can send messages to each other
-- **Internet:** a giant network of networks connecting the whole world
-- **Server:** a computer that waits for requests and answers them
-- **Data center:** a building full of servers
-- **Client:** the device doing the asking, like your phone or laptop
-- **Browser:** the app that sends requests and shows you the answers as pages
-- **Request:** a message asking a server for something
-- **Response:** the server's answer
+
+| Term | Meaning |
+|---|---|
+| **Network** | Devices connected so they can send messages to each other |
+| **Internet** | A giant network of networks that connects the whole world |
+| **Server** | A computer that waits for requests and answers them |
+| **Data center** | A building full of servers |
+| **Client** | The device that asks, like your phone or laptop |
+| **Browser** | The app that sends requests and shows you the answers as pages |
+| **Request** | A message that asks a server for something |
+| **Response** | The answer from the server |
 
 **The trip in one line**
+
 You type an address → the browser finds the server → sends a request → gets a response → builds the page.
 
 **Ask your AI**
+
 Try these with any AI chat tool to practice:
+
 - *"Explain what happens step by step when I open youtube.com, in simple words."*
+
 - *"I see this error: [paste it]. Did my request reach the server, or did it fail before that?"*
 
 ---
@@ -278,11 +279,11 @@ Try these with any AI chat tool to practice:
 <details>
 <summary><strong>Going deeper</strong> (optional, for curious readers)</summary>
 
-**Messages travel in small pieces.** Big messages, like a video, aren't sent in one go. They're cut into many small pieces called **packets**. Each packet travels across the internet on its own, possibly by a different route, and your device puts them back together in the right order.
+**Messages travel in small pieces.** Big messages, like a video, aren't sent all at once. They're cut into many small pieces called **packets**. Each packet travels across the internet on its own, possibly by a different route, and your device puts them back together in the right order.
 
 **The internet has cables under the sea.** Wi-Fi only covers the last few meters to your device. Most of the internet runs through cables, and most data between continents travels through cables laid on the ocean floor.
 
-**Big websites keep copies close to you.** Popular websites store copies of their pages and videos on servers in many countries. When you open them, you usually get the copy from a server near you, which is faster than one on the other side of the world.
+**Big websites keep copies close to you.** Popular websites store copies of their pages and videos on servers in many countries. When you open them, you usually get the copy from a server near you. That is faster than a server on the other side of the world.
 
 **Any computer can be a server.** A server isn't a special kind of machine. It's any computer running a program that answers requests. When you build an app, your own laptop will act as a server while you test it. [It works on my laptop. Why can't my friend open it?](/lessons/localhost-vs-production) explains this.
 

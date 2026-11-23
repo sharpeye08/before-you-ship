@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" role="img" aria-labelledby="t d">
+  <title id="t">A postcard and a locked box</title>
+  <desc id="d">Top row, plain HTTP: your browser sends your password and cookie as readable text. Someone on the café Wi-Fi can read and change them on the way to the server. Bottom row, HTTPS: the browser sends scrambled data. The same person sees only scrambled data and the name of the site.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="300" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Row 1: HTTP -->
+    <text x="24" y="40" font-size="12" fill="#a0a0a0">PLAIN HTTP: A POSTCARD</text>
+    <rect x="24" y="52" width="140" height="76" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="94" y="95" font-size="15" fill="#f2f2f2" text-anchor="middle">Your browser</text>
+
+    <rect x="268" y="52" width="184" height="76" rx="10" fill="#e5484d"/>
+    <text x="360" y="84" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Someone on Wi-Fi</text>
+    <text x="360" y="106" font-size="12" fill="#fde8e8" text-anchor="middle">can read and change it</text>
+
+    <rect x="556" y="52" width="140" height="76" rx="10" fill="#4f6bd8"/>
+    <text x="626" y="95" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Server</text>
+
+    <line x1="168" y1="90" x2="260" y2="90" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="214" y="80" font-size="12" fill="#f2c94c" text-anchor="middle">password</text>
+    <line x1="456" y1="90" x2="548" y2="90" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="502" y="80" font-size="12" fill="#f2c94c" text-anchor="middle">password</text>
+
+    <!-- Row 2: HTTPS -->
+    <text x="24" y="184" font-size="12" fill="#a0a0a0">HTTPS: A LOCKED BOX</text>
+    <rect x="24" y="196" width="140" height="76" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="94" y="239" font-size="15" fill="#f2f2f2" text-anchor="middle">Your browser</text>
+
+    <rect x="268" y="196" width="184" height="76" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="360" y="224" font-size="15" fill="#f2f2f2" text-anchor="middle">Someone on Wi-Fi</text>
+    <text x="360" y="244" font-size="12" fill="#a0a0a0" text-anchor="middle">sees scrambled data</text>
+    <text x="360" y="260" font-size="12" fill="#a0a0a0" text-anchor="middle">plus the site name</text>
+
+    <rect x="556" y="196" width="140" height="76" rx="10" fill="#4f6bd8"/>
+    <text x="626" y="239" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Server</text>
+
+    <line x1="168" y1="234" x2="260" y2="234" stroke="#1f9d6b" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="214" y="224" font-size="12" fill="#1f9d6b" text-anchor="middle">x7#Qp!...</text>
+    <line x1="456" y1="234" x2="548" y2="234" stroke="#1f9d6b" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="502" y="224" font-size="12" fill="#1f9d6b" text-anchor="middle">x7#Qp!...</text>
+  </g>
+</svg>

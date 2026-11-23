@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" role="img" aria-labelledby="t d">
+  <title id="t">What the server can trust</title>
+  <desc id="d">The web address, the form data and the request body come from the browser. The user can change all of them. The server made the session, so the server can trust it. Who asks comes from the session. What they want comes from the request.</desc>
+  <rect width="720" height="330" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Left: from the browser -->
+    <text x="200" y="40" font-size="12" fill="#a0a0a0" text-anchor="middle">FROM THE BROWSER</text>
+    <rect x="40" y="56" width="320" height="52" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="200" y="88" font-size="15" fill="#f2f2f2" text-anchor="middle">Web address (invoice ID)</text>
+    <rect x="40" y="118" width="320" height="52" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="200" y="150" font-size="15" fill="#f2f2f2" text-anchor="middle">Form data</text>
+    <rect x="40" y="180" width="320" height="52" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="200" y="212" font-size="15" fill="#f2f2f2" text-anchor="middle">Request body</text>
+    <text x="200" y="258" font-size="12" fill="#a0a0a0" text-anchor="middle">The user can change all of these.</text>
+    <text x="200" y="278" font-size="12" fill="#a0a0a0" text-anchor="middle">Use them only for WHAT the user wants.</text>
+
+    <!-- Right: made by the server -->
+    <text x="540" y="40" font-size="12" fill="#a0a0a0" text-anchor="middle">MADE BY THE SERVER</text>
+    <rect x="420" y="96" width="240" height="96" rx="10" fill="#1f9d6b"/>
+    <text x="540" y="138" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Session</text>
+    <text x="540" y="162" font-size="12" fill="#e6f6ee" text-anchor="middle">"this browser is user 17"</text>
+    <text x="540" y="258" font-size="12" fill="#a0a0a0" text-anchor="middle">The server can trust this.</text>
+    <text x="540" y="278" font-size="12" fill="#a0a0a0" text-anchor="middle">Use it for WHO asks.</text>
+
+    <line x1="390" y1="56" x2="390" y2="290" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="360" y="314" font-size="12" fill="#a0a0a0" text-anchor="middle">Authorization: check that WHO and WHAT match.</text>
+  </g>
+</svg>

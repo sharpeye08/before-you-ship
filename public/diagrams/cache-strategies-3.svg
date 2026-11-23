@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 240" role="img" aria-labelledby="t d">
+  <title id="t">The life of a copy with stale-while-revalidate</title>
+  <desc id="d">A timeline for Cache-Control: public, max-age=60, stale-while-revalidate=600. From 0 to 60 seconds the copy is fresh. From 60 to 660 seconds the cache still gives out the old copy while it gets a new one in the background. After 660 seconds the copy is too old, and the cache must get a new one first.</desc>
+  <rect width="720" height="240" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <text x="360" y="40" font-size="12" fill="#a0a0a0" text-anchor="middle">Cache-Control: public, max-age=60, stale-while-revalidate=600</text>
+
+    <text x="120" y="78" font-size="12" fill="#a0a0a0" text-anchor="middle">max-age=60</text>
+    <text x="370" y="78" font-size="12" fill="#a0a0a0" text-anchor="middle">stale-while-revalidate=600</text>
+
+    <rect x="40" y="90" width="160" height="70" rx="10" fill="#1f9d6b"/>
+    <text x="120" y="130" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Fresh</text>
+
+    <rect x="204" y="90" width="332" height="70" rx="10" fill="#f2c94c"/>
+    <text x="370" y="122" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Old copy, still served</text>
+    <text x="370" y="143" font-size="12" fill="#111111" text-anchor="middle">a new copy loads in the background</text>
+
+    <rect x="540" y="90" width="140" height="70" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="610" y="122" font-size="15" fill="#f2f2f2" text-anchor="middle">Too old</text>
+    <text x="610" y="143" font-size="12" fill="#a0a0a0" text-anchor="middle">get a new copy first</text>
+
+    <text x="40" y="184" font-size="12" fill="#a0a0a0" text-anchor="middle">0 s</text>
+    <text x="202" y="184" font-size="12" fill="#a0a0a0" text-anchor="middle">60 s</text>
+    <text x="538" y="184" font-size="12" fill="#a0a0a0" text-anchor="middle">660 s</text>
+    <text x="360" y="218" font-size="12" fill="#a0a0a0" text-anchor="middle">Time since the copy was made (not to scale)</text>
+  </g>
+</svg>

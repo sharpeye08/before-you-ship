@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" role="img" aria-labelledby="t d">
+  <title id="t">The trip of a web page</title>
+  <desc id="d">Your browser sends a request across the internet to a server in a data center. The server sends back a response. Then the browser builds the page on your screen.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="340" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- You / browser -->
+    <text x="110" y="44" font-size="12" fill="#a0a0a0" text-anchor="middle">YOU</text>
+    <rect x="40" y="58" width="140" height="96" rx="10" fill="#f2c94c"/>
+    <text x="110" y="100" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Browser</text>
+    <text x="110" y="122" font-size="12" fill="#111111" text-anchor="middle">(the client)</text>
+
+    <!-- Internet -->
+    <rect x="290" y="70" width="140" height="72" rx="36" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="360" y="111" font-size="15" fill="#f2f2f2" text-anchor="middle">Internet</text>
+
+    <!-- Server -->
+    <text x="610" y="44" font-size="12" fill="#a0a0a0" text-anchor="middle">DATA CENTER</text>
+    <rect x="540" y="58" width="140" height="96" rx="10" fill="#4f6bd8"/>
+    <text x="610" y="100" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Server</text>
+    <text x="610" y="122" font-size="12" fill="#e8ecff" text-anchor="middle">(has the page)</text>
+
+    <!-- Request -->
+    <line x1="186" y1="86" x2="532" y2="86" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="202" y="64" width="74" height="18" rx="9" fill="#141414"/>
+    <text x="239" y="77" font-size="12" fill="#f2c94c" text-anchor="middle">1. Request</text>
+    <text x="482" y="77" font-size="12" fill="#a0a0a0" text-anchor="middle">"Send me the page"</text>
+
+    <!-- Response -->
+    <line x1="534" y1="128" x2="188" y2="128" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="442" y="134" width="84" height="18" rx="9" fill="#141414"/>
+    <text x="484" y="147" font-size="12" fill="#8ea2ff" text-anchor="middle">2. Response</text>
+    <text x="240" y="147" font-size="12" fill="#a0a0a0" text-anchor="middle">"Here it is"</text>
+
+    <!-- Build the page -->
+    <line x1="110" y1="160" x2="110" y2="206" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="40" y="214" width="300" height="84" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="60" y="246" font-size="12" fill="#1f9d6b">3. Build</text>
+    <text x="60" y="270" font-size="15" fill="#f2f2f2">The browser builds the page</text>
+    <text x="60" y="288" font-size="12" fill="#a0a0a0">and shows it on your screen</text>
+
+    <text x="680" y="290" font-size="12" fill="#a0a0a0" text-anchor="end">A page usually needs many of these trips:</text>
+    <text x="680" y="308" font-size="12" fill="#a0a0a0" text-anchor="end">one for the page, more for pictures and styles.</text>
+  </g>
+</svg>

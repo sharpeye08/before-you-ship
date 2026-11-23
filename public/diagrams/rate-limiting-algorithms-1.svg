@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 280" role="img" aria-labelledby="t d">
+  <title id="t">The fixed window edge problem</title>
+  <desc id="d">Two fixed windows side by side: the 10:00 window and the 10:01 window. A client sends 100 requests at 10:00:59, at the end of the first window, and 100 more at 10:01:00, at the start of the second. Each window has its own counter, so all 200 requests in about 2 seconds are allowed.</desc>
+  <rect width="720" height="280" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <text x="200" y="56" font-size="15" fill="#f2f2f2" text-anchor="middle">10:00 window</text>
+    <text x="520" y="56" font-size="15" fill="#f2f2f2" text-anchor="middle">10:01 window</text>
+    <text x="180" y="128" font-size="12" fill="#a0a0a0" text-anchor="middle">counter 1 fills up to 100</text>
+    <text x="540" y="128" font-size="12" fill="#a0a0a0" text-anchor="middle">counter 2 starts at 0</text>
+
+    <!-- Time line and boundary -->
+    <line x1="40" y1="172" x2="680" y2="172" stroke="#3a3a3a" stroke-width="2"/>
+    <line x1="360" y1="40" x2="360" y2="200" stroke="#cfcfcf" stroke-width="1.5" stroke-dasharray="5 4"/>
+    <text x="360" y="214" font-size="12" fill="#a0a0a0" text-anchor="middle">reset</text>
+
+    <!-- Bursts -->
+    <rect x="300" y="82" width="56" height="88" rx="8" fill="#f08a4b"/>
+    <text x="328" y="126" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">100</text>
+    <rect x="364" y="82" width="56" height="88" rx="8" fill="#f08a4b"/>
+    <text x="392" y="126" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">100</text>
+    <text x="300" y="192" font-size="12" fill="#a0a0a0" text-anchor="end">10:00:59</text>
+    <text x="420" y="192" font-size="12" fill="#a0a0a0">10:01:00</text>
+
+    <text x="360" y="252" font-size="15" fill="#e5484d" text-anchor="middle">200 requests in about 2 seconds, all allowed</text>
+  </g>
+</svg>

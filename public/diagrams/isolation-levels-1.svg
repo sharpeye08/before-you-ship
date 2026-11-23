@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" role="img" aria-labelledby="t d">
+  <title id="t">At the same time or one at a time</title>
+  <desc id="d">Top: at Read Committed, Mia and Leo both count 19 bookings at the same time, both insert a booking, and the class ends with 21 bookings. Bottom: one at a time, Mia counts 19 and books, then Leo counts 20 and is told the class is full. Serializable promises the same result as one at a time.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="330" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Overlap -->
+    <text x="40" y="40" font-size="12" fill="#a0a0a0">AT THE SAME TIME (READ COMMITTED)</text>
+    <rect x="40" y="56" width="220" height="60" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="150" y="91" font-size="15" fill="#f2f2f2" text-anchor="middle">Mia and Leo count 19</text>
+    <rect x="310" y="56" width="160" height="60" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="390" y="91" font-size="15" fill="#f2f2f2" text-anchor="middle">Both insert</text>
+    <rect x="520" y="56" width="160" height="60" rx="10" fill="#e5484d"/>
+    <text x="600" y="91" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">21 bookings</text>
+    <line x1="262" y1="86" x2="302" y2="86" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="472" y1="86" x2="512" y2="86" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <!-- Serial -->
+    <text x="40" y="178" font-size="12" fill="#a0a0a0">ONE AT A TIME (SERIAL)</text>
+    <rect x="40" y="194" width="220" height="60" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="150" y="229" font-size="15" fill="#f2f2f2" text-anchor="middle">Mia counts 19, books</text>
+    <rect x="310" y="194" width="160" height="60" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="390" y="229" font-size="15" fill="#f2f2f2" text-anchor="middle">Leo counts 20</text>
+    <rect x="520" y="194" width="160" height="60" rx="10" fill="#1f9d6b"/>
+    <text x="600" y="229" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Class is full</text>
+    <line x1="262" y1="224" x2="302" y2="224" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="472" y1="224" x2="512" y2="224" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <text x="360" y="300" font-size="12" fill="#a0a0a0" text-anchor="middle">Serializable promises the same result as one at a time, or an error you retry.</text>
+  </g>
+</svg>

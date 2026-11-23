@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" role="img" aria-labelledby="t d">
+  <title id="t">The key stays on your server</title>
+  <desc id="d">The browser sends the question to your own endpoint, /api/chat. Your server first checks that the user is logged in. Then it adds the secret key and sends the question to the AI provider. The answer goes back to the browser without the key. The key never leaves your server.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="300" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Browser -->
+    <text x="100" y="40" font-size="12" fill="#a0a0a0" text-anchor="middle">FRONTEND</text>
+    <rect x="30" y="56" width="140" height="130" rx="10" fill="#f2c94c"/>
+    <text x="100" y="116" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Browser</text>
+    <text x="100" y="138" font-size="12" fill="#111111" text-anchor="middle">no key here</text>
+
+    <!-- Server -->
+    <text x="360" y="40" font-size="12" fill="#a0a0a0" text-anchor="middle">YOUR SERVER (BACKEND)</text>
+    <rect x="250" y="56" width="220" height="130" rx="10" fill="#4f6bd8"/>
+    <text x="360" y="88" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">/api/chat</text>
+    <text x="270" y="118" font-size="12" fill="#e8ecff">1. Is the user logged in?</text>
+    <text x="270" y="140" font-size="12" fill="#e8ecff">2. Add the secret key</text>
+    <text x="270" y="162" font-size="12" fill="#e8ecff">3. Ask the AI provider</text>
+
+    <!-- Provider -->
+    <text x="610" y="40" font-size="12" fill="#a0a0a0" text-anchor="middle">PAID SERVICE</text>
+    <rect x="550" y="56" width="140" height="130" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="620" y="116" font-size="15" fill="#f2f2f2" text-anchor="middle">AI provider</text>
+    <text x="620" y="138" font-size="12" fill="#a0a0a0" text-anchor="middle">you pay per call</text>
+
+    <!-- Arrows -->
+    <line x1="174" y1="96" x2="242" y2="96" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="208" y="88" font-size="12" fill="#a0a0a0" text-anchor="middle">question</text>
+    <line x1="246" y1="150" x2="178" y2="150" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="212" y="170" font-size="12" fill="#a0a0a0" text-anchor="middle">answer</text>
+    <line x1="474" y1="96" x2="542" y2="96" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="508" y="88" font-size="12" fill="#a0a0a0" text-anchor="middle">+ key</text>
+    <line x1="546" y1="150" x2="478" y2="150" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <rect x="30" y="216" width="660" height="56" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="360" y="240" font-size="12" fill="#a0a0a0" text-anchor="middle">The key never leaves your server.</text>
+    <text x="360" y="260" font-size="12" fill="#a0a0a0" text-anchor="middle">Without the login check, a stranger can still call /api/chat, and you still pay.</text>
+  </g>
+</svg>

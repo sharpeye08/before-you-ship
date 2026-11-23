@@ -7,7 +7,7 @@ levelName: Builder
 concepts: [HTTP methods, Safe and idempotent methods, Status codes, Headers]
 readTime: 13 min
 quiz:
-  - question: "Your server fails to save a note. It catches the error and replies with res.json({ error: \"Could not save\" }), without setting a status code. What does the browser see?"
+  - question: "Your server fails to save a note. It catches the error and replies with res.json({ error: \"Could not save\" }), without a status code. What does the browser see?"
     options:
       - text: "A 500 status code, because there was an error"
       - text: "A 200 status code, so the request looks like it worked"
@@ -23,16 +23,16 @@ quiz:
       - text: "It shows an error message to the user automatically"
       - text: "It returns the response normally. Your code must check response.ok or response.status."
         correct: true
-    explanation: "fetch() only fails when the request can't be sent or no response comes back, for example when the network is down. A 404 or 500 is still a response, so your code has to check it."
+    explanation: "fetch() only fails when it can't send the request or no response comes back, for example when the network is down. A 404 or 500 is still a response, so your code has to check it."
 
-  - question: "The AI made a delete link: clicking it sends GET /notes/42/delete. Why is this a problem?"
+  - question: "The AI made a delete link: a click on it sends GET /notes/42/delete. Why is this a problem?"
     options:
       - text: "GET requests are slower than DELETE requests"
       - text: "GET is supposed to be safe, so browsers and other programs may send it without a click, and data can be deleted by accident"
         correct: true
       - text: "Links can't send requests to a server"
       - text: "The server can't read the ID from a GET request"
-    explanation: "The HTTP rules say GET must not change anything. Programs such as search engine crawlers and tools that load pages early rely on that. If a GET request deletes data, one of them can delete it without anyone clicking."
+    explanation: "The HTTP rules say GET must not change anything. Other programs rely on that, such as search engine crawlers (programs that visit pages to list them) and tools that load pages early. If a GET request deletes data, one of them can delete it without a click."
 
   - question: "A user tries to sign up with an email address that already has an account. Which status code fits best?"
     options:
@@ -41,7 +41,7 @@ quiz:
       - text: "200 OK"
       - text: "500 Internal Server Error"
       - text: "404 Not Found"
-    explanation: "409 means the request conflicts with the data that already exists. It is not a crash (500), and it did not work (200). The user can fix it by using a different email or logging in instead."
+    explanation: "409 means the request conflicts with the data that already exists. It is not a crash (500), and it did not work (200). The user can fix it with a different email, or log in instead."
 
   - question: "A request to your app returns 401. A different request returns 403. What is the difference?"
     options:
@@ -50,7 +50,7 @@ quiz:
       - text: "401 means the server doesn't know who you are. 403 means it knows who you are, and you're not allowed."
         correct: true
       - text: "401 is a server problem. 403 is a browser problem."
-    explanation: "Despite its name, 401 Unauthorized is about not being logged in. 403 Forbidden means you are logged in, but this action is not allowed for you."
+    explanation: "The name 401 Unauthorized is confusing: it means you are not logged in. 403 Forbidden means you are logged in, but this action is not allowed for you."
 
   - question: "Your app shows \"Saved!\" but sometimes nothing was saved. In the Network tab, the save request shows status 500. Where should you look first?"
     options:
@@ -59,35 +59,34 @@ quiz:
         correct: true
       - text: "The browser's cookies"
       - text: "The CSS file for the page"
-    explanation: "Codes that start with 5 mean the server failed. The server's logs usually show the exact error. The page also needs fixing: it should check the status and only say \"Saved!\" when the request really worked."
+    explanation: "Codes that start with 5 mean the server failed. The server's logs usually show the exact error. The page also needs a fix: it must check the status and only say \"Saved!\" when the request really worked."
 ---
 
 # The app said "Saved!". The note was never saved
 
 > **Before you start**
-> This lesson uses a few words from earlier lessons:
-> - **Method and path:** the first line of a request, like `GET /games`. The method says what to do, the path says where. *([Every website is a conversation. Here's how it goes](/lessons/http-requests-and-responses))*
+> - **Method and path:** the first line of a request, like `GET /games`. The method says what to do. The path says where. *([Every website is a conversation. Here's how it goes](/lessons/http-requests-and-responses))*
 > - **Headers and body:** headers are `Name: value` lines of extra details on a request or response. The body is the main content. *([Every website is a conversation. Here's how it goes](/lessons/http-requests-and-responses))*
-> - **Status code:** the three-digit number in a response that says how it went. 2xx worked, 3xx look elsewhere (a **redirect**), 4xx problem with the request, 5xx problem on the server. *([Every website is a conversation. Here's how it goes](/lessons/http-requests-and-responses))*
-> - **API endpoint and JSON:** an address on your server that your app's pages send requests to, like `/api/notes`, usually sending data in a text format called JSON. *([The hidden conversation behind every button you tap](/lessons/what-is-an-api))*
+> - **Status code:** the three-digit number in a response that says how it went. The first digit gives the group: 2xx worked, 3xx look elsewhere (a **redirect**), 4xx request problem, 5xx server problem. *([Every website is a conversation. Here's how it goes](/lessons/http-requests-and-responses))*
+> - **API endpoint and JSON:** an address on your server that your pages send requests to, like `/api/notes`. The data usually travels in a text format called JSON. *([The hidden conversation behind every button you tap](/lessons/what-is-an-api))*
 
 ## "Saved!" (but it wasn't)
 
-You built a notes app with AI. You type a note, press **Save**, and a green message appears: **"Saved!"**
+You built a notes app with AI. You type a note and press **Save**. A green message appears: **"Saved!"**
 
 A week later, a user writes to you: *"I wrote ten notes yesterday. Today, three of them are gone."*
 
-You test it. Everything works. After days of searching, you find it: sometimes the database is busy and the save fails. Your server knows it failed. The page still says "Saved!".
+You test it. Everything works. After days of searching, you find the cause: sometimes the database is busy, and the save fails. Your server knows it failed. The page still says "Saved!".
 
-How can the page be wrong? Because the server answered with the status code **200**, which means "it worked", and put the word "error" somewhere the page never looked.
+How can the page be wrong? The server answered with the status code **200**, which means "it worked". It put the word "error" in a place the page never looked.
 
-If you don't know exactly what 200 means, or why the page believed it, that's normal. By the end of this lesson, you will, and you'll be able to spot the AI-written code that gets it wrong.
+Maybe you don't know exactly what 200 means, or why the page believed it. That's normal. By the end of this lesson, you will know. You will also be able to find the AI-written code that gets it wrong.
 
 ---
 
 ## Five methods, two promises
 
-You've met `GET` and `POST`. Real apps use five methods. Put together with a path, each one reads like a short sentence: `DELETE /api/notes/42` means *"Delete note 42."*
+You've met `GET` and `POST`. Real apps use five methods. Each method with a path reads like a short sentence: `DELETE /api/notes/42` means *"Delete note 42."*
 
 | Method | Meaning | Example |
 |---|---|---|
@@ -97,7 +96,7 @@ You've met `GET` and `POST`. Real apps use five methods. Put together with a pat
 | **PATCH** | Change part of something. | `PATCH /api/notes/42` → change only the title of note 42 |
 | **DELETE** | Remove something. | `DELETE /api/notes/42` → delete note 42 |
 
-The same path can do different things with different methods. One more fact: an HTML form can only send GET or POST. Your app's JavaScript can send any method, using a built-in function called `fetch()`. If you don't tell `fetch()` which method to use, it sends GET.
+The same path can do different things with different methods. One more fact: an HTML form can only send GET or POST. Your app's JavaScript can send any method with a built-in function called `fetch()`. If you don't tell `fetch()` which method to use, it sends GET.
 
 ### Two promises: "safe" and "idempotent"
 
@@ -105,19 +104,21 @@ The official HTTP rules (a document called RFC 9110) give some methods two impor
 
 A method is **safe** if it only reads. It must not change anything on the server. **GET** is safe. POST, PUT, PATCH and DELETE are not.
 
-A method is **idempotent** if sending the same request twice has the same effect as sending it once. Think of a lift (elevator) button. Press "floor 3" once or five times, and the lift still goes to floor 3 once. That's idempotent.
+A method is **idempotent** if the same request sent twice has the same effect as one request. Think of a lift (elevator) button. Press "floor 3" once or five times, and the lift still goes to floor 3 once. That's idempotent.
 
-Now think of ordering a pizza. Order twice, and two pizzas arrive. That's **not** idempotent.
+Now think of a pizza order. Order twice, and two pizzas arrive. That's **not** idempotent.
 
-- **GET, PUT and DELETE are idempotent.** Deleting note 42 twice still leaves you with note 42 deleted.
-- **POST is not.** Sending "add this note" twice usually creates two notes.
+- **GET, PUT and DELETE are idempotent.** If you delete note 42 twice, note 42 is still deleted, once.
+- **POST is not.** If you send "add this note" twice, you usually get two notes.
 - **PATCH is not always idempotent.** It depends on what the change is.
 
-Why does this matter? Requests sometimes fail halfway, for example when a phone loses signal, and then get sent again. Repeating a GET or a DELETE is harmless. Repeating a POST can create a double order or a double payment.
+![DELETE /api/notes/42 sent twice leaves note 42 deleted, the same result as once. POST /api/notes sent twice creates two new notes.](/diagrams/http-methods-and-status-codes-2.svg)
+
+Why does this matter? Sometimes a request fails halfway, for example when a phone loses signal. Then the request is sent again. A repeated GET or DELETE does no harm. A repeated POST can create a double order or a double payment.
 
 > **Go deeper:** [The payment timed out. Did it go through?](/lessons/timeouts-and-retries) (Level 3) shows how to make retries safe.
 
-**Where the lift comparison stops working:** a lift's button is built to work that way. HTTP methods are only labels. **Nothing forces your server to follow them.** If your code deletes data on a GET request, the server will do it. You'll see why that's dangerous in a moment.
+**Where the lift comparison stops working:** a lift's button is built to work that way. HTTP methods are only labels. **Nothing forces your server to follow them.** If your code deletes data on a GET request, the server will do it. You'll see why that's dangerous later in this lesson.
 
 ---
 
@@ -143,21 +144,21 @@ You know the four groups: 2xx, 3xx, 4xx and 5xx. Inside each group, the exact nu
 | **502** | Bad Gateway | A server in the middle got a bad answer from the server behind it, for example because your app crashed. |
 | **503** | Service Unavailable | I can't handle this right now. Try later. |
 
-For a redirect, the new address travels in a header, which you'll see in a moment.
+For a redirect, the new address travels in a header. You'll see that header in the next section.
 
 The name **401 Unauthorized** confuses everyone. It really means "not logged in". The code for "logged in, but not allowed" is **403**.
 
 > **Go deeper:** [Change one number in the URL, see everyone's invoices](/lessons/logged-in-doesnt-mean-allowed) (Level 2) explains the difference between "who are you?" and "are you allowed?".
 
-**400 or 422?** Some apps use 400 for every bad input. Others keep 422 for readable requests with invalid values. Both are fine if you stay consistent.
+**400 or 422?** Some apps use 400 for every bad input. Others keep 422 for requests they can read but that have invalid values. Both are fine if you use the same choice everywhere.
 
 > **Go deeper:** [Bots signed up 10,000 times overnight. Now what?](/lessons/rate-limiting) (Level 2) covers when and how to send 429.
 
 ---
 
-## Headers you'll meet in your own app
+## Headers you'll see in your own app
 
-Headers are the writing on the envelope: details that tell the other side how to handle the message. These are the ones your app's code will use most:
+Headers are like the writing on an envelope. They give details that tell the other side how to handle the message. Your app's code will use these headers most:
 
 | Header | Found in | What it says |
 |---|---|---|
@@ -193,9 +194,9 @@ In plain English:
 
 1. **Line 1:** When a POST request arrives at `/api/notes`...
 2. **Lines 2–4:** ...try to save the note in the database, and send it back as JSON.
-3. **Lines 5–7:** If saving fails, send back `{ "error": "Could not save" }`.
+3. **Lines 5–7:** If the save fails, send back `{ "error": "Could not save" }`.
 
-Look at line 6. It sends an error message, but it never sets a status code. When you don't set one, the server sends **200 OK**. So a failed save and a successful save look the same from the outside. Only the words inside the body are different.
+Look at line 6. It sends an error message, but it never sets a status code. When you don't set one, the server sends **200 OK**. So from the outside, a failed save and a successful save look the same. Only the words inside the body are different.
 
 Now the page's code:
 
@@ -210,11 +211,13 @@ showMessage("Saved!");
 
 In plain English: send the note to the server as JSON, then show "Saved!".
 
-The page never looks at the response at all. And here's a surprise many people don't expect: **`fetch()` does not fail when the server answers with 404 or 500.** It only fails when no answer comes back at all, for example when the network is down. A 500 is still an answer, so `fetch()` returns normally and the page shows "Saved!".
+The page never looks at the response at all. And many people don't expect this. **`fetch()` does not fail when the server answers with 404 or 500**. It only fails when no answer comes back at all, for example when the network is down. A 500 is still an answer. So `fetch()` returns normally, and the page shows "Saved!".
+
+![Before the fix, the save fails, the server replies 200 OK with an error in the body, and the page shows Saved. After the fix, the server replies 500, the page checks res.ok, and it shows the error.](/diagrams/http-methods-and-status-codes-1.svg)
 
 Two small mistakes, one on each side, and users lose notes without knowing it.
 
-### Bug 2: Deleting with a GET request
+### Bug 2: A GET request that deletes
 
 You ask the AI for a delete link next to each note. It writes this:
 
@@ -225,13 +228,18 @@ app.get("/notes/:id/delete", async (req, res) => {
 });
 ```
 
-In plain English: when someone opens the address `/notes/42/delete`, delete note 42, then send them back to the list of notes.
+In plain English: when someone opens the address `/notes/42/delete`, delete note 42. Then send them back to the list of notes.
 
-It works when you click it. But it breaks the promise that **GET is safe**, and other programs rely on that promise. Search engines follow the links they find. Some browsers and tools load links before you click them, to make pages feel faster. Any of them can open your "delete" address, and your data is gone. Nobody clicked anything.
+It works when you click it. But it breaks the promise that **GET is safe**, and other programs rely on that promise:
+
+- Search engines follow the links they find.
+- Some browsers and tools load links before you click them, to make pages feel faster.
+
+Any of these programs can open your "delete" address, and your data is gone. Nobody clicked anything.
 
 ### Bug 3: Codes that lie
 
-An empty form crashes the code and returns 500, when it should be a 400 with a clear message. A missing note returns 200 with nothing in it, when it should be a 404. Wrong codes make problems much harder to find, for you and for your AI.
+An empty form crashes the code and returns 500. It should be a 400 with a clear message. A missing note returns 200 with nothing in it. It should be a 404. Wrong codes make problems much harder to find, for you and for your AI.
 
 ---
 
@@ -239,7 +247,7 @@ An empty form crashes the code and returns 500, when it should be a 400 with a c
 
 ### Fix 1: Send honest status codes
 
-Here is the inside of the same `app.post("/api/notes", ...)` route, fixed:
+Here is the inside of the same `app.post("/api/notes", ...)` endpoint, fixed:
 
 ```js
 if (!req.body.text) return res.status(400).json({ error: "Note text is required" });
@@ -256,7 +264,9 @@ What changed:
 
 - **Line 1:** if the note is empty, reply **400** with a message the user can act on. This is the user's mistake, not a crash.
 - **Line 4:** on success, reply **201**, because something new was created.
-- **Lines 6–7:** on failure, write the real error to the server's logs, and reply **500** with a short, friendly message. Don't send the raw error to the browser. It can reveal details about your system.
+- **Lines 6–7:** on failure, write the real error to the server's logs. Then reply **500** with a short, friendly message.
+
+Do not send the raw error to the browser. It can show details about your system.
 
 > **Go deeper:** [Your error page showed your database details to everyone](/lessons/handling-errors) (Level 2) covers error messages that help users without leaking details.
 
@@ -273,7 +283,7 @@ if (!res.ok) {
 showMessage("Saved!");
 ```
 
-`res.ok` is `true` only when the status code is in the 200s. Now the page shows "Saved!" only when the server said it worked, and the server's message otherwise.
+`res.ok` is `true` only when the status code is in the 200s. Now the page shows "Saved!" only when the server said it worked. In all other cases, it shows the server's message.
 
 ### Fix 3: Match the method to the action
 
@@ -287,9 +297,9 @@ A clean set of endpoints for notes looks like this:
 | `PATCH /api/notes/42` | Change part of note 42 | 200 |
 | `DELETE /api/notes/42` | Delete note 42 | 204 |
 
-The delete button now sends a DELETE request using `fetch()`, instead of opening a link. Programs that open links on their own send only safe requests like GET.
+The delete button now sends a DELETE request with `fetch()`. It no longer opens a link. Programs that open links on their own send only safe requests like GET.
 
-Methods are labels, not locks. Every endpoint that changes data still needs to check that the person is logged in and allowed to do it.
+Methods are labels, not locks. Every endpoint that changes data must still check that the person is logged in and allowed to do it.
 
 ---
 
@@ -297,12 +307,14 @@ Methods are labels, not locks. Every endpoint that changes data still needs to c
 
 You need Chrome on a laptop or desktop.
 
-1. Open your app, then developer tools (**F12** on Windows, **Cmd+Option+I** on Mac).
-2. Click the **Network** tab, then click **Fetch/XHR** to show only requests your page's JavaScript sends.
-3. If you don't see a **Method** column, right-click any column title and tick **Method**.
-4. Use your app: create something, edit it, delete it. Watch each new row.
+1. Open your app.
+2. Open developer tools (**F12** on Windows, **Cmd+Option+I** on Mac).
+3. Click the **Network** tab.
+4. Click **Fetch/XHR**. This shows only the requests that your page's JavaScript sends.
+5. If you don't see a **Method** column, right-click any column title and tick **Method**.
+6. Use your app: create something, edit it, delete it. Watch each new row.
 
-Now check:
+Now check these points:
 
 - **Does each action use the right method?** A delete that shows `GET` is Bug 2.
 - **Do the status codes match what happened?** Create something and look for 201 or 200.
@@ -315,22 +327,25 @@ Now check:
 ## Takeaways
 
 **Key terms**
+
 - **Method:** the verb of a request: GET, POST, PUT, PATCH, DELETE
 - **Safe method:** only reads, never changes anything (GET)
-- **Idempotent method:** sending it twice has the same effect as once (GET, PUT, DELETE)
+- **Idempotent method:** two of the same request have the same effect as one (GET, PUT, DELETE)
 - **Status code:** the number that says how it went: 2xx worked, 3xx look elsewhere, 4xx the request has a problem, 5xx the server failed
 - **Headers:** `Name: value` labels on requests and responses, like `Content-Type`
 
 **Red flags in AI-written code**
+
 - An error is sent with `res.json(...)` or `res.send(...)` and no `res.status(...)`, so it goes out as 200
-- `fetch()` is called and the code never checks `res.ok` or `res.status`
+- The code calls `fetch()` and never checks `res.ok` or `res.status`
 - A GET endpoint, or a plain link, that creates, changes or deletes data
 - Every error becomes a 500, even when the user sent bad data
-- Raw error messages from the database are sent to the browser
+- Raw error messages from the database go to the browser
 
 **Ask your AI**
+
 - *"List every API endpoint in my app with its method and the status codes it can return. Flag any that send errors with a 200."*
-- *"Find every place my frontend calls fetch() without checking response.ok."*
+- *"Find every place my frontend calls fetch() without a check of response.ok."*
 - *"Does any GET endpoint in my app change or delete data?"*
 
 ---
@@ -338,21 +353,21 @@ Now check:
 <details>
 <summary><strong>Going deeper</strong> (optional, for readers who want more detail)</summary>
 
-**PUT vs PATCH.** PUT sends the complete new version and replaces whatever was there, so sending it twice gives the same result. PATCH sends a set of changes. If the change is "set the title to X", repeating it is harmless. If it is "add 1 to the counter", repeating it adds 2. That's why PATCH is not guaranteed to be idempotent. PATCH is defined in RFC 5789, not RFC 9110.
+**PUT vs PATCH.** PUT sends the complete new version and replaces what was there. So if you send it twice, you get the same result. PATCH sends a set of changes. If the change is "set the title to X", a repeat does no harm. If it is "add 1 to the counter", a repeat adds 2. That's why PATCH is not guaranteed to be idempotent. PATCH is defined in RFC 5789, not RFC 9110.
 
-**HEAD and OPTIONS.** Two more methods you may see in the Network tab. HEAD is a GET without the body, used to check headers. OPTIONS asks what the server allows. Browsers send it on their own before some requests to other websites, as part of CORS, covered in ["Blocked by CORS policy": why the browser said no](/lessons/cors).
+**HEAD and OPTIONS.** You may see two more methods in the Network tab. HEAD is a GET without the body, used to check headers. OPTIONS asks what the server allows. Browsers send it on their own before some requests to other websites. This is part of CORS, covered in ["Blocked by CORS policy": why the browser said no](/lessons/cors).
 
-**The redirect family.** 301 and 302 are old. For historical reasons, browsers may change a POST into a GET when following them. 307 (temporary) and 308 (permanent) were added later, and they keep the original method. Use 308 or 307 when that matters, for example when redirecting an API endpoint that receives POST requests.
+**The redirect family.** 301 and 302 are old. For historical reasons, browsers may change a POST into a GET when they follow them. 307 (temporary) and 308 (permanent) came later, and they keep the original method. Use 308 or 307 when that matters, for example to redirect an API endpoint that receives POST requests.
 
-**401 needs a header.** By the rules, a 401 response must include a `WWW-Authenticate` header saying how to log in. Many web apps skip it, and browsers don't complain, but strict API tools may.
+**401 needs a header.** By the rules, a 401 response must include a `WWW-Authenticate` header that says how to log in. Many web apps skip it, and browsers don't complain, but strict API tools may.
 
-**404 instead of 403.** RFC 9110 allows a server to answer 404 instead of 403 when it doesn't want to reveal that something exists. [Change one number in the URL, see everyone's invoices](/lessons/logged-in-doesnt-mean-allowed) uses this trick.
+**404 instead of 403.** RFC 9110 allows a server to answer 404 instead of 403 when it doesn't want to show that something exists. [Change one number in the URL, see everyone's invoices](/lessons/logged-in-doesnt-mean-allowed) uses this method.
 
-**422's old name.** 422 first appeared in a standard for editing files over the web (WebDAV), named "Unprocessable Entity". RFC 9110 renamed it "Unprocessable Content". You'll see both names.
+**422's old name.** 422 first appeared in a standard for editing files over the web (WebDAV), with the name "Unprocessable Entity". RFC 9110 renamed it "Unprocessable Content". You'll see both names.
 
-**502, 503 and 504.** All three usually involve a server in the middle, such as a hosting platform or a reverse proxy, that passes requests on to your app. 502: your app sent back something invalid, or crashed. 503: the service is overloaded or paused, and a `Retry-After` header may say when to come back. 504 Gateway Timeout: your app took too long to answer. [One company went down, and a big chunk of the internet went with it](/lessons/cloudflare) explains these servers in the middle.
+**502, 503 and 504.** All three usually involve a server in the middle that passes requests on to your app. That server can be a hosting platform or a reverse proxy. 502: your app sent back something invalid, or crashed. 503: the service is overloaded or paused, and a `Retry-After` header may say when to come back. 504 Gateway Timeout: your app took too long to answer. [One company went down, and a big chunk of the internet went with it](/lessons/cloudflare) explains these servers in the middle.
 
-**Caching.** GET responses can be saved and reused by browsers and other servers, which is why a GET must not change data. The `Cache-Control` header controls this. [Fast, but showing yesterday's data](/lessons/caching) covers it.
+**Caching.** Browsers and other servers can save GET responses and use them again. This is one more reason why a GET must not change data. The `Cache-Control` header controls this. [Fast, but showing yesterday's data](/lessons/caching) covers it.
 
 </details>
 

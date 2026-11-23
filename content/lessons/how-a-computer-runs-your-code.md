@@ -14,7 +14,7 @@ quiz:
         correct: true
       - text: "The CPU keeps your progress, and a dead battery breaks the CPU"
       - text: "Progress is always stored on the game company's server"
-    explanation: "The game itself is a file on the disk, which keeps things without power. Your progress was only in memory until you saved it. Memory is wiped when the power goes off."
+    explanation: "The game itself is a file on the disk, which keeps things without power. Your progress was only in memory until you saved it. Memory is cleared when the power goes off."
 
   - question: "Your server keeps the number of likes in a variable: let likes = 0. You get 50 likes, then you restart the server. How many likes does it show now?"
     options:
@@ -23,7 +23,7 @@ quiz:
       - text: "0, because the variable lived in memory and the process started again from the beginning"
         correct: true
       - text: "It depends on how fast the CPU is"
-    explanation: "A variable lives in the process's memory. When the process stops, that memory is cleared. The new process runs let likes = 0 again. Data you need later belongs in a database."
+    explanation: "A variable lives in the process's memory. When the process stops, that memory is cleared. The new process runs let likes = 0 again. Data that you need later belongs in a database."
 
   - question: "You start the same game twice, and the operating system makes a separate running copy each time. What is running on your computer now?"
     options:
@@ -32,16 +32,16 @@ quiz:
       - text: "One process, because a program can only run once"
       - text: "Two copies of the game file on the disk"
       - text: "Nothing new, because the game was already installed"
-    explanation: "A program is the set of instructions stored on the disk. Each time you start it, the operating system creates a new process: a running copy with its own space in memory."
+    explanation: "A program is the set of instructions stored on the disk. Each time you start it, the operating system creates a new process. A process is a running copy with its own space in memory."
 
-  - question: "Task Manager shows one app using almost 100% CPU, and your computer feels slow. What is that app most likely doing?"
+  - question: "Task Manager shows one app using almost 100% CPU, and your computer is slow. What is that app most likely doing?"
     options:
       - text: "Saving lots of files to the disk"
       - text: "Waiting for you to click something"
       - text: "Using up all the space on the disk"
       - text: "Keeping the CPU busy with instructions nonstop, for example stuck repeating the same steps"
         correct: true
-    explanation: "The CPU column shows how much of the CPU's time a process is using. Near 100% means it is keeping the CPU busy without a break. One common cause is code stuck repeating the same steps forever. Other processes have to wait for their turn."
+    explanation: "The CPU column shows how much of the CPU's time a process uses. Near 100% means that it keeps the CPU busy without a break. One common cause is code that repeats the same steps forever. Other processes have to wait for their turn."
 
   - question: "Your app was running. You closed the window that started it. Now the app's page won't load. What happened?"
     options:
@@ -50,7 +50,7 @@ quiz:
         correct: true
       - text: "Your memory is full"
       - text: "The CPU turned itself off"
-    explanation: "Your code is still safe on the disk. But a program only does something while it runs as a process. Closing the window that started it usually stops the process. Start it again and the page will load."
+    explanation: "Your code is still safe on the disk. But a program does something only while it runs as a process. When you close the window that started it, the process usually stops. Start it again, and the page loads."
 
   - question: "Your app has a list of users' high scores. Where should it keep them so they survive a restart?"
     options:
@@ -59,48 +59,48 @@ quiz:
       - text: "In a database, which saves them to a disk"
         correct: true
       - text: "In the window that started the app"
-    explanation: "Memory is fast, but it is cleared when the process stops. A database saves data on a disk, so it survives restarts and power cuts."
+    explanation: "Memory is fast, but it is cleared when the process stops. A database saves data on a disk, so the data stays after restarts and power cuts."
 ---
 
 # Your app restarted and all the likes vanished
 
 > **Before you start**
-> This lesson uses a few words from earlier lessons:
+> This lesson uses words from earlier lessons.
 > - **Server:** a computer that waits for requests and answers them. *([You pressed Enter. What happened in the next second?](/lessons/what-happens-when-you-open-a-website))*
-> - **Backend:** the part of your app that runs on the server, where users can't see or change it. *([A player scored 999,999 points by editing the page. How?](/lessons/frontend-and-backend))*
+> - **Backend:** the part of your app that runs on the server. Users can't see or change it. *([A player scored 999,999 points by editing the page. How?](/lessons/frontend-and-backend))*
 > - **Database:** a program that stores your app's data safely, so it is still there tomorrow. *([Your app forgot everyone's messages overnight. Why?](/lessons/what-is-a-database))*
 
 ## Where did my progress go?
 
-You're playing a game on a laptop. You've played for an hour. You haven't saved.
+You play a game on a laptop. You've played for an hour. You haven't saved.
 
 Then the battery dies.
 
-You plug in the charger and turn the laptop back on. The game is still there. You can open it. But the last hour of progress is gone.
+You connect the charger and turn the laptop on again. The game is still there. You can open it. But the last hour of progress is gone.
 
 Why did the computer keep the game, but lose your progress?
 
-The answer is about the parts inside your computer. Every computer has them: your laptop, your phone, and the servers that run websites. When you build an app with AI, these parts explain some confusing problems:
+The answer is in the parts inside your computer. Every computer has them: your laptop, your phone, and the servers that run websites. When you build an app with AI, these parts explain some confusing problems:
 
 - Data that disappears when your app restarts
-- An app that stops working when you close a window
+- An app that stops when you close a window
 - A computer that suddenly gets slow
 
-This lesson explains the three main parts, and what happens when you press **Run**.
+This lesson explains the three main parts. It also explains what happens when you press **Run**.
 
-> **In short:** a computer keeps some things and forgets others. Knowing which part does what explains why apps lose data or stop working.
+> **In short:** a computer keeps some things and forgets others. When you know which part does what, you understand why apps lose data or stop.
 
 ---
 
 ## A computer is like a kitchen
 
-We'll use a kitchen to explain the parts. Picture a cook making pancakes in a kitchen.
+This lesson uses a kitchen to explain the parts. Think of a cook who makes pancakes in a kitchen.
 
 The kitchen has a cook who follows recipes. It has a worktop, where the cook does the work. And it has a cupboard, where food is kept for later.
 
 A computer has a part for each of these. The next sections explain them one at a time.
 
-> **In short:** we'll compare the computer to a kitchen with a cook, a worktop, a cupboard and recipes.
+> **In short:** this lesson compares the computer to a kitchen with a cook, a worktop, a cupboard and recipes.
 
 ---
 
@@ -108,13 +108,13 @@ A computer has a part for each of these. The next sections explain them one at a
 
 A recipe is a list of steps: *"crack two eggs, add milk, stir."* A recipe does nothing on its own. Somebody has to follow it.
 
-In a computer, that somebody is the **CPU**. CPU is short for **Central Processing Unit**. It's a small chip inside your computer.
+In a computer, that somebody is the **CPU**. CPU is short for **Central Processing Unit**. It's a **chip** inside your computer: a small, flat electronic part.
 
 A program is also a list of steps, called **instructions**. The CPU reads one instruction and does it. Then it does the next one. Each instruction is tiny, like *"add these two numbers"* or *"copy this number over there"*.
 
-So how can tiny steps make a game or a video call? Speed. A modern CPU does **billions** of tiny steps every second. Lots of tiny steps, done very fast, add up to everything your computer does.
+So how can tiny steps make a game or a video call? The answer is speed. A modern CPU does **billions** of tiny steps every second. Many tiny steps, done very fast, make everything that your computer does.
 
-The code your AI writes doesn't go straight to the CPU. First, it is turned into instructions the CPU understands. Tools do this for you.
+The code your AI writes doesn't go directly to the CPU. First, tools change it into instructions that the CPU understands. This happens automatically.
 
 > **In short:** the CPU is the chip that follows a program's instructions, one tiny step at a time, billions of times per second.
 
@@ -122,61 +122,63 @@ The code your AI writes doesn't go straight to the CPU. First, it is turned into
 
 ## The worktop: memory
 
-The cook doesn't work inside the cupboard. They take out what they need and put it on the worktop. The worktop is close, so everything on it is quick to reach.
+The cook doesn't work inside the cupboard. The cook takes out the necessary food and puts it on the worktop. The worktop is close, so the cook can reach everything on it quickly.
 
-The computer's worktop is called **memory**. You'll also hear it called **RAM** (short for *Random Access Memory*). When people say "memory" about computers, they usually mean RAM.
+The computer's worktop is called **memory**. You'll also hear the name **RAM** (short for *Random Access Memory*). When people say "memory" about computers, they usually mean RAM.
 
-Memory holds everything that's in use right now:
+Memory holds everything that is in use now:
 
-- The game you're playing
+- The game that you play
 - Your progress since your last save
-- The tabs open in your browser
+- The tabs that are open in your browser
 
 The CPU can read memory very fast. That's why programs work there.
 
-But memory has one big weakness. **It forgets everything when the power goes off.** That's what happened to your game progress. It was only in memory.
+But memory has one big weakness. **Memory forgets everything when the power goes off.** The computer clears it. That's what happened to your game progress. It was only in memory.
 
-> **In short:** memory (RAM) is the fast workspace for things in use right now. When the power goes off, it is wiped clean.
+> **In short:** memory (RAM) is the fast workspace for things in use now. When the power goes off, it is cleared.
 
 ---
 
 ## The cupboard: the disk
 
-The cupboard keeps food for days, even when nobody is cooking. The computer's cupboard is the **disk**, also called **storage**.
+The cupboard keeps food for days, even when nobody cooks. The computer's cupboard is the **disk**, also called **storage**.
 
 The disk keeps things when the power is off. Your photos, your apps and your games all live on the disk, as **files**. That's why the game was still there after the battery died.
 
-The disk is slower than memory, but it is usually much bigger. That's why computers use both: the disk to keep things, memory to work on them.
+The disk is slower than memory, but it is usually much bigger. That's why computers use both. The disk keeps things, and memory is where the computer works on them.
 
-So what does **saving** mean? It means copying something from memory to the disk. Before you saved, your progress lived only in memory. After saving, a copy is safe on the disk.
+So what does **saving** mean? It means to copy something from memory to the disk. Before you saved, your progress lived only in memory. After you save, a copy is safe on the disk.
 
-Now the puzzle from the start is solved. The game is a file on the disk, so it survived. Your progress was only in memory, so it didn't.
+Now you can answer the question from the start. The game is a file on the disk, so the computer kept it. Your progress was only in memory, so the computer lost it.
 
-> **In short:** the disk keeps files even without power, but it's slower than memory. Saving means copying something from memory to the disk.
+> **In short:** the disk keeps files even without power, but it's slower than memory. Saving means to copy something from memory to the disk.
 
 ---
 
 ## Pressing Run: a process starts
 
-A recipe in a book is not the same as a pancake being cooked. One is instructions. The other is something happening right now.
+A recipe in a book is different from a pancake that the cook makes now. One is instructions. The other is something that happens now.
 
-Programs work the same way. A program on the disk is a file of instructions. It does nothing until you start it.
+Programs work in the same way. A program on the disk is a file of instructions. It does nothing until you start it.
 
 When you double-click an app, or press **Run**, this happens:
 
-1. The program's instructions are copied from the disk into memory.
+1. The computer copies the program's instructions from the disk into memory.
 2. The program gets its own space in memory to work in.
-3. The CPU starts following its instructions.
+3. The CPU starts to follow its instructions.
 
-A program that is running is called a **process**.
+![When you press Run, the program is copied from the disk into memory, and the CPU follows its instructions from there. Saving copies data from memory back to the disk. When the power goes off, memory is cleared, but the disk keeps its files.](/diagrams/how-a-computer-runs-your-code-1.svg)
 
-Who organizes all this? The **operating system**. It's the main program that runs your computer, like Windows, macOS, Android or iOS. It's like the kitchen manager. It starts processes, gives each one its own space in memory, and decides which one the CPU works on next.
+A program that runs is called a **process**.
 
-One program can become many processes. If you start the same game twice, the operating system can make two processes from it, each with its own memory. (Some apps, like most web browsers, notice they're already running and open a new window in the process they already have.)
+Who organizes all this? The **operating system**. It's the main program that runs your computer, like Windows, macOS, Android or iOS. It's like the kitchen manager. It starts processes and gives each one its own space in memory. It also decides which process the CPU works on next.
 
-When a process stops, the operating system clears its space in memory. Everything the process was holding is gone.
+One program can become many processes. If you start the same game twice, the operating system can make two processes from it. Each process has its own memory. Some apps, like most web browsers, see that they already run. Then they open a new window in the process that they already have.
 
-> **In short:** a process is a running program. The operating system starts it, gives it memory, and clears that memory when it stops.
+When a process stops, the operating system clears its space in memory. Everything that the process held is gone.
+
+> **In short:** a process is a running program. The operating system starts it and gives it memory. When the process stops, the operating system clears that memory.
 
 ---
 
@@ -195,21 +197,21 @@ Here is the whole kitchen in one table:
 
 The kitchen helps, but it isn't perfect:
 
-- **The worktop is wiped instantly.** In a real kitchen, food on the worktop stays there if the lights go out. Memory loses everything the moment the power stops.
-- **The cook switches dishes very fast.** Your computer runs many processes, but the CPU can only work on a few at any moment. So it switches between processes many times every second. It's so fast that they all seem to run at once.
-- **Each dish gets its own locked area.** In a kitchen, the cook can grab anything on the worktop. In a computer, the operating system stops a process from touching another process's memory.
+- **Memory is cleared instantly.** In a real kitchen, food on the worktop stays there if the lights go out. Memory loses everything the moment the power stops.
+- **The CPU switches between processes very fast.** Your computer runs many processes, but the CPU can work on only a few at any moment. So it switches between processes many times every second. It's so fast that they all seem to run at the same time.
+- **Each process gets its own locked area.** In a kitchen, the cook can take anything on the worktop. In a computer, the operating system stops a process from touching another process's memory.
 
-> **In short:** memory is wiped instantly, the CPU takes turns between processes very fast, and each process's memory is kept apart.
+> **In short:** memory is cleared instantly, the CPU takes turns between processes very fast, and each process's memory is kept apart.
 
 ---
 
 ## How it goes wrong
 
-Your app's backend is a process too, running on a server. So everything above applies to it.
+Your app's backend is a process too, and it runs on a server. So everything above applies to it.
 
 ### Problem 1: Data kept only in memory
 
-Here's a small piece of backend code, the kind an AI might write for a "like" button:
+Here's a small piece of backend code, the kind that an AI might write for a "like" button:
 
 ```js
 let likes = 0;
@@ -222,44 +224,46 @@ function addLike() {
 
 In plain English:
 
-1. **Line 1:** Make a **variable** called `likes` and set it to 0. A variable is a named box that holds a value. It lives in the process's memory.
-2. **Lines 2–5:** Each time someone likes something, add 1 to `likes` and send back the new number.
+1. **Line 1:** make a **variable** called `likes`, and set it to 0. A variable is a named box that holds a value. It lives in the process's memory.
+2. **Lines 2–5:** each time someone likes something, add 1 to `likes`. Then send back the new number.
 
 It works. You get 50 likes. Then the server restarts.
 
-Now the process starts again from the beginning. Line 1 runs again, and `likes` is back to 0. Your 50 likes are gone, like the unsaved game.
+Now the process starts again from the beginning. Line 1 runs again, and `likes` is 0 again. Your 50 likes are gone, like the unsaved game.
 
-Servers restart more often than you'd think. They restart when you update your app, when it crashes and when the server itself is updated. **So memory is never a safe place for data you need later.** That's the job of a database, which saves data to a disk.
+![Before the restart, the process holds likes = 50 in memory. The server restarts. A new process starts from the beginning, runs line 1 again, and now holds likes = 0.](/diagrams/how-a-computer-runs-your-code-2.svg)
+
+Servers restart more often than you think. They restart when you update your app and when your app crashes (stops because of an error). They also restart when someone updates the server itself. **So memory is never a safe place for data that you need later.** A database does that job, because it saves data to a disk.
 
 ### Problem 2: The process stopped
 
-You ask your AI to start your app. It works. Later you close a window, and now the app won't load.
+You ask your AI to start your app. It works. Later, you close a window, and now the app won't load.
 
-Often, the window you closed was the one running your app's process. Close it, and the process stops. Your code is still safe on the disk. But code on a disk doesn't answer anyone. Only a running process does.
+Often, the window that you closed ran your app's process. When you close it, the process stops. Your code is still safe on the disk. But code on a disk doesn't answer anyone. Only a running process does.
 
 That window is usually a **terminal**: a window where you type text commands. [It works on my laptop. Why can't my friend open it?](/lessons/localhost-vs-production) explains how to use one.
 
 ### Problem 3: The computer gets slow
 
-Two common reasons:
+There are two common reasons:
 
-- **The CPU is too busy.** A process might be stuck repeating the same steps forever. It keeps the CPU working nonstop, and other processes have to wait.
-- **Memory is full.** A process keeps adding things to memory and never lets them go. The computer slows down, and the process may crash.
+- **The CPU is too busy.** A process can repeat the same steps forever. It keeps the CPU busy nonstop, and other processes have to wait.
+- **Memory is full.** A process adds things to memory and never removes them. The computer gets slow, and the process can crash.
 
 > **Go deeper:** [Your server crashes every few days, like clockwork](/lessons/memory-leaks) (Level 4) explains how apps fill up memory, and how to stop it.
 
-> **In short:** memory is cleared when a process stops, an app works only while its process runs, and a busy CPU or full memory makes everything slow.
+> **In short:** memory is cleared when a process stops. An app works only while its process runs. A busy CPU or full memory makes everything slow.
 
 ---
 
 ## What good looks like
 
-- **Keep important data in a database.** Use memory only for things you can lose, like a value you're working with right now.
-- **Expect restarts.** Ask yourself: "If this process restarted right now, what would be lost?" The answer should be "nothing important".
-- **Know which process is your app.** Know which window started it, how to stop it, and how to start it again.
-- **When things get slow, look before you guess.** Check which process is using the CPU or memory (see below).
+- **Keep important data in a database.** Use memory only for things that you can lose, like a value that you work with right now.
+- **Expect restarts.** Ask yourself: "If this process restarted now, what would we lose?" The answer must be "nothing important".
+- **Know which process is your app.** Know which window started it, how to stop it and how to start it again.
+- **When things get slow, look before you guess.** Find which process uses the CPU or memory (see below).
 
-> **In short:** save what matters in a database, plan for restarts, and know where your app's process is running.
+> **In short:** save what matters in a database, plan for restarts, and know where your app's process runs.
 
 ---
 
@@ -270,42 +274,46 @@ Two common reasons:
 Every computer has a tool that lists its processes.
 
 - **Windows:** press **Ctrl+Shift+Esc** to open **Task Manager**. The **Processes** tab is the list.
-- **Mac:** open **Activity Monitor**. It's in **Applications → Utilities**, or search for it with Spotlight (Cmd+Space).
+- **Mac:** open **Activity Monitor**. It's in **Applications → Utilities**. You can also find it with Spotlight, the Mac's search tool (Cmd+Space).
 
 Look at the columns:
 
-- **CPU:** how much of the CPU's time each process is using right now
-- **Memory:** how much memory each process is using. **MB** and **GB** are units of size for data, like grams and kilograms.
+- **CPU:** how much of the CPU's time each process uses now.
+- **Memory:** how much memory each process uses. **MB** and **GB** are units of size for data, like grams and kilograms.
 
-Scroll through the list. You'll find many processes you never started yourself. The operating system runs lots of them in the background.
+Scroll through the list. You'll find many processes that you never started yourself. The operating system runs many of them in the background, where you don't see them.
 
 ### Experiment 2: Watch processes start and stop
 
 1. Keep Task Manager or Activity Monitor open.
-2. Open an app you don't have open yet, like a calculator. Watch a new process appear.
-3. Close the app. Watch the process disappear.
+2. Open an app that isn't open yet, like a calculator.
+3. Look for its new process in the list.
+4. Close the app. See its process disappear.
 
-**Bonus:** look for your browser. Chrome and some other browsers split themselves into many processes. They do this so that if one website crashes, it doesn't take the whole browser down with it.
+**Bonus:** look for your browser. Chrome and some other browsers split themselves into many processes. Then, if one website crashes, the whole browser doesn't stop.
 
 ---
 
 ## Takeaways
 
 **Key terms**
-- **CPU:** the chip that follows a program's instructions, billions of tiny steps per second
-- **Memory (RAM):** the fast workspace for things in use right now. Wiped when the power goes off.
-- **Disk (storage):** where files are kept, even without power. Slower than memory, but bigger.
-- **Program:** a file of instructions on the disk
-- **Process:** a program that is running right now
-- **Operating system:** the main program that runs the computer and manages processes
+
+- **CPU:** the chip that follows a program's instructions, billions of tiny steps per second.
+- **Memory (RAM):** the fast workspace for things in use now. It is cleared when the power goes off.
+- **Disk (storage):** where files are kept, even without power. It is slower than memory, but bigger.
+- **Program:** a file of instructions on the disk.
+- **Process:** a program that runs now.
+- **Operating system:** the main program that runs the computer and manages processes.
 
 **Which part is it?**
-- Data disappeared after a restart → it was only in **memory**
-- The app stopped answering after you closed a window → its **process** stopped
-- Everything is slow and one app shows a high CPU number → the **CPU** is too busy
-- Everything is slow and memory is almost full → **memory** is full
+
+- Data disappeared after a restart → it was only in **memory**.
+- The app stopped answering after you closed a window → its **process** stopped.
+- Everything is slow, and one app shows a high CPU number → the **CPU** is too busy.
+- Everything is slow, and memory is almost full → **memory** is full.
 
 **Ask your AI**
+
 - *"Does my app keep any important data only in memory, like in a variable? What would be lost if the server restarted?"*
 - *"How do I start and stop my app's process? Which window is it running in?"*
 - *"My computer is slow while my app runs. How do I check whether it's using too much CPU or memory?"*
@@ -315,17 +323,17 @@ Scroll through the list. You'll find many processes you never started yourself. 
 <details>
 <summary><strong>Going deeper</strong> (optional, for readers who want more detail)</summary>
 
-**More than one cook.** Most CPUs today contain several **cores**. Each core can follow its own list of instructions, so a CPU with 8 cores can really do 8 things at the same moment. The operating system still switches between processes on each core, because there are usually far more processes than cores.
+**More than one cook.** Most CPUs today contain several **cores**. Each core can follow its own list of instructions. So a CPU with 8 cores can really do 8 things at the same moment. The operating system still switches between processes on each core, because there are usually many more processes than cores.
 
-**Clock speed.** CPU speed is often shown in **GHz** (gigahertz). Intel explains that a 3.2 GHz CPU goes through 3.2 billion cycles per second. A cycle is one tick of the CPU's internal clock. Clock speed alone doesn't tell you which CPU is faster, because CPUs differ in how much work they do per cycle.
+**Clock speed.** CPU speed is often shown in **GHz** (gigahertz). Intel explains that a 3.2 GHz CPU goes through 3.2 billion cycles per second. A cycle is one tick of the CPU's internal clock. Clock speed alone doesn't tell you which CPU is faster. CPUs do different amounts of work per cycle.
 
-**From your code to CPU instructions.** CPUs understand only **machine code**: instructions written as numbers. JavaScript is turned into machine code while it runs. In Node.js and Chrome, a part called the V8 engine does this.
+**From your code to CPU instructions.** CPUs understand only **machine code**: instructions written as numbers. JavaScript is changed into machine code while it runs. Node.js is a program that runs JavaScript outside the browser, for example on a server. In Node.js and Chrome, a part called the V8 engine does this change.
 
-**When memory is full.** If processes need more memory than the computer has, the operating system can move some of it to the disk for a while. This is called **swap** or **virtual memory**. It keeps things running, but the disk is much slower than memory, so everything slows down.
+**When memory is full.** Sometimes processes need more memory than the computer has. Then the operating system can move some of the data to the disk for a while. This is called **swap** or **virtual memory**. It keeps things running, but the disk is much slower than memory. So everything gets slow.
 
 **Processes have ID numbers.** The operating system gives each process a number called a **PID** (process ID). Task Manager and Activity Monitor can show it. In Node.js, a process can read its own PID from `process.pid`.
 
-**Threads.** A process can split its work into **threads**, which take turns on the CPU (or run on different cores) while sharing the same memory. [One slow request froze the whole server](/lessons/event-loop) (Level 4) explains how Node.js handles this.
+**Threads.** A process can split its work into **threads**. Threads share the same memory. They take turns on the CPU, or run on different cores. [One slow request froze the whole server](/lessons/event-loop) (Level 4) explains how Node.js handles this.
 
 </details>
 

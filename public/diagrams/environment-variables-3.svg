@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" role="img" aria-labelledby="t d">
+  <title id="t">Public names go to every browser</title>
+  <desc id="d">Your .env file has two variables. NEXT_PUBLIC_SITE_NAME has a public prefix, so the tool copies it into the JavaScript that every visitor's browser downloads, and anyone can read it. WEATHER_API_KEY has no public prefix, so it stays in the backend on your server. Never give a secret a NEXT_PUBLIC_ or VITE_ prefix.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="320" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- .env -->
+    <rect x="40" y="40" width="250" height="210" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="165" y="70" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">.env file</text>
+    <rect x="56" y="88" width="218" height="58" rx="10" fill="#1f1f1f" stroke="#e98da4" stroke-width="1.5"/>
+    <text x="165" y="114" font-size="13" fill="#f2f2f2" text-anchor="middle">NEXT_PUBLIC_SITE_NAME</text>
+    <text x="165" y="132" font-size="12" fill="#a0a0a0" text-anchor="middle">public prefix</text>
+    <rect x="56" y="170" width="218" height="58" rx="10" fill="#1f1f1f" stroke="#1f9d6b" stroke-width="1.5"/>
+    <text x="165" y="196" font-size="13" fill="#f2f2f2" text-anchor="middle">WEATHER_API_KEY</text>
+    <text x="165" y="214" font-size="12" fill="#a0a0a0" text-anchor="middle">no public prefix</text>
+
+    <!-- Browser -->
+    <rect x="420" y="40" width="260" height="90" rx="10" fill="#e98da4"/>
+    <text x="550" y="78" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Every visitor's browser</text>
+    <text x="550" y="100" font-size="12" fill="#111111" text-anchor="middle">Anyone can read it here</text>
+
+    <!-- Backend -->
+    <rect x="420" y="160" width="260" height="90" rx="10" fill="#4f6bd8"/>
+    <text x="550" y="198" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Backend (your server)</text>
+    <text x="550" y="220" font-size="12" fill="#e8ecff" text-anchor="middle">Visitors can't see it</text>
+
+    <!-- Arrows -->
+    <line x1="280" y1="117" x2="412" y2="88" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="350" y="90" font-size="12" fill="#e98da4" text-anchor="middle">copied</text>
+    <line x1="280" y1="199" x2="412" y2="205" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="348" y="224" font-size="12" fill="#1f9d6b" text-anchor="middle">stays</text>
+
+    <text x="360" y="292" font-size="15" fill="#f2f2f2" text-anchor="middle">Never give a secret a NEXT_PUBLIC_ or VITE_ prefix.</text>
+  </g>
+</svg>

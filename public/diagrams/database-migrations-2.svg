@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" role="img" aria-labelledby="t d">
+  <title id="t">The deploy gap</title>
+  <desc id="d">A timeline with two rows. The migration renames name to full_name in the database first. The old code is still live and asks for name until the new code goes live a little later. Between these two moments, the live code and the live schema do not match, and users get errors.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="340" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Row labels -->
+    <text x="30" y="90" font-size="12" fill="#a0a0a0">DATABASE</text>
+    <text x="30" y="180" font-size="12" fill="#a0a0a0">LIVE CODE</text>
+
+    <!-- Database row -->
+    <rect x="140" y="60" width="190" height="50" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="235" y="90" font-size="15" fill="#f2f2f2" text-anchor="middle">has name</text>
+    <rect x="330" y="60" width="360" height="50" rx="10" fill="#4f6bd8"/>
+    <text x="590" y="90" font-size="15" fill="#f2f2f2" text-anchor="middle">has full_name</text>
+
+    <!-- Code row -->
+    <rect x="140" y="150" width="330" height="50" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="235" y="180" font-size="15" fill="#f2f2f2" text-anchor="middle">asks for name</text>
+    <rect x="470" y="150" width="220" height="50" rx="10" fill="#4f6bd8"/>
+    <text x="590" y="180" font-size="15" fill="#f2f2f2" text-anchor="middle">asks for full_name</text>
+
+    <!-- Gap -->
+    <rect x="330" y="48" width="140" height="164" fill="#e5484d" fill-opacity="0.18" stroke="#e5484d" stroke-width="1.5" stroke-dasharray="6 5"/>
+    <text x="400" y="136" font-size="15" font-weight="600" fill="#ff8a8d" text-anchor="middle">Errors</text>
+
+    <!-- Time axis -->
+    <line x1="140" y1="250" x2="690" y2="250" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="690" y="240" font-size="12" fill="#a0a0a0" text-anchor="end">time</text>
+    <line x1="330" y1="244" x2="330" y2="256" stroke="#cfcfcf" stroke-width="2"/>
+    <line x1="470" y1="244" x2="470" y2="256" stroke="#cfcfcf" stroke-width="2"/>
+    <text x="330" y="276" font-size="12" fill="#a0a0a0" text-anchor="middle">migration runs</text>
+    <text x="470" y="292" font-size="12" fill="#a0a0a0" text-anchor="middle">new code goes live</text>
+
+    <text x="360" y="324" font-size="12" fill="#a0a0a0" text-anchor="middle">If the new code goes live first, the gap is the other way round. It still breaks.</text>
+  </g>
+</svg>

@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 260" role="img" aria-labelledby="t d">
+  <title id="t">Three places a copy can live</title>
+  <desc id="d">A request goes from the browser cache, which is private to one user, to the CDN cache, which many visitors share, to the server cache, which all users share, and finally to the database, which holds the real data. The request stops at the first cache that has a fresh copy.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="260" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <rect x="24" y="70" width="140" height="90" rx="10" fill="#f2c94c"/>
+    <text x="94" y="110" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Browser cache</text>
+    <text x="94" y="132" font-size="12" fill="#111111" text-anchor="middle">private: one user</text>
+
+    <rect x="202" y="70" width="140" height="90" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="272" y="110" font-size="15" fill="#f2f2f2" text-anchor="middle">CDN cache</text>
+    <text x="272" y="132" font-size="12" fill="#a0a0a0" text-anchor="middle">shared by visitors</text>
+
+    <rect x="380" y="70" width="140" height="90" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="450" y="110" font-size="15" fill="#f2f2f2" text-anchor="middle">Server cache</text>
+    <text x="450" y="132" font-size="12" fill="#a0a0a0" text-anchor="middle">shared by all users</text>
+
+    <rect x="558" y="70" width="138" height="90" rx="10" fill="#4f6bd8"/>
+    <text x="627" y="110" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Database</text>
+    <text x="627" y="132" font-size="12" fill="#e8ecff" text-anchor="middle">the real data</text>
+
+    <line x1="164" y1="115" x2="198" y2="115" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="342" y1="115" x2="376" y2="115" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="520" y1="115" x2="554" y2="115" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <text x="94" y="190" font-size="12" fill="#a0a0a0" text-anchor="middle">You can't clear it</text>
+    <text x="272" y="190" font-size="12" fill="#a0a0a0" text-anchor="middle">You can purge it</text>
+    <text x="450" y="190" font-size="12" fill="#a0a0a0" text-anchor="middle">Your code clears it</text>
+
+    <text x="360" y="232" font-size="12" fill="#a0a0a0" text-anchor="middle">The request stops at the first cache that has a fresh copy.</text>
+  </g>
+</svg>

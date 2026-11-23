@@ -12,18 +12,18 @@ quiz:
       - text: "The query is too slow"
       - text: "The user's text becomes part of the SQL command itself"
         correct: true
-      - text: "The code should use double quotes instead of single quotes"
-      - text: "SELECT queries can't be used for searching"
-    explanation: "Gluing user text into the query means the database can't tell where your command ends and the user's text begins. A user can type SQL that changes what the command does. That's SQL injection."
+      - text: "The code must use double quotes, not single quotes"
+      - text: "SELECT queries can't be used for searches"
+    explanation: "When you glue user text into the query, the database cannot tell where your command ends and the user's text starts. A user can type SQL that changes what the command does. That is SQL injection."
 
-  - question: "With a parameterized query, a user types ' OR '1'='1 into the order code box. What does the database do?"
+  - question: "Your app uses a parameterized query. A user types ' OR '1'='1 into the order code box. What does the database do?"
     options:
-      - text: "Runs the OR part and returns every order"
-      - text: "Crashes with an error"
-      - text: "Looks for an order whose code is exactly that strange text, and finds none"
+      - text: "It runs the OR part and returns every order"
+      - text: "It crashes with an error"
+      - text: "It looks for an order whose code is exactly that strange text, and finds none"
         correct: true
-      - text: "Deletes the orders table"
-    explanation: "In a parameterized query, the value travels separately from the command. The database treats it only as data: a strange order code that matches nothing."
+      - text: "It deletes the orders table"
+    explanation: "In a parameterized query, the value goes to the database separately from the command. The database treats it only as data: a strange order code that matches nothing."
 
   - question: "Your app uses an ORM like Prisma. The AI writes prisma.$queryRawUnsafe(\"SELECT * FROM users WHERE name = '\" + name + \"'\"). Is it safe because it uses an ORM?"
     options:
@@ -32,97 +32,97 @@ quiz:
       - text: "Only if the user is logged in"
       - text: "No, this raw query glues user text into SQL, so it can be injected"
         correct: true
-    explanation: "ORMs protect their normal query methods. Raw-query escape hatches that accept a finished SQL string, like $queryRawUnsafe, are as dangerous as gluing strings yourself."
+    explanation: "ORMs protect their normal query methods. Some raw-query methods accept a finished SQL text, like $queryRawUnsafe. These are as dangerous as text that you glue together yourself."
 
-  - question: "Users can sort a product list by a column they choose. Column names can't be sent as query parameters. What's the safe approach?"
+  - question: "Users can sort a product list by a column that they choose. You cannot send column names as query parameters. What is the safe approach?"
     options:
       - text: "Put the user's text into the query, but remove all quotes first"
       - text: "Check the user's choice against a fixed list of allowed columns"
         correct: true
       - text: "Only allow logged-in users to sort"
       - text: "Hide the sort menu from most users"
-    explanation: "When a value can't be a parameter, compare it with a short list you wrote yourself, like \"name\", \"price\" or \"date\". Anything else is rejected, so only your own text ever reaches the query."
+    explanation: "When a value cannot be a parameter, compare it with a short list that you wrote yourself, like \"name\", \"price\" or \"date\". The code rejects everything else. So only your own text gets to the query."
 
-  - question: "You type a single apostrophe (') into your own app's search box, and the page shows a server error. What might this mean?"
+  - question: "You type a single apostrophe (') into your own app's search box. The page shows a server error. What can this mean?"
     options:
       - text: "The search box needs a bigger font"
       - text: "Apostrophes are banned on the internet"
       - text: "Your database is full"
-      - text: "Your text may be glued into a SQL query, which broke it"
+      - text: "Your text may be glued into a SQL query, and it broke the query"
         correct: true
-    explanation: "An apostrophe ends a piece of text in SQL. If one apostrophe breaks your query, your text is probably being glued into the command. Check that code for SQL injection."
+    explanation: "An apostrophe ends a piece of text in SQL. If one apostrophe breaks your query, your text is probably glued into the command. Check that code for SQL injection."
 
-  - question: "The AI suggests blocking apostrophes in every form to stop SQL injection. What's wrong with that?"
+  - question: "The AI suggests that you block apostrophes in every form to stop SQL injection. What is wrong with that?"
     options:
       - text: "Real names like O'Brien break, and the query still isn't parameterized"
         correct: true
       - text: "Nothing, it fully prevents SQL injection"
       - text: "Apostrophes are needed for passwords"
       - text: "It makes the database slower"
-    explanation: "Blocking characters rejects real users and attackers often find other ways in. The real fix is a parameterized query, which keeps data and commands apart no matter what the text contains."
+    explanation: "Blocked characters reject real users, and attackers often find other ways in. The real fix is a parameterized query. It keeps data and commands apart, whatever the text contains."
 ---
 
 # How one line of text can dump your whole database
 
 > **Before you start**
-> This lesson uses a few words from earlier lessons:
-> - **SQL:** the language many databases understand, with commands like "find these rows". *([Your app forgot everyone's messages overnight. Why?](/lessons/what-is-a-database))*
-> - **API route:** an address on your server that your pages talk to, like `/api/orders`. *([The hidden conversation behind every button you tap](/lessons/what-is-an-api))*
-> - **Trust boundary:** anything that comes from the browser might have been changed by the user. *([A player scored 999,999 points by editing the page. How?](/lessons/frontend-and-backend))*
-> - **Server-side validation:** checking data on your server before you use it. *([Can strangers read your whole database? Check in 5 minutes](/lessons/never-trust-the-browser))*
+> Words from earlier lessons:
+> - **SQL:** the language that many databases understand. *([Your app forgot everyone's messages overnight. Why?](/lessons/what-is-a-database))*
+> - **API route:** a server address that your pages send requests to, like `/api/orders`. *([The hidden conversation behind every button you tap](/lessons/what-is-an-api))*
+> - **Trust boundary:** the user can change anything that comes from the browser. *([A player scored 999,999 points by editing the page. How?](/lessons/frontend-and-backend))*
+> - **Server-side validation:** a check of data on your server before you use it. *([Can strangers read your whole database? Check in 5 minutes](/lessons/never-trust-the-browser))*
 
 ## Every order, from one text box
 
-You built a small online shop with AI. Customers don't need an account. After they buy something, they get an **order code**, like `K7Q2M`. To check on an order, they open a "Find my order" page, type their email and their code, and see their order.
+You built a small online shop with AI. Customers do not need an account. After they buy something, they get an **order code**, like `K7Q2M`. To check on an order, they open a "Find my order" page. They type their email and their code, and they see their order.
 
 One evening, a customer writes to you:
 
 > "I typed something strange into the order code box, and your site showed me a list of **every** order. Names, addresses, everything."
 
-They didn't guess anyone's code. They didn't need a password. They typed a few characters, including some apostrophes, into a normal text box.
+They did not guess anyone's code. They did not need a password. They typed a few characters, including some apostrophes, into a normal text box.
 
-How can typing in a box show someone else's data? The answer is one of the oldest and best-known security bugs on the web. By the end of this lesson, you'll know how it works, how to spot it in AI-written code and how to fix it with one small change.
+How can text in a box show someone else's data? The answer is one of the oldest and best-known security bugs on the web. In this lesson, you learn how it works and how to find it in AI-written code. You also learn how to fix it with one small change.
 
 ---
 
 ## Commands and data
 
-When your server talks to the database, it sends a **query**: a command written in SQL. A query to find one order looks like this:
+Your **server** is the computer that runs your app's code. When it talks to the database, it sends a **query**: a command written in SQL. A query to find one order looks like this:
 
 ```sql
 SELECT * FROM orders WHERE email = 'mia@example.com' AND code = 'K7Q2M';
 ```
 
-In plain English: "From the `orders` table, give me every column of the rows where the email is `mia@example.com` and the code is `K7Q2M`." In SQL, a piece of text goes between single quotes (`'...'`). The first quote starts the text, and the next quote ends it.
+In plain English: "From the `orders` table, give me every column of the rows with the email `mia@example.com` and the code `K7Q2M`". In SQL, a piece of text goes between single quotes (`'...'`). The first quote starts the text, and the next quote ends it.
 
 This query has two kinds of parts:
 
 - **Command parts** that you wrote: `SELECT`, `FROM orders`, `WHERE`, `AND`.
 - **Data parts** that came from the user: the email and the code.
 
-The database must be able to tell these apart. If it can't, a user can type something that the database reads as a command.
+The database must be able to tell these parts apart. If it cannot, a user can type something that the database reads as a command.
 
 ### A fill-in-the-blank note
 
-Imagine a teacher has a pile of notes that say:
+A teacher has a pile of notes that say:
 
 > "Please give \_\_\_\_\_\_ a gold star."
 
-Each student writes their name in the blank, and the teacher reads the note aloud and does what it says. A student writes in the blank:
+Each student writes their name in the blank. The teacher reads the note aloud and does what it says. One student writes this in the blank:
 
 > "Sam a gold star, and give everyone else no homework this week. Also give Sam"
 
-The teacher reads: *"Please give Sam a gold star, and give everyone else no homework this week. Also give Sam a gold star."* The teacher can't see where the blank ended. So the student's words became part of the instructions.
+The teacher reads: *"Please give Sam a gold star, and give everyone else no homework this week. Also give Sam a gold star."* The teacher cannot see where the blank ended. So the student's words became part of the instructions.
 
-That's **SQL injection**: user input that ends up being read as part of a SQL command.
+That is **SQL injection**: user input that the database reads as part of a SQL command.
 
-**Where this comparison stops working:** a teacher might notice the trick. A database never does. It follows the exact text it receives, every time.
+**Where this comparison stops working:** a teacher can notice the trick. A database never does. It follows the exact text that it gets, every time.
 
 ---
 
 ## How it goes wrong
 
-You ask your AI: *"Make an API route that finds an order by email and order code."* It might write this:
+You ask your AI: *"Make an API route that finds an order by email and order code."* It can write this:
 
 ```js
 app.post("/api/find-order", async (req, res) => {
@@ -136,19 +136,19 @@ app.post("/api/find-order", async (req, res) => {
 
 In plain English:
 
-1. **Line 2:** take the email and code from the request body (what the user typed).
-2. **Lines 3–5:** build a SQL query as one piece of text, gluing the user's email and code into the gaps. The backticks and `${...}` mean "put this value into the text here". Then send the whole text to the database. (`pool` is the app's connection to a PostgreSQL database.)
-3. **Line 6:** send back whatever rows the database found.
+1. **Line 2:** the code takes the email and code from the **request body**. The request body is the data that the browser sends, here what the user typed.
+2. **Lines 3–5:** the code builds a SQL query as one piece of text. It glues the user's email and code into the gaps. The backticks and `${...}` mean "put this value into the text here". Then it sends the whole text to the database. (`pool` is the app's connection to a PostgreSQL database.)
+3. **Line 6:** the server sends back the rows that the database found.
 
-With honest input, the query is exactly the one you saw above. It works when you test it.
+With honest input, the query is exactly the one that you saw above. It works when you test it.
 
-Now the attacker types any email, and this in the code box:
+Now the attacker types any email, and this text in the code box:
 
 ```text
 ' OR '1'='1
 ```
 
-The server glues it in. The database receives:
+The server glues it in. The database gets this query:
 
 ```sql
 SELECT * FROM orders WHERE email = 'x@example.com' AND code = '' OR '1'='1'
@@ -157,20 +157,26 @@ SELECT * FROM orders WHERE email = 'x@example.com' AND code = '' OR '1'='1'
 Read it slowly:
 
 1. `code = ''`: the attacker's first apostrophe **closed** the text early. Now the code is empty.
-2. `OR '1'='1'`: this is no longer data. It's a new part of the command: "...or if 1 equals 1".
+2. `OR '1'='1'`: this is no longer data. It is a new part of the command: "...or if 1 equals 1".
 3. `'1'='1'` is always true. So the condition is true for every row, and the database returns **every order**.
 
-The attacker's text broke out of its blank and became part of the command. That's the "strange thing" your customer typed.
+![With honest input, the order code stays inside its quotes as data. With the attack text, the first apostrophe closes the quotes early, and OR '1'='1' becomes part of the command, so the database returns every order.](/diagrams/sql-injection-1.svg)
+
+The attacker's text broke out of its blank and became part of the command. That is the "strange thing" that your customer typed.
 
 ### It can get worse
 
-Reading every order is bad enough. But depending on the database and the code, an injected command can also change or delete data. OWASP, a nonprofit security organization whose guides are an industry standard, lists what a successful SQL injection can do: read sensitive data, modify it (insert, update, delete), and in some cases run admin operations on the database.
+It is bad when an attacker can read every order. But an injected command can also change or delete data. This depends on the database and the code. OWASP is a nonprofit security organization, and its guides are an industry standard. It lists what a successful SQL injection can do:
+
+- Read sensitive data.
+- Change it (insert, update, delete).
+- In some cases, run admin operations on the database.
 
 ### Why AI writes this
 
-- **It looks natural.** Building text with `${...}` is how JavaScript code builds every other kind of text. The bug is invisible unless you know to look for it.
-- **It works when you test it.** You type normal emails and codes, and it behaves perfectly.
-- **"Escape hatches".** When a query is too complex for the AI's usual tools, it often falls back to writing raw SQL by hand, and gluing values into it.
+- **It looks natural**. JavaScript code builds every other kind of text with `${...}`. You cannot see the bug unless you know to look for it.
+- **It works when you test it**. You type normal emails and codes, and it works perfectly.
+- **It uses "escape hatches"**. Sometimes a query is too complex for the AI's usual tools. Then the AI often writes raw SQL by hand and glues values into it.
 
 ---
 
@@ -178,7 +184,7 @@ Reading every order is bad enough. But depending on the database and the code, a
 
 ### Fix: Send the data separately with a parameterized query
 
-The fix is to never put user text inside the SQL text. Instead, you put a **placeholder** where each value goes, and send the values separately. This is called a **parameterized query**. (A parameter is a value that fills a placeholder.)
+The fix: never put user text inside the SQL text. Put a **placeholder** where each value goes, and send the values separately. This is called a **parameterized query**. (A parameter is a value that fills a placeholder.)
 
 ```js
 app.post("/api/find-order", async (req, res) => {
@@ -193,19 +199,21 @@ app.post("/api/find-order", async (req, res) => {
 
 In plain English:
 
-1. **Line 4:** the query text has `$1` and `$2` where the values go. No user text is in it. It's the same every time.
-2. **Line 5:** the values travel separately, in a list. `$1` means "the first value", `$2` "the second".
-3. The database receives the command and the values as two different things. It fills the placeholders itself, and it treats the values only as data.
+1. **Line 4:** the query text has `$1` and `$2` where the values go. It has no user text in it, so it is the same every time.
+2. **Line 5:** the values go separately, in a list. `$1` means "the first value", and `$2` means "the second value".
+3. The database gets the command and the values as two different things. It fills the placeholders itself, and it treats the values only as data.
 
-Now when the attacker types `' OR '1'='1`, the database looks for an order whose code is, letter for letter, `' OR '1'='1`. There's no such order, so it returns nothing. The apostrophes are just characters in a strange code.
+Now the attacker types `' OR '1'='1` again. The database looks for an order whose code is, letter for letter, `' OR '1'='1`. There is no such order, so it returns nothing. The apostrophes are only characters in a strange code.
 
-In the note analogy, the blank is now a sealed box. Whatever the student writes inside it, the teacher reads it only as a name.
+![When you glue text, the user's text and your command arrive as one text, so the attack becomes part of the command and returns every order. With a parameterized query, the command and the values arrive separately, so the attack is only a strange code that matches nothing.](/diagrams/sql-injection-2.svg)
 
-OWASP's guidance is clear: use parameterized queries for any value that comes from outside your code. Different libraries use different placeholders (`$1`, `?`, `:email`), but the idea is the same.
+In the note example, the blank is now a sealed box. The student can write anything inside it, but the teacher reads it only as a name.
+
+OWASP's advice is clear: **use parameterized queries for any value that comes from outside your code**. Different code packages use different placeholders (`$1`, `?`, `:email`), but the idea is the same.
 
 ### ORMs help, but check the escape hatches
 
-Most AI-built apps don't write SQL by hand. They use an **ORM** (Object-Relational Mapper): a package that lets you work with the database using normal code instead of SQL. Prisma and Drizzle are popular ones for JavaScript and TypeScript.
+Most AI-built apps do not write SQL by hand. They use an **ORM** (Object-Relational Mapper). An ORM is a code package that lets you work with the database with normal code, not SQL. Prisma and Drizzle are popular ORMs for JavaScript and TypeScript.
 
 ```js
 const order = await prisma.order.findFirst({
@@ -213,9 +221,9 @@ const order = await prisma.order.findFirst({
 });
 ```
 
-This is the ORM version of the same search. The ORM builds a parameterized query for you, so normal ORM methods like this are protected.
+This is the ORM version of the same search. The ORM builds a parameterized query for you. So normal ORM methods like this one are protected.
 
-But every ORM also has a way to run raw SQL, for queries that its normal methods can't express. Some of these are safe, and some are not. They can look almost the same:
+But every ORM also has a way to run raw SQL, for queries that its normal methods cannot do. Some of these ways are safe, and some are not. They can look almost the same:
 
 | Library | Safe | Unsafe with user input |
 |---|---|---|
@@ -234,20 +242,20 @@ await prisma.$queryRawUnsafe(`SELECT * FROM orders WHERE code = '${code}'`);
 
 In plain English:
 
-1. **Line 2:** the backtick text comes right after `$queryRaw`, with no brackets. This special form, called a **tagged template**, hands Prisma the SQL pieces and the values separately. Prisma's documentation says it turns them into prepared statements that are safe from SQL injection.
-2. **Line 5:** `$queryRawUnsafe` receives one finished piece of text. By the time Prisma sees it, the user's input is already glued in. Prisma's documentation warns that this is at significant risk of SQL injection.
+1. **Line 2:** the backtick text comes directly after `$queryRaw`, with no brackets. This special form is called a **tagged template**. It gives Prisma the SQL pieces and the values separately. Prisma's documentation says that it turns them into prepared statements (parameterized queries) that are safe from SQL injection.
+2. **Line 5:** `$queryRawUnsafe` gets one finished piece of text. When Prisma sees it, the user's input is already glued in. Prisma's documentation warns that this method has a significant risk of SQL injection.
 
-So the same-looking `${code}` is safe in one line and dangerous in the other. Drizzle works the same way: its `sql` template turns values into parameters, while its documentation says `sql.raw()` adds text without any processing or escaping.
+So the same `${code}` is safe in one line and dangerous in the other. Drizzle works in the same way. Its `sql` template turns values into parameters. But its documentation says that `sql.raw()` adds text with no processing or escaping.
 
-**The rule:** any method named "raw" or "unsafe" deserves a careful look. Never pass user input into it.
+**The rule:** look carefully at any method named "raw" or "unsafe". **Never pass user input into it.**
 
-### When a value can't be a parameter
+### When a value cannot be a parameter
 
-Placeholders work for **values**, like an email or a code. They don't work for parts of the command itself, like a column name or the words `ASC` and `DESC` (sort up or down).
+Placeholders work for **values**, like an email or a code. They do not work for parts of the command itself. Examples are a column name, or the words `ASC` and `DESC` (sort up or down).
 
-Say your shop lets users sort products by "name", "price" or "date". The AI might glue the user's choice into the query: `ORDER BY ${sortBy}`. That's injectable again.
+Say that your shop lets users sort products by "name", "price" or "date". The AI can glue the user's choice into the query: `ORDER BY ${sortBy}`. Then an attacker can inject SQL again.
 
-The fix is an **allowlist**: a fixed list of values you wrote yourself.
+The fix is an **allowlist**: a fixed list of values that you wrote yourself.
 
 ```js
 const SORT_COLUMNS = new Map([["name", "name"], ["price", "price"], ["date", "created_at"]]);
@@ -256,14 +264,14 @@ const column = SORT_COLUMNS.get(req.query.sort) ?? "created_at";
 
 In plain English:
 
-1. **Line 1:** the only columns users may sort by, written by you.
-2. **Line 2:** look up the user's choice in that list. If it's not there, use `created_at`. Either way, the text that reaches the query was written by you, never by the user.
+1. **Line 1:** you write the only columns that users can sort by.
+2. **Line 2:** the code looks up the user's choice in that list. If the choice is not there, it uses `created_at`. In both cases, you wrote the text that gets to the query, not the user.
 
-### What doesn't fix it
+### What does not fix it
 
-- **Blocking apostrophes or "bad words".** Real people are called O'Brien. And OWASP warns against trying to recognize every dangerous string: attackers find ones you didn't list.
-- **Escaping by hand.** Adding backslashes before quotes yourself is easy to get wrong. OWASP calls manual escaping error-prone and strongly discouraged.
-- **Validation alone.** Server-side validation is still good: an order code should be 5 letters and digits. But it's an extra layer. The parameterized query is the fix.
+- **Blocked apostrophes or "bad words"**. Real people have names like O'Brien. OWASP also warns: do not try to recognize every dangerous string. Attackers find strings that you did not list.
+- **Escaping by hand**. Escaping means that you add backslashes before quotes yourself. It is easy to get wrong. OWASP calls manual escaping error-prone and strongly discouraged.
+- **Validation alone**. Server-side validation is still good: an order code must be 5 letters and digits. But it is an extra layer. The parameterized query is the fix.
 
 ---
 
@@ -271,37 +279,46 @@ In plain English:
 
 **Test 1: Search your code.** Ask your AI, or search your project, for these:
 
-- `$queryRawUnsafe`, `$executeRawUnsafe` or `Prisma.raw` (Prisma)
-- `sql.raw` (Drizzle)
-- Any `query(` call where the SQL text contains `${` or uses `+` to join text with a variable
+- `$queryRawUnsafe`, `$executeRawUnsafe` or `Prisma.raw` (Prisma).
+- `sql.raw` (Drizzle).
+- Any `query(` call where the SQL text contains `${` or uses `+` to join text with a variable.
 
-For each one, check where the values come from. If any part came from the request, it's a likely injection.
+For each one, check where the values come from. If any part came from the request, it is probably an injection bug.
 
-**Test 2: The apostrophe test.** In **your own app only**, type a single apostrophe (`'`) into each search box and form field, and submit.
+**Test 2: The apostrophe test.** Do this test **only in your own app**.
+
+1. Type a single apostrophe (`'`) into a search box or form field.
+2. Submit the form.
+3. Do this for each search box and form field.
+
+Here is what the result means:
 
 - If you see a normal "nothing found" result, good.
-- If you see a server error (500) or a database error message, your text may be breaking a SQL query. Show that route's code to your AI and ask whether it's injectable.
+- If you see a server error (500) or a database error message, your text can break a SQL query. Show that route's code to your AI. Ask if an attacker can inject SQL into it.
 
-Only test apps you own. Trying this on other people's websites can be illegal.
+**Test only apps that you own.** This test on other people's websites can be illegal.
 
 ---
 
 ## Takeaways
 
 **Key terms**
-- **Query:** a command sent to the database, written in SQL
-- **SQL injection:** user input that ends up being read as part of a SQL command
-- **Parameterized query:** a query with placeholders, where values are sent separately and treated only as data
-- **ORM:** a package that lets your code use the database without writing SQL by hand
-- **Allowlist:** a fixed list of accepted values, written by you
+
+- **Query:** a command, written in SQL, that your code sends to the database.
+- **SQL injection:** user input that the database reads as part of a SQL command.
+- **Parameterized query:** a query with placeholders. The values go separately, and the database treats them only as data.
+- **ORM:** a package that lets your code use the database without hand-written SQL.
+- **Allowlist:** a fixed list of accepted values, written by you.
 
 **Red flags in AI-written code**
-- SQL text built with `${...}` or `+` that includes anything from `req.body`, `req.query` or `req.params`
-- `$queryRawUnsafe`, `$executeRawUnsafe`, `Prisma.raw` or `sql.raw` with user input anywhere nearby
-- A column name or sort order taken straight from the request
-- "I escaped the quotes, so it's safe" or "I blocked special characters"
+
+- SQL text built with `${...}` or `+` that includes anything from `req.body`, `req.query` or `req.params`.
+- `$queryRawUnsafe`, `$executeRawUnsafe`, `Prisma.raw` or `sql.raw` with user input anywhere near it.
+- A column name or sort order that comes directly from the request.
+- Someone says "I escaped the quotes, so it's safe" or "I blocked special characters".
 
 **Ask your AI**
+
 - *"Find every place in my app where SQL text is built from variables. Is any value from the request glued into the text instead of passed as a parameter?"*
 - *"List every raw query in my project (queryRaw, queryRawUnsafe, sql.raw). Is each one safe from SQL injection?"*
 - *"Where does my app let users choose a column or sort order? Is it checked against an allowlist?"*
@@ -311,17 +328,17 @@ Only test apps you own. Trying this on other people's websites can be illegal.
 <details>
 <summary><strong>Going deeper</strong> (optional, for readers who want more detail)</summary>
 
-**Where it ranks.** The OWASP Top 10 is the industry's standard list of web application security risks. In the 2025 edition, "Injection" is A05, down from third place in 2021. The category includes SQL injection and cross-site scripting. OWASP reports that every application it tested was tested for some form of injection.
+**Where it ranks.** The OWASP Top 10 is the industry's standard list of web application security risks. In the 2025 edition, "Injection" is A05. In 2021, it was in third place. The category includes SQL injection and cross-site scripting. OWASP reports that it tested every application in its data for some form of injection.
 
-**Prepared statements.** You'll also hear "prepared statement". It's a closely related idea: the database receives the query shape first and the values later. Most libraries use the terms loosely. What matters is that values never become part of the SQL text.
+**Prepared statements.** You also hear the term "prepared statement". It is a closely related idea. The database gets the shape of the query first and the values later. Most code packages use the two terms loosely. The important thing is that values never become part of the SQL text.
 
-**Stored procedures aren't automatically safe.** A **stored procedure** is a piece of SQL saved inside the database. OWASP notes that parameterizing the call to a procedure protects the call, but not any SQL the procedure builds from text inside itself.
+**Stored procedures are not automatically safe.** A **stored procedure** is a piece of SQL that is saved inside the database. OWASP says that a parameterized call to a procedure protects the call. But it does not protect SQL that the procedure builds from text inside itself.
 
-**Least privilege.** Give your app's database account only the permissions it needs. If the app never deletes tables, its account shouldn't be able to. OWASP recommends never giving an application's account admin access. Then even a successful injection can do less damage.
+**Least privilege.** Give your app's database account only the permissions that it needs. If the app never deletes tables, its account must not be able to delete them. OWASP recommends that you never give an app's account admin access. Then even a successful injection can do less damage.
 
-**Not only SQL.** The same pattern appears anywhere data gets glued into a command: shell commands, search engines and other query languages. The fix has the same shape each time: keep the data separate from the command. [A comment that runs code in every visitor's browser](/lessons/cross-site-scripting) shows the same bug in HTML.
+**Not only SQL.** The same pattern happens anywhere that code glues data into a command. Examples are shell commands (commands for the computer's terminal), search engines and other query languages. The fix is the same each time: keep the data separate from the command. [A comment that runs code in every visitor's browser](/lessons/cross-site-scripting) shows the same bug in HTML.
 
-**A famous joke.** The comic xkcd #327, "Exploits of a Mom", shows a school whose student records were deleted because a student's name was `Robert'); DROP TABLE Students;--`. Developers still call him "Little Bobby Tables".
+**A famous joke.** The comic xkcd #327, "Exploits of a Mom", shows a school that lost its student records. A student's name was `Robert'); DROP TABLE Students;--`. Developers still call him "Little Bobby Tables".
 
 </details>
 

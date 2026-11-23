@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" role="img" aria-labelledby="t d">
+  <title id="t">A token bucket</title>
+  <desc id="d">Tokens drip into a bucket at 100 per minute. The bucket holds up to 20 tokens. Each request takes one token. If a token is there, the request is allowed. If the bucket is empty, the request gets a 429 reply.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#e5484d"/>
+    </marker>
+  </defs>
+  <rect width="720" height="300" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Refill -->
+    <text x="360" y="36" font-size="12" fill="#a0a0a0" text-anchor="middle">Tokens drip in: 100 per minute</text>
+    <line x1="360" y1="46" x2="360" y2="84" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <!-- Requests -->
+    <rect x="30" y="130" width="150" height="70" rx="10" fill="#4f6bd8"/>
+    <text x="105" y="170" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Requests</text>
+    <line x1="180" y1="165" x2="276" y2="165" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <!-- Bucket -->
+    <path d="M270 92 L450 92 L430 232 L290 232 Z" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="360" y="120" font-size="12" fill="#a0a0a0" text-anchor="middle">holds up to 20 tokens</text>
+    <g fill="#f2c94c">
+      <circle cx="310" cy="214" r="8"/><circle cx="332" cy="214" r="8"/><circle cx="354" cy="214" r="8"/><circle cx="376" cy="214" r="8"/><circle cx="398" cy="214" r="8"/>
+      <circle cx="310" cy="192" r="8"/><circle cx="332" cy="192" r="8"/><circle cx="354" cy="192" r="8"/><circle cx="376" cy="192" r="8"/><circle cx="398" cy="192" r="8"/>
+      <circle cx="321" cy="170" r="8"/><circle cx="343" cy="170" r="8"/><circle cx="365" cy="170" r="8"/>
+    </g>
+    <text x="360" y="256" font-size="15" fill="#f2f2f2" text-anchor="middle">Bucket</text>
+
+    <!-- Outcomes -->
+    <rect x="530" y="70" width="160" height="60" rx="10" fill="#1f9d6b"/>
+    <text x="610" y="96" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Allowed</text>
+    <text x="610" y="116" font-size="12" fill="#e6f5ee" text-anchor="middle">takes 1 token</text>
+    <rect x="530" y="200" width="160" height="60" rx="10" fill="#1f1f1f" stroke="#e5484d" stroke-width="1.5"/>
+    <text x="610" y="226" font-size="15" fill="#f2f2f2" text-anchor="middle">429</text>
+    <text x="610" y="246" font-size="12" fill="#e5484d" text-anchor="middle">no token left</text>
+
+    <line x1="446" y1="130" x2="526" y2="100" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="436" y1="200" x2="526" y2="226" stroke="#e5484d" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrow-red)"/>
+  </g>
+</svg>

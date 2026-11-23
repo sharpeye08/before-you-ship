@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" role="img" aria-labelledby="t d">
+  <title id="t">Two questions, two architectures</title>
+  <desc id="d">On Monday, the question millions of users leads the AI to eight services, Kafka, event sourcing and three regions. On Tuesday, the question simplest way leads to one server, one database and Stripe. Only Maya's facts, four bakeries, one developer and her savings, can choose between the plans.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="330" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <text x="130" y="30" font-size="12" fill="#a0a0a0" text-anchor="middle">THE QUESTION</text>
+    <text x="410" y="30" font-size="12" fill="#a0a0a0" text-anchor="middle">THE AI'S PLAN</text>
+
+    <!-- Monday -->
+    <rect x="30" y="42" width="200" height="64" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="130" y="70" font-size="15" fill="#f2f2f2" text-anchor="middle">"Millions of users"</text>
+    <text x="130" y="90" font-size="12" fill="#a0a0a0" text-anchor="middle">Monday</text>
+
+    <rect x="300" y="42" width="220" height="64" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="410" y="70" font-size="15" fill="#f2f2f2" text-anchor="middle">8 services + Kafka</text>
+    <text x="410" y="90" font-size="12" fill="#a0a0a0" text-anchor="middle">event sourcing, 3 regions</text>
+
+    <line x1="234" y1="74" x2="294" y2="74" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <!-- Tuesday -->
+    <rect x="30" y="140" width="200" height="64" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="130" y="168" font-size="15" fill="#f2f2f2" text-anchor="middle">"Simplest way"</text>
+    <text x="130" y="188" font-size="12" fill="#a0a0a0" text-anchor="middle">Tuesday</text>
+
+    <rect x="300" y="140" width="220" height="64" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="410" y="168" font-size="15" fill="#f2f2f2" text-anchor="middle">1 server + 1 database</text>
+    <text x="410" y="188" font-size="12" fill="#a0a0a0" text-anchor="middle">Stripe, a hosting platform</text>
+
+    <line x1="234" y1="172" x2="294" y2="172" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <!-- Facts -->
+    <rect x="30" y="246" width="490" height="56" rx="10" fill="#f2c94c"/>
+    <text x="275" y="279" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Maya's facts: 4 bakeries, 1 developer, her savings</text>
+
+    <text x="545" y="96" font-size="12" fill="#a0a0a0">Both plans sound</text>
+    <text x="545" y="114" font-size="12" fill="#a0a0a0">confident. The AI</text>
+    <text x="545" y="132" font-size="12" fill="#a0a0a0">followed the words</text>
+    <text x="545" y="150" font-size="12" fill="#a0a0a0">of each question.</text>
+    <text x="545" y="270" font-size="12" fill="#f2c94c">Only these facts</text>
+    <text x="545" y="288" font-size="12" fill="#f2c94c">can choose a plan.</text>
+  </g>
+</svg>

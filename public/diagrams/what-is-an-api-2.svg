@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" role="img" aria-labelledby="t d">
+  <title id="t">A wrong address gives the "not valid JSON" error</title>
+  <desc id="d">The frontend asks for /api/like, but the endpoint is /api/likes. The server has no such endpoint, so it sends back a 404 status code and its "page not found" HTML page. The frontend expected JSON, so it shows the error: Unexpected token '&lt;' ... is not valid JSON.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#e5484d"/>
+    </marker>
+  </defs>
+  <rect width="720" height="330" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Frontend -->
+    <rect x="40" y="58" width="160" height="100" rx="10" fill="#f2c94c"/>
+    <text x="120" y="102" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Frontend</text>
+    <text x="120" y="124" font-size="12" fill="#111111" text-anchor="middle">(expects JSON)</text>
+
+    <!-- Server -->
+    <rect x="520" y="58" width="160" height="100" rx="10" fill="#4f6bd8"/>
+    <text x="600" y="102" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Server</text>
+    <text x="600" y="124" font-size="12" fill="#e8ecff" text-anchor="middle">(has /api/likes)</text>
+
+    <!-- Wrong request -->
+    <line x1="206" y1="88" x2="512" y2="88" stroke="#e5484d" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow-red)"/>
+    <text x="359" y="76" font-size="12" fill="#e5484d" text-anchor="middle">1. Asks for /api/like</text>
+    <text x="359" y="108" font-size="12" fill="#a0a0a0" text-anchor="middle">(one letter is missing)</text>
+
+    <!-- Response -->
+    <line x1="514" y1="136" x2="208" y2="136" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="361" y="156" font-size="12" fill="#8ea2ff" text-anchor="middle">2. 404 and an HTML page</text>
+    <text x="361" y="174" font-size="12" fill="#a0a0a0" text-anchor="middle">"Page not found" (starts with &lt;)</text>
+
+    <!-- Error -->
+    <line x1="120" y1="164" x2="120" y2="210" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="40" y="218" width="640" height="80" rx="10" fill="#1f1f1f" stroke="#e5484d" stroke-width="1.5"/>
+    <text x="60" y="246" font-size="12" fill="#e5484d">3. Error</text>
+    <text x="60" y="270" font-size="15" fill="#f2f2f2">Unexpected token '&lt;' ... is not valid JSON</text>
+    <text x="60" y="288" font-size="12" fill="#a0a0a0">It wanted JSON, but it got HTML. Check the endpoint's address first.</text>
+  </g>
+</svg>

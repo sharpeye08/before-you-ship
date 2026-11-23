@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" role="img" aria-labelledby="t d">
+  <title id="t">A normal table vs an event store</title>
+  <desc id="d">Top: a normal table keeps only the current balance of 0, because each update overwrote the old value. Bottom: an event store keeps every step: wallet opened, 120 deposited, 20 paid to Ben, 100 withdrawn. A replay adds them up in order and also gives a balance of 0.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="320" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Normal table -->
+    <text x="30" y="40" font-size="12" fill="#a0a0a0">NORMAL TABLE: KEEPS ONLY NOW</text>
+    <rect x="30" y="55" width="200" height="64" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="130" y="93" font-size="15" fill="#f2f2f2" text-anchor="middle">balance = 0</text>
+    <text x="255" y="83" font-size="12" fill="#a0a0a0">Each UPDATE overwrote the old value.</text>
+    <text x="255" y="101" font-size="12" fill="#e5484d">The past is gone.</text>
+
+    <!-- Event store -->
+    <text x="30" y="166" font-size="12" fill="#a0a0a0">EVENT STORE: KEEPS EVERY STEP</text>
+    <rect x="30" y="180" width="120" height="64" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="90" y="217" font-size="15" fill="#f2f2f2" text-anchor="middle">Opened</text>
+
+    <rect x="170" y="180" width="120" height="64" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="230" y="208" font-size="15" fill="#f2f2f2" text-anchor="middle">+120</text>
+    <text x="230" y="228" font-size="12" fill="#a0a0a0" text-anchor="middle">deposited</text>
+
+    <rect x="310" y="180" width="120" height="64" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="370" y="208" font-size="15" fill="#f2f2f2" text-anchor="middle">&#8722;20</text>
+    <text x="370" y="228" font-size="12" fill="#a0a0a0" text-anchor="middle">paid to Ben</text>
+
+    <rect x="450" y="180" width="120" height="64" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="510" y="208" font-size="15" fill="#f2f2f2" text-anchor="middle">&#8722;100</text>
+    <text x="510" y="228" font-size="12" fill="#a0a0a0" text-anchor="middle">withdrawn</text>
+
+    <rect x="600" y="180" width="90" height="64" rx="10" fill="#1f9d6b"/>
+    <text x="645" y="208" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">= $0</text>
+    <text x="645" y="228" font-size="12" fill="#e6fff4" text-anchor="middle">balance</text>
+
+    <line x1="152" y1="212" x2="166" y2="212" stroke="#cfcfcf" stroke-width="2"/>
+    <line x1="292" y1="212" x2="306" y2="212" stroke="#cfcfcf" stroke-width="2"/>
+    <line x1="432" y1="212" x2="446" y2="212" stroke="#cfcfcf" stroke-width="2"/>
+
+    <!-- Replay -->
+    <line x1="30" y1="268" x2="592" y2="268" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="300" y="292" font-size="12" fill="#a0a0a0" text-anchor="middle">Replay: start at 0 and add up the events in order</text>
+  </g>
+</svg>

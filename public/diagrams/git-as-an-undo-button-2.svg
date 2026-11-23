@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" role="img" aria-labelledby="t d">
+  <title id="t">Which way to go back</title>
+  <desc id="d">Your app broke. Run git status first. Then ask: did you commit the broken change? If no, use git stash -u to put the changes aside, and git stash pop brings them back. If yes, use git revert, which adds a commit that undoes the bad one. Use git reset --hard only as the last choice, because it deletes uncommitted work for good.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#e5484d"/>
+    </marker>
+  </defs>
+  <rect width="720" height="320" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Start -->
+    <rect x="250" y="24" width="220" height="60" rx="10" fill="#f2c94c"/>
+    <text x="360" y="50" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Your app broke</text>
+    <text x="360" y="70" font-size="12" fill="#111111" text-anchor="middle">Run git status first</text>
+
+    <line x1="360" y1="86" x2="360" y2="110" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <!-- Question -->
+    <rect x="190" y="114" width="340" height="44" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="360" y="141" font-size="15" fill="#f2f2f2" text-anchor="middle">Did you commit the broken change?</text>
+
+    <!-- Branches -->
+    <path d="M250 160 L140 210" fill="none" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="176" y="180" font-size="12" fill="#f2c94c" text-anchor="middle">No</text>
+    <line x1="360" y1="160" x2="360" y2="208" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="376" y="190" font-size="12" fill="#f2c94c">Yes</text>
+    <path d="M470 160 L580 210" fill="none" stroke="#e5484d" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrowRed)"/>
+    <text x="560" y="180" font-size="12" fill="#e5484d">Last choice</text>
+
+    <!-- git stash -u -->
+    <rect x="40" y="214" width="200" height="80" rx="10" fill="#1f9d6b"/>
+    <text x="140" y="242" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">git stash -u</text>
+    <text x="140" y="262" font-size="12" fill="#dff5ec" text-anchor="middle">Puts the changes aside</text>
+    <text x="140" y="280" font-size="12" fill="#dff5ec" text-anchor="middle">Back with git stash pop</text>
+
+    <!-- git revert -->
+    <rect x="260" y="214" width="200" height="80" rx="10" fill="#4f6bd8"/>
+    <text x="360" y="242" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">git revert</text>
+    <text x="360" y="262" font-size="12" fill="#e8ecff" text-anchor="middle">Adds a commit that</text>
+    <text x="360" y="280" font-size="12" fill="#e8ecff" text-anchor="middle">undoes the bad one</text>
+
+    <!-- git reset --hard -->
+    <rect x="480" y="214" width="200" height="80" rx="10" fill="#1f1f1f" stroke="#e5484d" stroke-width="1.5"/>
+    <text x="580" y="242" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">git reset --hard</text>
+    <text x="580" y="262" font-size="12" fill="#a0a0a0" text-anchor="middle">Deletes uncommitted</text>
+    <text x="580" y="280" font-size="12" fill="#a0a0a0" text-anchor="middle">work for good</text>
+  </g>
+</svg>

@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" role="img" aria-labelledby="t d">
+  <title id="t">The browser checks the permission slip</title>
+  <desc id="d">Your page on localhost:5173 asks the browser for the notes. The browser sends the request to your API on localhost:3000, and the API sends back a response with its headers. The browser checks the Access-Control-Allow-Origin header. If the header allows the page's origin, the page gets the data. If the header is missing or wrong, the browser blocks the response and shows a CORS error. Usually the request has already reached the server.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#e5484d"/>
+    </marker>
+  </defs>
+  <rect width="720" height="360" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Page -->
+    <rect x="24" y="56" width="134" height="92" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="91" y="96" font-size="15" fill="#f2f2f2" text-anchor="middle">Your page</text>
+    <text x="91" y="118" font-size="12" fill="#a0a0a0" text-anchor="middle">localhost:5173</text>
+
+    <!-- Browser -->
+    <rect x="250" y="46" width="176" height="112" rx="10" fill="#f2c94c"/>
+    <text x="338" y="94" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Browser</text>
+    <text x="338" y="116" font-size="12" fill="#111111" text-anchor="middle">checks the header</text>
+
+    <!-- API -->
+    <rect x="566" y="56" width="130" height="92" rx="10" fill="#4f6bd8"/>
+    <text x="631" y="96" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Your API</text>
+    <text x="631" y="118" font-size="12" fill="#e8ecff" text-anchor="middle">localhost:3000</text>
+
+    <!-- Page to browser -->
+    <line x1="162" y1="102" x2="242" y2="102" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="202" y="92" font-size="12" fill="#f2c94c" text-anchor="middle">1. Ask</text>
+
+    <!-- Browser to API and back -->
+    <line x1="430" y1="82" x2="558" y2="82" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="494" y="72" font-size="12" fill="#f2c94c" text-anchor="middle">2. Request</text>
+    <line x1="560" y1="124" x2="432" y2="124" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="496" y="144" font-size="12" fill="#8ea2ff" text-anchor="middle">3. Response</text>
+    <text x="496" y="160" font-size="12" fill="#a0a0a0" text-anchor="middle">+ CORS headers</text>
+
+    <!-- Outcomes -->
+    <line x1="310" y1="162" x2="210" y2="222" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="366" y1="162" x2="466" y2="222" stroke="#e5484d" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrow-red)"/>
+
+    <rect x="80" y="228" width="240" height="72" rx="10" fill="#1f9d6b"/>
+    <text x="200" y="258" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Page gets the data</text>
+    <text x="200" y="280" font-size="12" fill="#e6f6ef" text-anchor="middle">the header allows its origin</text>
+
+    <rect x="360" y="228" width="240" height="72" rx="10" fill="#e5484d"/>
+    <text x="480" y="258" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Browser blocks it</text>
+    <text x="480" y="280" font-size="12" fill="#fde8e8" text-anchor="middle">header missing or wrong</text>
+
+    <text x="360" y="326" font-size="12" fill="#a0a0a0" text-anchor="middle">Usually the request has already reached the server.</text>
+    <text x="360" y="344" font-size="12" fill="#a0a0a0" text-anchor="middle">The browser only decides if your page may read the answer.</text>
+  </g>
+</svg>

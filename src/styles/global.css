@@ -729,3 +729,12 @@ a.row:hover {
     height: 40px;
   }
 }
+
+/* Diagrams in lessons */
+.prose img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1.8em auto;
+  border-radius: 14px;
+}

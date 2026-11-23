@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" role="img" aria-labelledby="t d">
+  <title id="t">Three instances, three copies of memory</title>
+  <desc id="d">A load balancer sends requests to three instances of the app. Each instance keeps its own stock = 1 in memory, so each one thinks it has one item to sell. A shared store, such as the database or Redis, keeps one copy that all instances use.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="340" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Load balancer -->
+    <rect x="30" y="130" width="150" height="70" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="105" y="170" font-size="15" fill="#f2f2f2" text-anchor="middle">Load balancer</text>
+
+    <!-- Instances -->
+    <rect x="250" y="40" width="200" height="62" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="350" y="66" font-size="15" fill="#f2f2f2" text-anchor="middle">Instance 1</text>
+    <text x="350" y="88" font-size="12" fill="#e98da4" text-anchor="middle">stock = 1 in its memory</text>
+    <rect x="250" y="134" width="200" height="62" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="350" y="160" font-size="15" fill="#f2f2f2" text-anchor="middle">Instance 2</text>
+    <text x="350" y="182" font-size="12" fill="#e98da4" text-anchor="middle">stock = 1 in its memory</text>
+    <rect x="250" y="228" width="200" height="62" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="350" y="254" font-size="15" fill="#f2f2f2" text-anchor="middle">Instance 3</text>
+    <text x="350" y="276" font-size="12" fill="#e98da4" text-anchor="middle">stock = 1 in its memory</text>
+
+    <line x1="182" y1="150" x2="244" y2="76" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="182" y1="165" x2="242" y2="165" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="182" y1="180" x2="244" y2="254" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <!-- Shared store -->
+    <rect x="530" y="115" width="160" height="100" rx="10" fill="#1f9d6b"/>
+    <text x="610" y="155" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Database</text>
+    <text x="610" y="177" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">or Redis</text>
+    <text x="610" y="199" font-size="12" fill="#e6f6ef" text-anchor="middle">one shared copy</text>
+
+    <line x1="452" y1="76" x2="524" y2="132" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="452" y1="165" x2="522" y2="165" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="452" y1="254" x2="524" y2="198" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <text x="360" y="322" font-size="12" fill="#a0a0a0" text-anchor="middle">Memory in one instance is not shared. Keep shared data in a shared store.</text>
+  </g>
+</svg>

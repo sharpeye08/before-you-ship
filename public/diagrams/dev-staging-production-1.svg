@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" role="img" aria-labelledby="t d">
+  <title id="t">Laptop connected to the real world, and laptop kept apart</title>
+  <desc id="d">Wrong: the laptop's settings point to the production database and the live email and payment keys, so a test script reaches 3,400 real students. Right: the laptop uses its own test database with test keys and fake data, and only the production app uses the production database and live keys.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#e5484d"/>
+    </marker>
+  </defs>
+  <rect width="720" height="330" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <line x1="360" y1="28" x2="360" y2="306" stroke="#3a3a3a" stroke-width="1.5" stroke-dasharray="6 5"/>
+
+    <!-- Wrong -->
+    <text x="40" y="40" font-size="12" font-weight="600" fill="#e5484d">WRONG</text>
+    <rect x="90" y="60" width="180" height="60" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="180" y="87" font-size="15" fill="#f2f2f2" text-anchor="middle">Your laptop</text>
+    <text x="180" y="106" font-size="12" fill="#a0a0a0" text-anchor="middle">runs a test script</text>
+    <line x1="180" y1="124" x2="180" y2="194" stroke="#e5484d" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrow-red)"/>
+    <text x="192" y="163" font-size="12" fill="#e5484d">reaches real users</text>
+    <rect x="60" y="200" width="240" height="70" rx="10" fill="#1f1f1f" stroke="#e5484d" stroke-width="1.5"/>
+    <text x="180" y="230" font-size="15" fill="#f2f2f2" text-anchor="middle">Production database</text>
+    <text x="180" y="250" font-size="12" fill="#a0a0a0" text-anchor="middle">and live email and payment keys</text>
+    <text x="180" y="300" font-size="12" fill="#a0a0a0" text-anchor="middle">3,400 real students get "test test asdf"</text>
+
+    <!-- Right -->
+    <text x="376" y="40" font-size="12" font-weight="600" fill="#1f9d6b">RIGHT</text>
+    <rect x="376" y="60" width="154" height="60" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="453" y="95" font-size="15" fill="#f2f2f2" text-anchor="middle">Your laptop</text>
+    <rect x="542" y="60" width="154" height="60" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="619" y="95" font-size="15" fill="#f2f2f2" text-anchor="middle">Production app</text>
+    <line x1="453" y1="124" x2="453" y2="194" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="619" y1="124" x2="619" y2="194" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="376" y="200" width="154" height="70" rx="10" fill="#1f9d6b"/>
+    <text x="453" y="230" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Test database</text>
+    <text x="453" y="250" font-size="12" fill="#e6f6ef" text-anchor="middle">test keys, fake data</text>
+    <rect x="542" y="200" width="154" height="70" rx="10" fill="#4f6bd8"/>
+    <text x="619" y="230" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Production</text>
+    <text x="619" y="250" font-size="12" fill="#e8ecff" text-anchor="middle">database, live keys</text>
+    <text x="536" y="300" font-size="12" fill="#a0a0a0" text-anchor="middle">Each one touches only its own data.</text>
+  </g>
+</svg>

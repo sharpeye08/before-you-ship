@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" role="img" aria-labelledby="t d">
+  <title id="t">Failing open versus failing safe</title>
+  <desc id="d">The app asks the billing service if a user has paid. The check fails because billing is down. If the code fails open and returns true, everyone watches for free. If the code fails safe and returns false, the user sees a message to try again in a few minutes.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#e5484d"/>
+    </marker>
+  </defs>
+  <rect width="720" height="320" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <rect x="30" y="120" width="170" height="80" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="115" y="156" font-size="15" fill="#f2f2f2" text-anchor="middle">Billing check</text>
+    <text x="115" y="178" font-size="12" fill="#a0a0a0" text-anchor="middle">has this user paid?</text>
+
+    <rect x="270" y="120" width="170" height="80" rx="10" fill="#f08a4b"/>
+    <text x="355" y="156" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Check fails</text>
+    <text x="355" y="178" font-size="12" fill="#111111" text-anchor="middle">billing is down</text>
+
+    <rect x="510" y="30" width="180" height="90" rx="10" fill="#e5484d"/>
+    <text x="600" y="68" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Fail open: yes</text>
+    <text x="600" y="90" font-size="12" fill="#fde8e8" text-anchor="middle">everyone watches free</text>
+
+    <rect x="510" y="200" width="180" height="90" rx="10" fill="#1f9d6b"/>
+    <text x="600" y="238" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Fail safe: no</text>
+    <text x="600" y="260" font-size="12" fill="#e6f6ef" text-anchor="middle">"Please try again soon"</text>
+
+    <line x1="202" y1="160" x2="262" y2="160" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="442" y1="140" x2="502" y2="88" stroke="#e5484d" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrow-red)"/>
+    <text x="440" y="100" font-size="12" fill="#ff8a8d" text-anchor="middle">return true</text>
+    <line x1="442" y1="180" x2="502" y2="232" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="440" y="232" font-size="12" fill="#7fd4ad" text-anchor="middle">return false</text>
+
+    <text x="30" y="270" font-size="12" fill="#a0a0a0">For access, money or safety,</text>
+    <text x="30" y="286" font-size="12" fill="#a0a0a0">a failed check means "no".</text>
+  </g>
+</svg>

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 290" role="img" aria-labelledby="t d">
+  <title id="t">A stopped reader holds the WAL</title>
+  <desc id="d">The WAL grows at the end. The replication slot is a bookmark at the point where Debezium stopped. Postgres can delete the WAL before the bookmark, but it must keep everything after it. While Debezium is stopped, that part grows and the disk fills.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="290" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <text x="30" y="52" font-size="12" fill="#a0a0a0">THE WAL (grows at the end)</text>
+
+    <!-- Already read -->
+    <rect x="30" y="70" width="200" height="64" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="130" y="98" font-size="15" fill="#f2f2f2" text-anchor="middle">Already read</text>
+    <text x="130" y="118" font-size="12" fill="#a0a0a0" text-anchor="middle">Postgres can delete it</text>
+
+    <!-- Not read yet -->
+    <rect x="236" y="70" width="394" height="64" rx="10" fill="#f08a4b"/>
+    <text x="433" y="98" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Not read yet</text>
+    <text x="433" y="118" font-size="12" fill="#111111" text-anchor="middle">Postgres must keep all of it</text>
+
+    <!-- Growth -->
+    <line x1="636" y1="102" x2="688" y2="102" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="662" y="88" font-size="12" fill="#a0a0a0" text-anchor="middle">grows</text>
+
+    <!-- Bookmark -->
+    <line x1="233" y1="60" x2="233" y2="168" stroke="#f2c94c" stroke-width="2"/>
+    <rect x="158" y="170" width="150" height="56" rx="10" fill="#f2c94c"/>
+    <text x="233" y="195" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Replication slot</text>
+    <text x="233" y="213" font-size="12" fill="#111111" text-anchor="middle">the bookmark</text>
+
+    <!-- Debezium stopped -->
+    <rect x="430" y="170" width="200" height="56" rx="10" fill="#1f1f1f" stroke="#e5484d" stroke-width="1.5"/>
+    <text x="530" y="195" font-size="15" fill="#f2f2f2" text-anchor="middle">Debezium</text>
+    <text x="530" y="213" font-size="12" fill="#e5484d" text-anchor="middle">stopped a week ago</text>
+
+    <text x="360" y="262" font-size="12" fill="#a0a0a0" text-anchor="middle">The bookmark does not move, so the orange part grows and the disk fills.</text>
+  </g>
+</svg>

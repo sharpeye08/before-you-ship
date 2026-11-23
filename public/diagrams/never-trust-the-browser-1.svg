@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" role="img" aria-labelledby="t d">
+  <title id="t">Browser checks and server checks</title>
+  <desc id="d">An honest user fills in your form, which checks that the mood is 1 to 5. A hand-made request with a mood of 3000 skips the form and goes straight to the server. The check on the server stops the bad request, and only good data gets to the database.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#e5484d"/>
+    </marker>
+  </defs>
+  <rect width="720" height="340" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <text x="130" y="38" font-size="12" fill="#a0a0a0" text-anchor="middle">IN THE BROWSER (USER CONTROLS IT)</text>
+    <text x="560" y="38" font-size="12" fill="#a0a0a0" text-anchor="middle">ON YOUR SERVER (YOU CONTROL IT)</text>
+    <line x1="330" y1="30" x2="330" y2="300" stroke="#3a3a3a" stroke-width="1.5" stroke-dasharray="6 5"/>
+
+    <!-- Honest path -->
+    <rect x="30" y="56" width="200" height="80" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="130" y="92" font-size="15" fill="#f2f2f2" text-anchor="middle">Your form</text>
+    <text x="130" y="114" font-size="12" fill="#a0a0a0" text-anchor="middle">mood picker: 1 to 5</text>
+    <line x1="234" y1="96" x2="372" y2="140" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="300" y="104" font-size="12" fill="#a0a0a0" text-anchor="middle">mood: 4</text>
+
+    <!-- Hand-made path -->
+    <rect x="30" y="196" width="200" height="80" rx="10" fill="#1f1f1f" stroke="#e5484d" stroke-width="1.5"/>
+    <text x="130" y="232" font-size="15" fill="#f2f2f2" text-anchor="middle">Hand-made request</text>
+    <text x="130" y="254" font-size="12" fill="#a0a0a0" text-anchor="middle">skips the form</text>
+    <line x1="234" y1="236" x2="372" y2="190" stroke="#e5484d" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrow-red)"/>
+    <text x="276" y="250" font-size="12" fill="#e5484d" text-anchor="middle">mood: 3000</text>
+
+    <!-- Server check -->
+    <rect x="380" y="116" width="170" height="100" rx="10" fill="#4f6bd8"/>
+    <text x="465" y="156" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Server check</text>
+    <text x="465" y="178" font-size="12" fill="#e8ecff" text-anchor="middle">mood is 1 to 5?</text>
+    <text x="465" y="196" font-size="12" fill="#e8ecff" text-anchor="middle">note max 500?</text>
+
+    <!-- Database -->
+    <line x1="554" y1="150" x2="592" y2="150" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="600" y="110" width="100" height="80" rx="10" fill="#1f9d6b"/>
+    <text x="650" y="146" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Database</text>
+    <text x="650" y="168" font-size="12" fill="#e6f6ee" text-anchor="middle">good data</text>
+
+    <!-- Rejected -->
+    <line x1="465" y1="220" x2="465" y2="250" stroke="#e5484d" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrow-red)"/>
+    <rect x="390" y="256" width="150" height="44" rx="10" fill="#1f1f1f" stroke="#e5484d" stroke-width="1.5"/>
+    <text x="465" y="283" font-size="15" fill="#f2f2f2" text-anchor="middle">400: rejected</text>
+
+    <text x="360" y="326" font-size="12" fill="#a0a0a0" text-anchor="middle">Browser checks are for comfort. Server checks are for safety.</text>
+  </g>
+</svg>

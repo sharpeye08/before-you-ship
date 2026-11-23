@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 290" role="img" aria-labelledby="t d">
+  <title id="t">What you lose with each kind of restore</title>
+  <desc id="d">A timeline of one day. A scheduled backup was made at 03:00, and the delete happened at 16:42. If you restore the scheduled backup, you lose everything between 03:00 and 16:42. With point-in-time recovery, you restore to 16:41 and lose about one minute.</desc>
+  <rect width="720" height="290" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Row 1: scheduled backup -->
+    <text x="40" y="40" font-size="15" fill="#f2f2f2">Scheduled backup (made at 03:00)</text>
+    <rect x="40" y="54" width="80" height="30" rx="6" fill="#1f9d6b"/>
+    <text x="80" y="74" font-size="12" fill="#f2f2f2" text-anchor="middle">kept</text>
+    <rect x="120" y="54" width="480" height="30" rx="6" fill="#e5484d"/>
+    <text x="360" y="74" font-size="12" fill="#f2f2f2" text-anchor="middle">lost: everything from 03:00 to 16:42</text>
+
+    <!-- Row 2: PITR -->
+    <text x="40" y="122" font-size="15" fill="#f2f2f2">Point-in-time recovery (restore to 16:41)</text>
+    <rect x="40" y="136" width="520" height="30" rx="6" fill="#1f9d6b"/>
+    <text x="300" y="156" font-size="12" fill="#f2f2f2" text-anchor="middle">kept: everything up to 16:41</text>
+    <rect x="560" y="136" width="40" height="30" rx="6" fill="#e5484d"/>
+    <text x="580" y="186" font-size="12" fill="#e5484d" text-anchor="middle">about 1 minute lost</text>
+
+    <!-- Delete marker -->
+    <line x1="600" y1="30" x2="600" y2="214" stroke="#e5484d" stroke-width="2" stroke-dasharray="6 5"/>
+    <text x="610" y="40" font-size="12" fill="#e5484d">DELETE</text>
+
+    <!-- Time axis -->
+    <line x1="40" y1="214" x2="680" y2="214" stroke="#cfcfcf" stroke-width="2"/>
+    <line x1="120" y1="208" x2="120" y2="220" stroke="#cfcfcf" stroke-width="2"/>
+    <line x1="560" y1="208" x2="560" y2="220" stroke="#cfcfcf" stroke-width="2"/>
+    <text x="120" y="238" font-size="12" fill="#a0a0a0" text-anchor="middle">03:00</text>
+    <text x="554" y="238" font-size="12" fill="#a0a0a0" text-anchor="end">16:41</text>
+    <text x="606" y="238" font-size="12" fill="#e5484d">16:42</text>
+    <text x="680" y="238" font-size="12" fill="#a0a0a0" text-anchor="end">time</text>
+
+    <text x="40" y="270" font-size="12" fill="#a0a0a0">Not to scale. The red parts are the data that you lose.</text>
+  </g>
+</svg>

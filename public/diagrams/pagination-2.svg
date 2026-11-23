@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" role="img" aria-labelledby="t d">
+  <title id="t">Drift with offset, no drift with a cursor</title>
+  <desc id="d">Example with 4 rows per page. Page 1 shows orders 50, 49, 48 and 47. Then 3 new orders arrive at the top. Page 2 with an offset of 4 shows orders 49, 48 and 47 again, then 46. Page 2 with a cursor continues after order 47 and shows orders 46, 45, 44 and 43.</desc>
+  <rect width="720" height="330" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Page 1 -->
+    <text x="130" y="40" font-size="12" fill="#a0a0a0" text-anchor="middle">PAGE 1</text>
+    <rect x="30" y="56" width="200" height="176" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="130" y="94" font-size="15" fill="#f2f2f2" text-anchor="middle">Order 50</text>
+    <text x="130" y="130" font-size="15" fill="#f2f2f2" text-anchor="middle">Order 49</text>
+    <text x="130" y="166" font-size="15" fill="#f2f2f2" text-anchor="middle">Order 48</text>
+    <text x="130" y="202" font-size="15" fill="#f2f2f2" text-anchor="middle">Order 47</text>
+
+    <!-- Page 2 with offset -->
+    <text x="360" y="40" font-size="12" fill="#a0a0a0" text-anchor="middle">PAGE 2 WITH OFFSET 4</text>
+    <rect x="260" y="56" width="200" height="176" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <rect x="276" y="74" width="168" height="30" rx="6" fill="#141414" stroke="#e5484d" stroke-width="1.5"/>
+    <text x="360" y="94" font-size="15" fill="#f2f2f2" text-anchor="middle">Order 49</text>
+    <rect x="276" y="110" width="168" height="30" rx="6" fill="#141414" stroke="#e5484d" stroke-width="1.5"/>
+    <text x="360" y="130" font-size="15" fill="#f2f2f2" text-anchor="middle">Order 48</text>
+    <rect x="276" y="146" width="168" height="30" rx="6" fill="#141414" stroke="#e5484d" stroke-width="1.5"/>
+    <text x="360" y="166" font-size="15" fill="#f2f2f2" text-anchor="middle">Order 47</text>
+    <text x="360" y="202" font-size="15" fill="#f2f2f2" text-anchor="middle">Order 46</text>
+    <text x="360" y="256" font-size="12" fill="#e5484d" text-anchor="middle">3 rows the reader already saw</text>
+
+    <!-- Page 2 with cursor -->
+    <text x="590" y="40" font-size="12" fill="#a0a0a0" text-anchor="middle">PAGE 2 WITH A CURSOR</text>
+    <rect x="490" y="56" width="200" height="176" rx="10" fill="#1f1f1f" stroke="#1f9d6b" stroke-width="2"/>
+    <text x="590" y="94" font-size="15" fill="#f2f2f2" text-anchor="middle">Order 46</text>
+    <text x="590" y="130" font-size="15" fill="#f2f2f2" text-anchor="middle">Order 45</text>
+    <text x="590" y="166" font-size="15" fill="#f2f2f2" text-anchor="middle">Order 44</text>
+    <text x="590" y="202" font-size="15" fill="#f2f2f2" text-anchor="middle">Order 43</text>
+    <text x="590" y="256" font-size="12" fill="#1f9d6b" text-anchor="middle">continues after order 47</text>
+
+    <text x="360" y="300" font-size="12" fill="#a0a0a0" text-anchor="middle">Between the two clicks, 3 new orders (51, 52, 53) arrive at the top. Example page size: 4 rows.</text>
+  </g>
+</svg>

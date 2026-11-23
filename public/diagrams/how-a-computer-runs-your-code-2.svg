@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" role="img" aria-labelledby="t d">
+  <title id="t">A restart clears the likes</title>
+  <desc id="d">Before the restart, the process holds likes = 50 in its memory. The server restarts, and the memory is cleared. A new process starts from the beginning. Line 1 runs again, so the new process holds likes = 0. The 50 likes are gone.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="300" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Before -->
+    <text x="160" y="46" font-size="12" fill="#a0a0a0" text-anchor="middle">BEFORE THE RESTART</text>
+    <rect x="40" y="60" width="240" height="140" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="160" y="92" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Process</text>
+    <text x="160" y="112" font-size="12" fill="#a0a0a0" text-anchor="middle">its memory:</text>
+    <rect x="80" y="126" width="160" height="50" rx="10" fill="#f2c94c"/>
+    <text x="160" y="157" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">likes = 50</text>
+
+    <!-- Restart arrow -->
+    <line x1="286" y1="130" x2="432" y2="130" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="359" y="118" font-size="12" fill="#e98da4" text-anchor="middle">Server restarts</text>
+    <text x="359" y="150" font-size="12" fill="#a0a0a0" text-anchor="middle">memory is cleared</text>
+
+    <!-- After -->
+    <text x="560" y="46" font-size="12" fill="#a0a0a0" text-anchor="middle">AFTER THE RESTART</text>
+    <rect x="440" y="60" width="240" height="140" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="560" y="92" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">New process</text>
+    <text x="560" y="112" font-size="12" fill="#a0a0a0" text-anchor="middle">its memory:</text>
+    <rect x="480" y="126" width="160" height="50" rx="10" fill="#1f1f1f" stroke="#e5484d" stroke-width="1.5"/>
+    <text x="560" y="157" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">likes = 0</text>
+
+    <text x="560" y="224" font-size="12" fill="#a0a0a0" text-anchor="middle">Line 1 runs again: let likes = 0</text>
+
+    <text x="360" y="268" font-size="15" fill="#f2f2f2" text-anchor="middle">The 50 likes are gone. Keep data that you need in a database.</text>
+  </g>
+</svg>

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" role="img" aria-labelledby="t d">
+  <title id="t">Fixed columns plus one jsonb column</title>
+  <desc id="d">A products table. The name and price columns are fixed and every product has them. The attributes column is jsonb and holds different fields for each product: a screen size for the phone, a fabric for the sofa and a wattage for the lamp.</desc>
+  <rect width="720" height="300" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <text x="190" y="44" font-size="12" fill="#a0a0a0" text-anchor="middle">FIXED COLUMNS</text>
+    <text x="510" y="44" font-size="12" fill="#1f9d6b" text-anchor="middle">FLEXIBLE: ONE JSONB COLUMN</text>
+
+    <!-- Table frame -->
+    <rect x="40" y="56" width="640" height="194" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <rect x="340" y="56" width="340" height="194" rx="10" fill="#17241e" stroke="#1f9d6b" stroke-width="1.5"/>
+    <line x1="40" y1="98" x2="680" y2="98" stroke="#3a3a3a" stroke-width="1.5"/>
+    <line x1="40" y1="148" x2="680" y2="148" stroke="#2a2a2a" stroke-width="1"/>
+    <line x1="40" y1="198" x2="680" y2="198" stroke="#2a2a2a" stroke-width="1"/>
+    <line x1="180" y1="56" x2="180" y2="250" stroke="#2a2a2a" stroke-width="1"/>
+
+    <!-- Header -->
+    <text x="60" y="83" font-size="12" fill="#a0a0a0">name</text>
+    <text x="200" y="83" font-size="12" fill="#a0a0a0">price_cents</text>
+    <text x="360" y="83" font-size="12" fill="#1f9d6b">attributes (jsonb)</text>
+
+    <!-- Rows -->
+    <text x="60" y="129" font-size="15" fill="#f2f2f2">Phone</text>
+    <text x="200" y="129" font-size="15" fill="#f2f2f2">49900</text>
+    <text x="360" y="129" font-size="15" fill="#f2f2f2">{"screen": "6 inch"}</text>
+    <text x="60" y="179" font-size="15" fill="#f2f2f2">Sofa</text>
+    <text x="200" y="179" font-size="15" fill="#f2f2f2">89900</text>
+    <text x="360" y="179" font-size="15" fill="#f2f2f2">{"fabric": "linen"}</text>
+    <text x="60" y="229" font-size="15" fill="#f2f2f2">Lamp</text>
+    <text x="200" y="229" font-size="15" fill="#f2f2f2">2500</text>
+    <text x="360" y="229" font-size="15" fill="#f2f2f2">{"watts": 40}</text>
+
+    <text x="360" y="280" font-size="12" fill="#a0a0a0" text-anchor="middle">Real columns for what every product has. One jsonb column for what differs.</text>
+  </g>
+</svg>

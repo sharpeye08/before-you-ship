@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" role="img" aria-labelledby="t d">
+  <title id="t">The heart button talks to the server</title>
+  <desc id="d">The frontend in your browser sends a request: save a like for video 42. The backend on the server saves the like and sends a response: video 42 now has 1,204 likes. Then the frontend changes only the number next to the heart. The rest of the page stays the same.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="330" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Frontend -->
+    <text x="120" y="44" font-size="12" fill="#a0a0a0" text-anchor="middle">IN YOUR BROWSER</text>
+    <rect x="40" y="58" width="160" height="100" rx="10" fill="#f2c94c"/>
+    <text x="120" y="102" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Frontend</text>
+    <text x="120" y="124" font-size="12" fill="#111111" text-anchor="middle">(JavaScript)</text>
+
+    <!-- Backend -->
+    <text x="600" y="44" font-size="12" fill="#a0a0a0" text-anchor="middle">ON THE SERVER</text>
+    <rect x="520" y="58" width="160" height="100" rx="10" fill="#4f6bd8"/>
+    <text x="600" y="102" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Backend</text>
+    <text x="600" y="124" font-size="12" fill="#e8ecff" text-anchor="middle">(saves the like)</text>
+
+    <!-- Request -->
+    <line x1="206" y1="88" x2="512" y2="88" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="359" y="76" font-size="12" fill="#f2c94c" text-anchor="middle">1. Request</text>
+    <text x="359" y="108" font-size="12" fill="#a0a0a0" text-anchor="middle">"Save a like for video 42."</text>
+
+    <!-- Response -->
+    <line x1="514" y1="136" x2="208" y2="136" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="361" y="156" font-size="12" fill="#8ea2ff" text-anchor="middle">2. Response</text>
+    <text x="361" y="174" font-size="12" fill="#a0a0a0" text-anchor="middle">"Done. Video 42 now has 1,204 likes."</text>
+
+    <!-- Update -->
+    <line x1="120" y1="164" x2="120" y2="210" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="40" y="218" width="340" height="80" rx="10" fill="#1f1f1f" stroke="#1f9d6b" stroke-width="1.5"/>
+    <text x="60" y="246" font-size="12" fill="#1f9d6b">3. Update</text>
+    <text x="60" y="270" font-size="15" fill="#f2f2f2">Only the number changes</text>
+    <text x="60" y="288" font-size="12" fill="#a0a0a0">1,203 becomes 1,204. No new page loads.</text>
+
+    <text x="680" y="270" font-size="12" fill="#a0a0a0" text-anchor="end">You don't see these messages.</text>
+    <text x="680" y="288" font-size="12" fill="#a0a0a0" text-anchor="end">They happen in the background.</text>
+  </g>
+</svg>

@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" role="img" aria-labelledby="t d">
+  <title id="t">The signature check on a webhook endpoint</title>
+  <desc id="d">Stripe and an attacker both send a request to your webhook endpoint. The endpoint checks the signature with the signing secret. The real, signed event matches, so the server upgrades the user and replies 200. The fake event does not match, so the server replies 400 and changes nothing.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#e5484d"/>
+    </marker>
+  </defs>
+  <rect width="720" height="360" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Senders -->
+    <text x="118" y="40" font-size="12" fill="#a0a0a0" text-anchor="middle">SENDERS</text>
+    <rect x="30" y="60" width="176" height="80" rx="10" fill="#4f6bd8"/>
+    <text x="118" y="96" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Stripe</text>
+    <text x="118" y="118" font-size="12" fill="#e8ecff" text-anchor="middle">knows the secret</text>
+
+    <rect x="30" y="220" width="176" height="80" rx="10" fill="#e5484d"/>
+    <text x="118" y="256" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Attacker</text>
+    <text x="118" y="278" font-size="12" fill="#fde8e8" text-anchor="middle">does not know it</text>
+
+    <!-- Endpoint with signature check -->
+    <text x="375" y="40" font-size="12" fill="#a0a0a0" text-anchor="middle">YOUR SERVER</text>
+    <rect x="290" y="60" width="170" height="240" rx="10" fill="#f2c94c"/>
+    <text x="375" y="150" font-size="12" fill="#111111" text-anchor="middle">Webhook endpoint</text>
+    <text x="375" y="180" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Signature check</text>
+    <text x="375" y="206" font-size="12" fill="#111111" text-anchor="middle">Does the signature</text>
+    <text x="375" y="222" font-size="12" fill="#111111" text-anchor="middle">match the secret?</text>
+
+    <!-- Arrows in -->
+    <line x1="208" y1="100" x2="282" y2="100" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="245" y="90" font-size="12" fill="#a0a0a0" text-anchor="middle">signed</text>
+    <line x1="208" y1="260" x2="282" y2="260" stroke="#e5484d" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrow-red)"/>
+    <text x="245" y="250" font-size="12" fill="#ff8a8d" text-anchor="middle">fake</text>
+
+    <!-- Results -->
+    <rect x="540" y="60" width="150" height="80" rx="10" fill="#1f9d6b"/>
+    <text x="615" y="96" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Upgrade user</text>
+    <text x="615" y="118" font-size="12" fill="#e6f6ef" text-anchor="middle">reply 200</text>
+
+    <rect x="540" y="220" width="150" height="80" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="615" y="256" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Reply 400</text>
+    <text x="615" y="278" font-size="12" fill="#a0a0a0" text-anchor="middle">nothing changes</text>
+
+    <line x1="462" y1="100" x2="532" y2="100" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="497" y="90" font-size="12" fill="#a0a0a0" text-anchor="middle">match</text>
+    <line x1="462" y1="260" x2="532" y2="260" stroke="#e5484d" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrow-red)"/>
+    <text x="497" y="250" font-size="12" fill="#ff8a8d" text-anchor="middle">no match</text>
+
+    <text x="360" y="335" font-size="12" fill="#a0a0a0" text-anchor="middle">Anyone can send a request to your endpoint. Only Stripe can sign it.</text>
+  </g>
+</svg>

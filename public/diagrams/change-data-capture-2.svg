@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 260" role="img" aria-labelledby="t d">
+  <title id="t">Change data capture with Debezium</title>
+  <desc id="d">Writers such as the app, admin scripts and the SQL console change the database. The database writes every change to the WAL. Debezium reads the WAL and sends each change as an event to Kafka. The search updater reads the events and updates the search index within seconds.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="260" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Writers -->
+    <rect x="25" y="70" width="110" height="90" rx="10" fill="#f2c94c"/>
+    <text x="80" y="104" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Writers</text>
+    <text x="80" y="124" font-size="12" fill="#111111" text-anchor="middle">app, scripts,</text>
+    <text x="80" y="140" font-size="12" fill="#111111" text-anchor="middle">SQL console</text>
+
+    <!-- Database -->
+    <rect x="165" y="70" width="110" height="90" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="220" y="104" font-size="15" fill="#f2f2f2" text-anchor="middle">Database</text>
+    <text x="220" y="124" font-size="12" fill="#a0a0a0" text-anchor="middle">writes every</text>
+    <text x="220" y="140" font-size="12" fill="#a0a0a0" text-anchor="middle">change to WAL</text>
+
+    <!-- Debezium -->
+    <rect x="305" y="70" width="110" height="90" rx="10" fill="#4f6bd8"/>
+    <text x="360" y="104" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Debezium</text>
+    <text x="360" y="124" font-size="12" fill="#e8ecff" text-anchor="middle">reads the WAL</text>
+    <text x="360" y="140" font-size="12" fill="#e8ecff" text-anchor="middle">with a slot</text>
+
+    <!-- Kafka -->
+    <rect x="445" y="70" width="110" height="90" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="500" y="104" font-size="15" fill="#f2f2f2" text-anchor="middle">Kafka</text>
+    <text x="500" y="124" font-size="12" fill="#a0a0a0" text-anchor="middle">one topic</text>
+    <text x="500" y="140" font-size="12" fill="#a0a0a0" text-anchor="middle">per table</text>
+
+    <!-- Search -->
+    <rect x="585" y="70" width="110" height="90" rx="10" fill="#1f9d6b"/>
+    <text x="640" y="104" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Search</text>
+    <text x="640" y="124" font-size="12" fill="#e6fff4" text-anchor="middle">updater</text>
+    <text x="640" y="140" font-size="12" fill="#e6fff4" text-anchor="middle">upserts</text>
+
+    <!-- Arrows -->
+    <line x1="137" y1="115" x2="160" y2="115" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="277" y1="115" x2="300" y2="115" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="417" y1="115" x2="440" y2="115" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="557" y1="115" x2="580" y2="115" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <text x="80" y="50" font-size="12" fill="#a0a0a0" text-anchor="middle">1. Change</text>
+    <text x="220" y="50" font-size="12" fill="#a0a0a0" text-anchor="middle">2. Log it</text>
+    <text x="360" y="50" font-size="12" fill="#a0a0a0" text-anchor="middle">3. Read it</text>
+    <text x="500" y="50" font-size="12" fill="#a0a0a0" text-anchor="middle">4. Send event</text>
+    <text x="640" y="50" font-size="12" fill="#a0a0a0" text-anchor="middle">5. Update copy</text>
+
+    <text x="360" y="205" font-size="12" fill="#a0a0a0" text-anchor="middle">Every change reaches the search index within seconds,</text>
+    <text x="360" y="223" font-size="12" fill="#a0a0a0" text-anchor="middle">whoever made it. The code that saves products does not know search exists.</text>
+  </g>
+</svg>

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 380" role="img" aria-labelledby="t d">
+  <title id="t">Three cases behind one timeout</title>
+  <desc id="d">Your server sends a request to the payment service. In case 1, the request is lost on the way. In case 2, the request arrives and the card is charged, but the answer is lost on the way back. In case 3, the request arrives and the payment service is still working. In all three cases, your server gets no answer.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#e5484d"/>
+    </marker>
+  </defs>
+  <rect width="720" height="380" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <rect x="30" y="60" width="140" height="280" rx="10" fill="#f2c94c"/>
+    <text x="100" y="90" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Your server</text>
+    <text x="100" y="125" font-size="12" fill="#111111" text-anchor="middle">no answer</text>
+    <text x="100" y="210" font-size="12" fill="#111111" text-anchor="middle">no answer</text>
+    <text x="100" y="295" font-size="12" fill="#111111" text-anchor="middle">no answer</text>
+
+    <rect x="550" y="60" width="140" height="280" rx="10" fill="#4f6bd8"/>
+    <text x="620" y="90" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Payment service</text>
+    <text x="620" y="125" font-size="12" fill="#e8ecff" text-anchor="middle">got nothing</text>
+    <text x="620" y="210" font-size="12" fill="#e8ecff" text-anchor="middle">card charged</text>
+    <text x="620" y="295" font-size="12" fill="#e8ecff" text-anchor="middle">still working</text>
+
+    <line x1="176" y1="120" x2="320" y2="120" stroke="#e5484d" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrowRed)"/>
+    <text x="332" y="124" font-size="12" fill="#e5484d">1. Request lost on the way</text>
+
+    <line x1="176" y1="186" x2="544" y2="186" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="360" y="177" font-size="12" fill="#a0a0a0" text-anchor="middle">2. Request arrives</text>
+    <line x1="544" y1="220" x2="390" y2="220" stroke="#e5484d" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrowRed)"/>
+    <text x="378" y="224" font-size="12" fill="#e5484d" text-anchor="end">Answer lost</text>
+
+    <line x1="176" y1="290" x2="544" y2="290" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="360" y="281" font-size="12" fill="#a0a0a0" text-anchor="middle">3. Request arrives</text>
+    <text x="360" y="312" font-size="12" fill="#a0a0a0" text-anchor="middle">the answer has not come yet</text>
+
+    <text x="360" y="366" font-size="12" fill="#f2c94c" text-anchor="middle">All three look the same to your server: no answer.</text>
+  </g>
+</svg>
