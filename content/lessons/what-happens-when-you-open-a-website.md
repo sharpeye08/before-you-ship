@@ -286,6 +286,15 @@ Try these with any AI chat tool to practice:
 
 **Any computer can be a server.** A server isn't a special kind of machine. It's any computer running a program that answers requests. When you build an app, your own laptop will act as a server while you test it. [It works on my laptop. Why can't my friend open it?](/lessons/localhost-vs-production) explains this.
 
-**Source for the request count:** the HTTP Archive's *Web Almanac 2024*, Page Weight chapter, reports a median of 71 requests per page on desktop and 66 on mobile.
-
 </details>
+
+## References
+
+- [Page Weight, Web Almanac 2024](https://almanac.httparchive.org/en/2024/page-weight): HTTP Archive. The median page makes 71 requests on desktop and 66 on mobile.
+- [How the web works](https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Web_standards/How_the_web_works): MDN Web Docs. Clients and servers, DNS as an address book, requests and responses, and data sent in packets.
+- [404 Not Found](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/404): MDN Web Docs. What a 404 response means: the server was reached but has nothing at that address.
+- [error_page_strings.grdp](https://chromium.googlesource.com/chromium/src/+/main/components/error_page_strings.grdp): Chromium source code. Chrome's "No internet" error page and its dinosaur game.
+- [Open Chrome DevTools](https://developer.chrome.com/docs/devtools/open): Chrome for Developers. The F12 and Cmd+Option+I shortcuts.
+- [Inspect network activity](https://developer.chrome.com/docs/devtools/network): Chrome for Developers. Using the Network panel to see every request a page makes.
+- [Submarine Cable FAQs](https://www2.telegeography.com/submarine-cable-faqs-frequently-asked-questions): TeleGeography. Satellites carry only a very small share of international data, and cables carry far more data than satellites.
+- [CDN](https://developer.mozilla.org/en-US/docs/Glossary/CDN): MDN Web Docs. Big websites keep copies of their data on servers in many places and answer from the one closest to you.

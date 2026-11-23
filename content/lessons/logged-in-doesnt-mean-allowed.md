@@ -333,3 +333,14 @@ Use 404 when revealing that a record exists would leak information, as in this l
 **Fetching lists.** List pages need the same check. `findMany()` without a `userId` filter returns everyone's records, and it's easy to miss because it looks fine when you're the only user.
 
 </details>
+
+## References
+
+- [A01:2021 Broken Access Control](https://top10.owasp.org/2021/A01_2021-Broken_Access_Control): OWASP Top 10:2021. Broken Access Control moved up to the first spot (A01) in the 2021 edition.
+- [A01:2025 Broken Access Control](https://top10.owasp.org/2025/A01_2025-Broken_Access_Control): OWASP Top 10:2025. Broken Access Control kept the #1 spot in 2025; its example attack is changing an account number in the web address.
+- [Insecure Direct Object Reference Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html): OWASP. What IDOR is, why random IDs don't replace access checks, and scoping lookups to the current user.
+- [Mass Assignment Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Mass_Assignment_Cheat_Sheet.html): OWASP. An attacker adding an admin field to a request, and the fix of allow-listing fields.
+- [401 Unauthorized](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/401): MDN. 401 means the request lacks valid authentication credentials, and 403 is for a known user without permission.
+- [403 Forbidden](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/403): MDN. 403 means the user is known but lacks permission, and servers may send 404 instead to hide that a resource exists.
+- [Network features reference](https://developer.chrome.com/docs/devtools/network/reference): Chrome for Developers. The Network tab and the "Copy as fetch" option used in the self-test.
+- [Open Chrome DevTools](https://developer.chrome.com/docs/devtools/open): Chrome for Developers. The F12 and Cmd+Option+I shortcuts.
