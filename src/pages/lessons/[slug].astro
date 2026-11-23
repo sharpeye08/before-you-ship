@@ -1,11 +1,11 @@
 ---
 import { render } from 'astro:content';
-import Base from '../../layouts/Base.astro';
-import Icon from '../../components/Icon.astro';
+import Editorial from '../../layouts/Editorial.astro';
 import Quiz from '../../components/Quiz.astro';
+import Cover from '../../components/Cover.astro';
 import { getLessons, summarize, issueUrl } from '../../lib/lessons';
 import { extract, glossary, plain } from '../../lib/extract';
-import { SITE } from '../../config';
+import { SITE, LEVEL_COLORS } from '../../config';
 
 export async function getStaticPaths() {
   const lessons = await getLessons();
@@ -35,85 +35,42 @@ const firstPara = (lesson.body ?? '')
   .split('\n')
   .find((l) => l.trim() && !/^[#>|`<-]/.test(l.trim()));
 const description = firstPara ? firstPara.replace(/[*_`]/g, '').slice(0, 155) : SITE.description;
+const color = LEVEL_COLORS[info.level] ?? '#f2c94c';
 ---
 
-<Base title={info.title} description={description} active="lessons">
+<Editorial title={info.title} description={description}>
   <div class="read-progress" aria-hidden="true"><div class="read-progress-fill" data-read-progress></div></div>
 
-  <div class="lesson-layout">
-    <article class="lesson">
-      <header class="lesson-header">
-        <a class="chip-btn" href={`/lessons#level-${info.level}`}>
-          <Icon name="arrow-left" size={14} /> Level {info.level} · {info.levelName}
-        </a>
-        <p class="lesson-kicker">Lesson {info.order}</p>
-        <h1>{info.title}</h1>
-        <p class="lesson-meta">
-          <span><Icon name="clock" size={16} /> {info.minutes} min read</span>
-          <span class="done-badge" data-done-badge hidden><Icon name="check" size={16} /> Completed</span>
-        </p>
-        {
-          info.concepts.length > 0 && (
-            <ul class="concepts" aria-label="Concepts covered">
-              {info.concepts.map((c) => (
-                <li>{c}</li>
-              ))}
-            </ul>
-          )
-        }
-      </header>
+  <a class="back" href={`/lessons#level-${info.level}`}><span aria-hidden="true">↖</span> Back to Level {info.level} · {info.levelName}</a>
+  <h1>{info.title}</h1>
 
-      <div class="lesson-body glass">
-        <div class="prose" data-prose>
-          <Content />
-        </div>
-        <script type="application/json" data-terms set:html={JSON.stringify(terms)} />
-      </div>
+  <div class="cover-wrap">
+    <Cover slug={info.slug} order={info.order} level={info.level} levelName={info.levelName} />
+  </div>
 
-      <Quiz questions={lesson.data.quiz} />
-
-      <section class="finish glass" aria-label="Finish this lesson">
+  <div class="layout">
+    <aside class="meta" aria-label="About this lesson">
+      <div class="who">
+        <span class="badge" style={`background:${color}`}>{info.order}</span>
         <div>
-          <h2>Finished reading?</h2>
-          <p class="muted">Mark it as completed to track your progress. It's saved only in this browser.</p>
+          <strong>Lesson {info.order} of {total}</strong>
+          <span>Level {info.level} · {info.levelName}</span>
         </div>
-        <div class="finish-actions">
-          <button type="button" class="btn btn-accent" data-complete data-slug={info.slug}>
-            <Icon name="check-circle" size={18} /> <span data-complete-label>Mark as completed</span>
-          </button>
-          <a class="chip-btn" href={issueUrl(SITE.githubRepo, info.title)} target="_blank" rel="noopener noreferrer">
-            <Icon name="flag" size={14} /> Report a mistake
-          </a>
-        </div>
-      </section>
-
-      <nav class="pager" aria-label="Other lessons">
-        {
-          prev ? (
-            <a class="pager-link glass" href={`/lessons/${prev.slug}`}>
-              <span class="muted"><Icon name="arrow-left" size={14} /> Previous</span>
-              <span class="pager-title">{prev.title}</span>
-            </a>
-          ) : (
-            <span />
-          )
-        }
-        {
-          next && (
-            <a class="pager-link glass next" href={`/lessons/${next.slug}`}>
-              <span class="muted">Next <Icon name="arrow-right" size={14} /></span>
-              <span class="pager-title">{next.title}</span>
-            </a>
-          )
-        }
-      </nav>
-    </article>
-
-    {
-      toc.length > 0 && (
-        <aside class="toc" aria-label="On this page">
-          <div class="toc-inner glass">
-            <p class="toc-title">On this page</p>
+      </div>
+      <p class="read"><b>{info.minutes} MIN</b> read <span class="done-badge" data-done-badge hidden>· ✓ completed</span></p>
+      {
+        info.concepts.length > 0 && (
+          <ul class="tags" aria-label="Concepts covered">
+            {info.concepts.map((c) => (
+              <li>{c}</li>
+            ))}
+          </ul>
+        )
+      }
+      {
+        toc.length > 0 && (
+          <nav class="toc" aria-label="On this page">
+            <p>On this page</p>
             <ol>
               {toc.map((h) => (
                 <li>
@@ -126,12 +83,57 @@ const description = firstPara ? firstPara.replace(/[*_`]/g, '').slice(0, 155) : 
                 <a href="#quiz-title">Check yourself</a>
               </li>
             </ol>
-          </div>
-        </aside>
-      )
-    }
+          </nav>
+        )
+      }
+    </aside>
+
+    <div class="main-col">
+      <article class="lesson-body">
+        <div class="prose" data-prose>
+          <Content />
+        </div>
+        <script type="application/json" data-terms set:html={JSON.stringify(terms)} />
+      </article>
+
+      <Quiz questions={lesson.data.quiz} />
+
+      <section class="finish" aria-label="Finish this lesson">
+        <div>
+          <h2>Finished reading?</h2>
+          <p class="muted">Mark it as completed to track your progress. It's saved only in this browser.</p>
+        </div>
+        <div class="finish-actions">
+          <button type="button" class="btn btn-accent" data-complete data-slug={info.slug}>
+            <span data-complete-label>Mark as completed</span>
+          </button>
+          <a class="report" href={issueUrl(SITE.githubRepo, info.title)} target="_blank" rel="noopener noreferrer">Report a mistake</a>
+        </div>
+      </section>
+
+      <nav class="pager" aria-label="Other lessons">
+        {
+          prev ? (
+            <a class="pager-link" href={`/lessons/${prev.slug}`}>
+              <span class="muted">↖ Previous · lesson {prev.order}</span>
+              <span class="pager-title">{prev.title}</span>
+            </a>
+          ) : (
+            <span />
+          )
+        }
+        {
+          next && (
+            <a class="pager-link next" href={`/lessons/${next.slug}`}>
+              <span class="muted">Next · lesson {next.order} ↗</span>
+              <span class="pager-title">{next.title}</span>
+            </a>
+          )
+        }
+      </nav>
+    </div>
   </div>
-</Base>
+</Editorial>
 
 <style>
   .read-progress {
@@ -145,89 +147,144 @@ const description = firstPara ? firstPara.replace(/[*_`]/g, '').slice(0, 155) : 
   .read-progress-fill {
     height: 100%;
     width: 0;
-    background: var(--accent);
-    box-shadow: 0 0 10px rgba(229, 72, 77, 0.6);
+    background: var(--text);
   }
-  .lesson-layout {
+  .back {
+    display: inline-flex;
+    gap: 8px;
+    font-size: 0.82rem;
+    color: var(--text-soft);
+    text-decoration: none;
+  }
+  .back:hover {
+    color: var(--text);
+  }
+  h1 {
+    font-family: 'Inter Tight', Inter, sans-serif;
+    font-weight: 500;
+    font-size: clamp(2.1rem, 5.2vw, 4rem);
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+    margin: 14px 0 48px;
+    max-width: 20ch;
+  }
+  .cover-wrap {
+    margin-bottom: 64px;
+  }
+  .layout {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 240px;
-    gap: 28px;
+    grid-template-columns: 230px minmax(0, 1fr);
+    gap: 72px;
     align-items: start;
   }
-  .lesson {
-    min-width: 0;
-    width: 100%;
-    max-width: 800px;
+  .meta {
+    position: sticky;
+    top: 24px;
+    font-size: 0.82rem;
+    color: var(--text-soft);
   }
-  .lesson-header {
-    padding: 8px 4px 24px;
-  }
-  .lesson-kicker {
-    margin: 22px 0 6px;
-    color: var(--accent-text);
-    font-size: 0.85rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
-  .lesson-header h1 {
-    margin: 0 0 14px;
-    font-size: clamp(2rem, 4.5vw, 3rem);
-    line-height: 1.12;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-  }
-  .lesson-meta {
+  .who {
     display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    margin: 0 0 14px;
-    color: var(--muted);
-    font-size: 0.9rem;
-  }
-  .lesson-meta span {
-    display: inline-flex;
+    gap: 12px;
     align-items: center;
-    gap: 6px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 14px;
+  }
+  .who strong {
+    display: block;
+    color: var(--text);
+    font-weight: 500;
+  }
+  .who span {
+    color: var(--muted);
+  }
+  .badge {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    color: #111;
+    font-weight: 600;
+    font-size: 0.85rem;
+  }
+  .read {
+    margin: 0;
+  }
+  .read b {
+    color: var(--text);
+    font-weight: 600;
   }
   .done-badge {
     color: var(--good);
   }
-  .done-badge[hidden] {
-    display: none !important;
-  }
-  .concepts {
+  .tags {
+    list-style: none;
+    padding: 0;
+    margin: 14px 0 20px;
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
-    list-style: none;
-    padding: 0;
-    margin: 0;
   }
-  .concepts li {
-    font-size: 0.78rem;
-    padding: 4px 10px;
+  .tags li {
+    padding: 3px 9px;
     border-radius: 99px;
-    border: 1px solid var(--border);
+    border: 1px solid var(--line);
     color: var(--text-soft);
-    background: rgba(255, 255, 255, 0.04);
   }
-  .lesson-body {
-    padding: 36px 40px;
-    background: var(--glass-strong);
+  .toc {
+    border-top: 1px solid var(--line);
+    padding-top: 14px;
+  }
+  .toc p {
+    margin: 0 0 8px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.72rem;
+  }
+  .toc ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 2px;
+  }
+  .toc a {
+    display: block;
+    padding: 5px 0 5px 10px;
+    border-left: 1px solid var(--line);
+    color: var(--muted);
+    text-decoration: none;
+    line-height: 1.35;
+  }
+  .toc a:hover,
+  .toc a.is-current {
+    color: var(--text);
+    border-left-color: var(--text);
+  }
+  .main-col {
+    min-width: 0;
+    max-width: 720px;
   }
   .finish {
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
     gap: 20px;
     flex-wrap: wrap;
-    padding: 24px 28px;
-    margin-top: 28px;
+    margin-top: 48px;
+    padding: 28px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
   }
   .finish h2 {
     margin: 0 0 4px;
-    font-size: 1.2rem;
+    font-family: 'Inter Tight', Inter, sans-serif;
+    font-weight: 500;
+    font-size: 1.5rem;
   }
   .finish p {
     margin: 0;
@@ -235,99 +292,253 @@ const description = firstPara ? firstPara.replace(/[*_`]/g, '').slice(0, 155) : 
   .finish-actions {
     display: flex;
     align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .report {
+    color: var(--muted);
+    font-size: 0.85rem;
   }
   .pager {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-top: 28px;
+    gap: 24px;
+    margin-top: 32px;
   }
   .pager-link {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    padding: 18px 20px;
     text-decoration: none;
-    transition: border-color 0.15s;
-  }
-  .pager-link:hover {
-    border-color: var(--border-strong);
   }
   .pager-link .muted {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
+  }
+  .pager-title {
+    font-family: 'Inter Tight', Inter, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+  .pager-link:hover .pager-title {
+    text-decoration: underline;
+    text-underline-offset: 4px;
   }
   .pager-link.next {
     text-align: right;
     align-items: flex-end;
   }
-  .pager-title {
+
+  /* Quiz restyle for this layout */
+  .main-col :global(.quiz) {
+    margin-top: 48px;
+    padding: 28px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+  }
+  .main-col :global(.quiz h2) {
+    font-family: 'Inter Tight', Inter, sans-serif;
+    font-weight: 500;
+    font-size: 1.6rem;
+  }
+
+  /* Article typography */
+  .prose {
+    font-size: 1.1rem;
+    line-height: 1.75;
+    color: var(--text-soft);
+    overflow-wrap: break-word;
+  }
+  .prose :global(h1) {
+    display: none;
+  }
+  .prose > :global(:first-child) {
+    margin-top: 0;
+  }
+  .prose :global(h2) {
+    font-family: 'Inter Tight', Inter, sans-serif;
+    font-weight: 500;
+    font-size: 2.1rem;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin: 2.2em 0 0.6em;
+    scroll-margin-top: 20px;
+  }
+  .prose :global(h3) {
+    color: var(--text);
+    font-size: 1.25rem;
+    margin: 1.8em 0 0.5em;
+  }
+  .prose :global(h4) {
+    color: var(--text);
+    margin: 1.5em 0 0.4em;
+  }
+  .prose :global(p),
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin: 0 0 1.05em;
+  }
+  .prose :global(li) {
+    margin: 0.3em 0;
+  }
+  .prose :global(strong) {
+    color: var(--text);
     font-weight: 600;
   }
-  .toc {
-    position: sticky;
-    top: 28px;
+  .prose :global(a) {
+    color: var(--text);
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(255, 255, 255, 0.4);
   }
-  .toc-inner {
-    padding: 18px;
+  .prose :global(a:hover) {
+    text-decoration-color: var(--text);
   }
-  .toc-title {
-    margin: 0 0 10px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+  .prose :global(hr) {
+    border: 0;
+    border-top: 1px solid var(--line);
+    margin: 3em 0;
   }
-  .toc ol {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
+  .prose :global(blockquote) {
+    margin: 1.6em 0;
+    padding: 2px 0 2px 18px;
+    border-left: 3px solid var(--text);
+    color: var(--text);
   }
-  .toc a {
+  .prose :global(blockquote p) {
+    margin: 0.4em 0;
+  }
+  .prose :global(.callout-short) {
+    font-size: 1.2rem;
+    line-height: 1.55;
+  }
+  .prose :global(.callout-start) {
+    border-left-color: #f2c94c;
+    font-size: 1rem;
+    color: var(--text-soft);
+  }
+  .prose :global(.callout-start > p:first-child > strong:first-child) {
     display: block;
-    padding: 6px 10px;
-    border-radius: 9px;
-    font-size: 0.86rem;
-    line-height: 1.35;
-    color: var(--muted);
-    text-decoration: none;
-    border-left: 2px solid transparent;
+    margin-bottom: 4px;
   }
-  .toc a:hover {
+  .prose :global(.callout-deeper) {
+    font-size: 0.98rem;
+    border-left-color: #4f6bd8;
+    color: var(--text-soft);
+  }
+  .prose :global(code) {
+    font-family: var(--mono);
+    font-size: 0.86em;
+    background: rgba(255, 255, 255, 0.07);
+    padding: 0.1em 0.35em;
+    border-radius: 5px;
     color: var(--text);
-    background: var(--glass-hover);
   }
-  .toc a.is-current {
+  .prose :global(pre) {
+    margin: 0 0 1.3em;
+    padding: 18px 20px;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    overflow-x: auto;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+  .prose :global(pre code) {
+    background: none;
+    padding: 0;
+    font-size: inherit;
+  }
+  .prose :global(.table-wrap) {
+    overflow-x: auto;
+    margin: 0 0 1.3em;
+  }
+  .prose :global(table) {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+  .prose :global(th),
+  .prose :global(td) {
+    border-bottom: 1px solid var(--line);
+    padding: 10px 12px;
+    text-align: left;
+    vertical-align: top;
+  }
+  .prose :global(td) {
+    min-width: 110px;
+  }
+  .prose :global(th) {
     color: var(--text);
-    border-left-color: var(--accent);
-    border-radius: 0 9px 9px 0;
+    font-weight: 600;
   }
-  @media (max-width: 1100px) {
-    .lesson-layout {
+  .prose :global(details) {
+    margin-top: 2.4em;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 14px 0;
+  }
+  .prose :global(summary) {
+    cursor: pointer;
+    color: var(--text);
+  }
+  .prose :global(details > summary + *) {
+    margin-top: 16px;
+  }
+  /* Hover definitions for terms from earlier lessons */
+  .prose :global(.term) {
+    position: relative;
+    border-bottom: 1px dotted var(--muted);
+    cursor: help;
+  }
+  .prose :global(.term:hover::after),
+  .prose :global(.term:focus::after) {
+    content: attr(data-def);
+    position: absolute;
+    left: 0;
+    top: calc(100% + 6px);
+    z-index: 40;
+    width: max-content;
+    max-width: min(300px, 80vw);
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border-strong);
+    background: #161616;
+    color: var(--text-soft);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    white-space: normal;
+    pointer-events: none;
+  }
+  .prose :global(.term:focus) {
+    outline: none;
+    border-bottom-color: var(--text);
+  }
+
+  @media (max-width: 860px) {
+    h1 {
+      margin-bottom: 26px;
+    }
+    .cover-wrap {
+      margin-bottom: 26px;
+    }
+    .layout {
       grid-template-columns: minmax(0, 1fr);
+      gap: 28px;
+    }
+    .meta {
+      position: static;
     }
     .toc {
       display: none;
     }
-    .lesson {
-      margin: 0 auto;
+    .prose {
+      font-size: 1.04rem;
     }
-  }
-  @media (max-width: 760px) {
-    .lesson-body {
-      padding: 22px 18px;
-      border-radius: 18px;
+    .prose :global(h2) {
+      font-size: 1.65rem;
     }
-    .finish {
-      padding: 20px;
+    .main-col :global(.quiz) {
+      padding: 20px 16px;
     }
     .pager {
       grid-template-columns: 1fr;
