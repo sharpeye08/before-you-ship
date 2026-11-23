@@ -100,7 +100,8 @@ const tools = [
   .hero {
     position: relative;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
+    padding-bottom: 7vh;
     width: 100vw;
     height: 100svh;
     min-height: 560px;
@@ -111,9 +112,7 @@ const tools = [
   .hero-shade {
     position: absolute;
     inset: 0;
-    background:
-      linear-gradient(90deg, rgba(0, 0, 0, 0.94) 0%, rgba(0, 0, 0, 0.78) 36%, rgba(0, 0, 0, 0) 62%),
-      linear-gradient(180deg, rgba(5, 5, 5, 0) 72%, #050505 100%);
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 56%, rgba(0, 0, 0, 0.85) 70%, #050505 100%);
     pointer-events: none;
   }
   .hero-content {
@@ -123,6 +122,7 @@ const tools = [
     max-width: calc(1440px + 2 * var(--pad-x));
     margin: 0 auto;
     padding: 0 var(--pad-x);
+    text-align: center;
   }
   .kicker {
     margin: 0 0 14px;
@@ -133,15 +133,14 @@ const tools = [
   h1 {
     font-family: 'Inter Tight', Inter, sans-serif;
     font-weight: 500;
-    font-size: clamp(2.8rem, 7.5vw, 6.2rem);
+    font-size: clamp(2.8rem, 6.4vw, 5.6rem);
     line-height: 1;
     letter-spacing: -0.035em;
-    margin: 0 0 22px;
-    max-width: 12ch;
+    margin: 0 auto 18px;
   }
   .lede {
-    margin: 0 0 30px;
-    max-width: 46ch;
+    margin: 0 auto 28px;
+    max-width: 52ch;
     font-size: 1.15rem;
     line-height: 1.6;
     color: var(--text-soft);
@@ -149,6 +148,7 @@ const tools = [
   .hero-actions {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 12px;
   }
   .search-row {
@@ -362,7 +362,6 @@ const tools = [
 
   @media (max-width: 860px) {
     .hero {
-      align-items: flex-end;
       padding-bottom: 56px;
     }
     .hero-shade {
