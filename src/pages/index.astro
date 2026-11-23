@@ -23,19 +23,22 @@ const tools = [
 ---
 
 <Editorial title="Know what you're building" description="Free, no-login lessons on the software fundamentals behind every app, from your first website to production.">
-  <p class="kicker">{lessons.length} free lessons · {levels.length} levels · no login</p>
-  <h1>Know what you're building.</h1>
-  <p class="lede">
-    Short, plain-English lessons on how software really works: the web, databases, security, and running apps for real
-    users. Made for people who build with AI.
-  </p>
-
-  <div class="hero-actions">
-    {first && <a class="btn btn-accent" href={`/lessons/${first.slug}`}>Start with lesson 1</a>}
-    <a class="btn" href="/start">Where should I start?</a>
-  </div>
-
-  <div class="hero-art-wrap"><PrismHero /></div>
+  <section class="hero" aria-labelledby="hero-title">
+    <PrismHero />
+    <div class="hero-shade" aria-hidden="true"></div>
+    <div class="hero-content">
+      <p class="kicker">{lessons.length} free lessons · {levels.length} levels · no login</p>
+      <h1 id="hero-title">Know what you're building.</h1>
+      <p class="lede">
+        Short, plain-English lessons on how software really works: the web, databases, security, and running apps for
+        real users. Made for people who build with AI.
+      </p>
+      <div class="hero-actions">
+        {first && <a class="btn btn-accent" href={`/lessons/${first.slug}`}>Start with lesson 1</a>}
+        <a class="btn" href="/start">Where should I start?</a>
+      </div>
+    </div>
+  </section>
 
   <div class="search-row">
     <Search lessons={lessons} />
@@ -94,24 +97,51 @@ const tools = [
 </Editorial>
 
 <style>
+  .hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100vw;
+    height: 100svh;
+    min-height: 560px;
+    margin-left: calc(50% - 50vw);
+    margin-top: calc(-1 * (var(--pad-top) + 40px + var(--top-gap)));
+    margin-bottom: 56px;
+  }
+  .hero-shade {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgba(0, 0, 0, 0.94) 0%, rgba(0, 0, 0, 0.78) 36%, rgba(0, 0, 0, 0) 62%),
+      linear-gradient(180deg, rgba(5, 5, 5, 0) 72%, #050505 100%);
+    pointer-events: none;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: calc(1440px + 2 * var(--pad-x));
+    margin: 0 auto;
+    padding: 0 var(--pad-x);
+  }
   .kicker {
     margin: 0 0 14px;
-    font-size: 0.82rem;
+    font-size: 0.85rem;
     color: var(--text-soft);
     letter-spacing: 0.02em;
   }
   h1 {
     font-family: 'Inter Tight', Inter, sans-serif;
     font-weight: 500;
-    font-size: clamp(2.6rem, 7vw, 5.2rem);
-    line-height: 1.02;
-    letter-spacing: -0.03em;
-    margin: 0 0 20px;
-    max-width: 14ch;
+    font-size: clamp(2.8rem, 7.5vw, 6.2rem);
+    line-height: 1;
+    letter-spacing: -0.035em;
+    margin: 0 0 22px;
+    max-width: 12ch;
   }
   .lede {
-    margin: 0 0 28px;
-    max-width: 56ch;
+    margin: 0 0 30px;
+    max-width: 46ch;
     font-size: 1.15rem;
     line-height: 1.6;
     color: var(--text-soft);
@@ -120,21 +150,6 @@ const tools = [
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
-    margin-bottom: 48px;
-  }
-  .hero-art-wrap {
-    margin: 0 0 32px;
-  }
-  .hero-art {
-    margin: 0 0 32px;
-    border-radius: 18px;
-    overflow: hidden;
-    aspect-ratio: 1000 / 380;
-  }
-  .hero-art svg {
-    display: block;
-    width: 100%;
-    height: 100%;
   }
   .search-row {
     max-width: 640px;
@@ -346,11 +361,12 @@ const tools = [
   }
 
   @media (max-width: 860px) {
-    .hero-actions {
-      margin-bottom: 28px;
+    .hero {
+      align-items: flex-end;
+      padding-bottom: 56px;
     }
-    .hero-art {
-      border-radius: 14px;
+    .hero-shade {
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.55) 45%, rgba(0, 0, 0, 0.92) 78%, #050505 100%);
     }
     .grid {
       grid-template-columns: minmax(0, 1fr);

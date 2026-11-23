@@ -109,6 +109,7 @@ const repoUrl = `https://github.com/${SITE.githubRepo}`;
   }
   body {
     margin: 0;
+    overflow-x: clip;
     background: var(--bg);
     color: var(--text);
     font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
@@ -137,20 +138,32 @@ const repoUrl = `https://github.com/${SITE.githubRepo}`;
   .muted {
     color: var(--muted);
   }
+  :root {
+    --pad-x: clamp(18px, 5vw, 88px);
+    --pad-top: 28px;
+    --top-gap: 56px;
+  }
   .frame {
-    max-width: 1140px;
-    margin: 40px auto;
-    padding: 36px 64px 56px;
+    max-width: none;
+    margin: 0;
+    padding: var(--pad-top) var(--pad-x) 56px;
     background-color: var(--frame);
     background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
     background-size: 6px 6px;
-    border-radius: 6px;
+    min-height: 100vh;
   }
   .top {
+    position: relative;
+    z-index: 5;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 64px;
+    height: 40px;
+    margin-bottom: var(--top-gap);
+  }
+  main {
+    max-width: 1440px;
+    margin: 0 auto;
   }
   .logo {
     text-decoration: none;
@@ -267,13 +280,12 @@ const repoUrl = `https://github.com/${SITE.githubRepo}`;
     background: transparent;
   }
   @media (max-width: 860px) {
-    .frame {
-      margin: 0;
-      padding: 20px 18px 40px;
-      border-radius: 0;
+    :root {
+      --pad-top: 20px;
+      --top-gap: 32px;
     }
-    .top {
-      margin-bottom: 36px;
+    .frame {
+      padding-bottom: 40px;
     }
     .hide-sm {
       display: none;
