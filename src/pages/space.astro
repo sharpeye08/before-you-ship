@@ -82,7 +82,7 @@ const pageTitle = `${SITE.name}: know what you're building`;
 
     <!-- Pill nav, centred (Aria style). -->
     <header class="fixed inset-x-0 top-4 z-50 flex justify-center px-3">
-      <div class="glass flex w-full max-w-max items-center gap-2 rounded-full py-1.5 pr-1.5 pl-5 max-md:max-w-none max-md:justify-between">
+      <div data-nav-pill class="glass flex w-full max-w-max items-center gap-2 rounded-full py-1.5 pr-1.5 pl-5 max-md:max-w-none max-md:justify-between">
         <a href="/space" class="wordmark mr-3 text-[1.05rem] whitespace-nowrap">before<span class="slash">/</span>you<span class="slash">/</span>ship</a>
         <nav aria-label="Sections" class="flex gap-1 max-md:hidden">
           <a href="#path" class="rounded-full px-3 py-1.5 text-sm text-soft hover:bg-white/8 hover:text-ink">The path</a>
@@ -98,10 +98,10 @@ const pageTitle = `${SITE.name}: know what you're building`;
       <!-- 1. Hero: everything centred. -->
       <section data-sky="hero" class="flex min-h-svh flex-col items-center justify-center px-5 pt-24 pb-20 text-center" aria-labelledby="hero-title">
         <div data-dim class="flex flex-col items-center">
-          <!-- The logo as the title: the before/you/ship wordmark. -->
-          <h1 id="hero-title" data-sky-origin aria-label="Before you ship" class="wordmark text-[clamp(3.2rem,12.5vw,10.5rem)] leading-[0.95] whitespace-nowrap">
-            {['before', '/', 'you', '/', 'ship'].map((w, i) => (
-              <span aria-hidden="true" class={`focus-in inline-block ${w === '/' ? 'slash' : ''}`} style={`animation-delay:${0.35 + i * 0.12}s`}>{w}</span>
+          <!-- Title in the logo style. A script sizes it to the same width as the nav bar. -->
+          <h1 id="hero-title" data-sky-origin data-fit-title aria-label="Before you ship" class="wordmark text-[clamp(3rem,9vw,7.5rem)] leading-[0.95] whitespace-nowrap">
+            {['before', 'you', 'ship'].map((w, i) => (
+              <span aria-hidden="true" class={`focus-in inline-block ${i < 2 ? 'mr-[0.2em]' : ''}`} style={`animation-delay:${0.35 + i * 0.15}s`}>{w}</span>
             ))}
           </h1>
           <p class="rise-in mt-7 max-w-[34ch] text-[clamp(1.1rem,1.8vw,1.35rem)] leading-snug text-soft" style="animation-delay:1.1s">
@@ -316,6 +316,24 @@ const pageTitle = `${SITE.name}: know what you're building`;
 
 
     <script>
+      // Hero title: same width as the nav bar, on every screen size.
+      const fitTitle = () => {
+        const pill = document.querySelector<HTMLElement>('[data-nav-pill]');
+        const title = document.querySelector<HTMLElement>('[data-fit-title]');
+        if (!pill || !title) return;
+        title.style.fontSize = '';
+        const size = parseFloat(getComputedStyle(title).fontSize);
+        const width = title.getBoundingClientRect().width;
+        if (width > 0) title.style.fontSize = `${(size * pill.getBoundingClientRect().width) / width}px`;
+      };
+      fitTitle();
+      document.fonts?.ready.then(fitTitle);
+      let fitFrame = 0;
+      addEventListener('resize', () => {
+        cancelAnimationFrame(fitFrame);
+        fitFrame = requestAnimationFrame(fitTitle);
+      });
+
       // Fade sections up once when they enter the screen.
       const els = document.querySelectorAll('.reveal');
       const io = new IntersectionObserver(

@@ -35,7 +35,7 @@ const ICE = L('#050607', '#0c0f12', '#151b21', '#212b35', '#33465a', '#52708f', 
 const SMOKE = L('#060505', '#100e0d', '#1c1918', '#2b2725', '#413b38', '#625955', '#958a85', '#f1ece9');
 const DAWN = L('#070506', '#120d0e', '#201718', '#332324', '#4d3433', '#74504b', '#ad857a', '#fbeee6');
 // Aurora: a muted mint, so the curtain blends into the grey sky.
-const AURORA = L('#040606', '#0a1110', '#121e1c', '#1c2f2b', '#2c4a43', '#46736a', '#7fb3a6', '#e6fff8');
+const AURORA = L('#040606', '#08130f', '#0e2620', '#153b31', '#1f5a49', '#2f8a6c', '#6fd1a4', '#e3fff1');
 
 const base = { aurora: 0, dawn: 0, ripple: 0, stars: 1 };
 export const SCENES: Record<string, Scene> = {
@@ -45,7 +45,7 @@ export const SCENES: Record<string, Scene> = {
   lesson: { ...base, gas: 0.32, energy: 0.3, ladder: GRAPHITE, accent: ICE, accentAmt: 0.4 },
   index: { ...base, gas: 0.2, energy: 0.2, stars: 1.7, ladder: GRAPHITE, accent: ICE, accentAmt: 0.35 },
   tools: { ...base, gas: 0.6, energy: 0.75, ladder: SMOKE, accent: ICE, accentAmt: 0.6 },
-  promise: { ...base, gas: 0.3, energy: 0.4, aurora: 1, stars: 1.2, ladder: GRAPHITE, accent: ICE, accentAmt: 0.4 },
+  promise: { ...base, gas: 0.3, energy: 0.4, aurora: 1.7, stars: 1.2, ladder: GRAPHITE, accent: ICE, accentAmt: 0.4 },
   faq: { ...base, gas: 0.22, energy: 0.2, ladder: GRAPHITE, accent: ICE, accentAmt: 0.3 },
   start: { ...base, gas: 0.5, energy: 0.55, dawn: 1, ripple: 0.35, stars: 0.8, ladder: SMOKE, accent: DAWN, accentAmt: 0.6 },
   footer: { ...base, gas: 0.35, energy: 0.3, dawn: 0.6, stars: 0.8, ladder: SMOKE, accent: DAWN, accentAmt: 0.6 },
@@ -146,7 +146,7 @@ void main(){
     vec2 e = min(cell - d.xy, d.zw - cell);
     dimM = max(dimM, smoothstep(-24.0, 16.0, min(e.x, e.y)));
   }
-  aur *= 1.0 - 0.75 * dimM;
+  aur *= 1.0 - 0.35 * dimM;   // the aurora stays visible behind text, only a little softer
 
   // Pointer: a soft light that lifts the gas near it.
   float pd = length(cell - uPtr.xy) / uGrid.y;
@@ -154,7 +154,8 @@ void main(){
 
   // Ladder position (0 = empty sky, 7 = brightest). Behind text, cap it at a mid tone.
   float v = 0.25 + gas * 6.2 + glow * 4.5 + light * 2.0 + aur * 4.5;
-  v = min(v, mix(7.0, 2.6, dimM));
+  // Behind text the aurora may reach a little higher than gas, since its tones are darker.
+  v = min(v, mix(7.0, 2.6 + 1.8 * clamp(aur * 1.5, 0.0, 1.0), dimM));
 
   // Stars: single cells, the brightest as a small cross. They drift slowly with scroll.
   vec2 sc = floor(cell + vec2(0.0, floor(uScroll * uGrid.y * 0.05)));
@@ -184,7 +185,7 @@ void main(){
   // same brightness step. Only brightness is dithered, so colours blend into each other with no seams.
   float hc = fbm(q * 0.7 + w * 1.4 + vec2(7.3, t * 0.01));
   float wAcc = uAccAmt * smoothstep(0.3, 0.72, hc) * (0.5 + 0.5 * smoothstep(0.0, 0.6, gas));
-  float wAur = clamp(aur * 1.8, 0.0, 1.0);
+  float wAur = clamp(aur * 2.4, 0.0, 1.0);
   vec3 col = mix(mix(uLadder[idx], uAcc[idx], wAcc), uAur[idx], wAur);
 
   o = vec4(col, 1.0);
