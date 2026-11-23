@@ -4,7 +4,6 @@
 // Standalone: it does not use the shared layouts, so other pages are not affected.
 import '../styles/space.css';
 import Sky from '../components/space/Sky';
-import Chip from '../components/space/Chip';
 import QuizDemo from '../components/space/QuizDemo';
 import LessonIndex from '../components/space/LessonIndex';
 import { SITE } from '../config';
@@ -17,13 +16,11 @@ const levels = groupByLevel(lessons);
 const first = lessons[0];
 const hours = Math.round(lessons.reduce((sum, l) => sum + l.minutes, 0) / 60);
 const repoUrl = `https://github.com/${SITE.githubRepo}`;
-const pad = (n: number) => String(n).padStart(2, '0');
 const LEVEL_TONES = ['var(--color-l1)', 'var(--color-l2)', 'var(--color-l3)', 'var(--color-l4)', 'var(--color-l5)'];
-const LEVEL_HEX = ['#7fe0a0', '#4fd1e8', '#7b8cff', '#b08cff', '#f08fd0'];
+const LEVEL_HEX = ['#e6f3ff', '#bcd9f4', '#94bfe6', '#74a3cf', '#a9b3bf'];
 
 // The lesson shown in "A lesson": its title, its first paragraphs and its real quiz.
 const demo = all.find((l) => l.id === 'what-is-a-database') ?? all[0];
-const demoSummary = lessons.find((l) => l.slug === demo.id)!;
 const demoBody = (demo.body ?? '').replace(/\r\n/g, '\n');
 const firstSection = demoBody.split(/\n## /)[1] ?? '';
 const demoHeading = firstSection.split('\n')[0].trim();
@@ -62,7 +59,6 @@ const faq = [
   { q: 'I build with AI. Why learn this?', a: 'Your AI tool writes code fast, but it does not know your users, your costs or your risks. These lessons help you read what it makes and find the problems before your users do.' },
   { q: 'Can I skip ahead?', a: 'Yes. Take the short placement quiz, or open any level in the lesson list.' },
 ];
-const SECTIONS = 9;
 const pageTitle = `${SITE.name}: know what you're building`;
 ---
 
@@ -72,7 +68,7 @@ const pageTitle = `${SITE.name}: know what you're building`;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="dark" />
-    <meta name="theme-color" content="#03040a" />
+    <meta name="theme-color" content="#050506" />
     <meta name="robots" content="noindex" />
     <title>{pageTitle}</title>
     <meta name="description" content="Free, no-login lessons on the software fundamentals behind every app." />
@@ -103,7 +99,6 @@ const pageTitle = `${SITE.name}: know what you're building`;
       <!-- 1. Hero: everything centred. -->
       <section data-sky="hero" class="flex min-h-svh flex-col items-center justify-center px-5 pt-24 pb-20 text-center" aria-labelledby="hero-title">
         <div data-dim class="flex flex-col items-center">
-          <p class="label rise-in mb-6 text-soft" style="animation-delay:.9s">{lessons.length} free lessons · {levels.length} levels · no login</p>
           <h1 id="hero-title" data-sky-origin class="text-[clamp(3.4rem,11vw,9.5rem)] leading-[0.92] font-medium tracking-[-0.05em]">
             {['Before', 'you', 'ship.'].map((w, i) => <span class={`focus-in inline-block ${i < 2 ? 'mr-[0.24em]' : ''}`} style={`animation-delay:${0.35 + i * 0.18}s`}>{w}</span>)}
           </h1>
@@ -114,7 +109,6 @@ const pageTitle = `${SITE.name}: know what you're building`;
             {first && <a href={`/lessons/${first.slug}`} class="btn btn-light">Start with lesson 1</a>}
             <a href="/start" class="btn btn-ghost">Where should I start?</a>
           </div>
-          <p class="rise-in mt-6 text-sm text-faint" style="animation-delay:1.5s">Free and open source. Each lesson takes 10 to 15 minutes.</p>
         </div>
       </section>
 
@@ -122,7 +116,7 @@ const pageTitle = `${SITE.name}: know what you're building`;
       <section data-sky="why" class="flex min-h-[90svh] items-center justify-center px-5 py-28 text-center" aria-labelledby="why-title">
         <div data-dim class="reveal max-w-5xl">
           <h2 id="why-title" class="text-[clamp(2.6rem,6.4vw,5.8rem)] leading-[1] font-medium tracking-[-0.04em]">
-            Your AI writes the code.<br /><span class="text-[#a9a6ff]">You still ship it.</span>
+            Your AI writes the code.<br /><span class="text-[#9cc4ea]">You still ship it.</span>
           </h2>
           <p class="mx-auto mt-8 max-w-[52ch] text-lg leading-relaxed text-soft">
             AI tools write code fast. They do not know your users, your costs or your risks. These lessons show you what to check before real people use your app.
@@ -144,8 +138,7 @@ const pageTitle = `${SITE.name}: know what you're building`;
               levels.map((lv, i) => (
                 <li class="relative flex flex-col md:items-center md:text-center max-md:pl-9">
                   <span class="relative h-[15px] w-[15px] rounded-full border-2 border-ground max-md:absolute max-md:top-1 max-md:left-0" style={`background:${LEVEL_TONES[i]};box-shadow:0 0 18px ${LEVEL_HEX[i]}`} />
-                  <p class="label mt-6 text-faint max-md:mt-0">Level {pad(lv.n)}</p>
-                  <h3 class="mt-2 text-xl font-medium tracking-tight">{lv.name}</h3>
+                  <h3 class="mt-6 text-xl max-md:mt-0 font-medium tracking-tight">{lv.name}</h3>
                   <p class="mt-2 text-[0.95rem] leading-relaxed text-soft">{lv.blurb}</p>
                   <a href={`/lessons#level-${lv.n}`} class="mt-3 text-sm underline decoration-white/30 underline-offset-4 hover:decoration-white">{lv.lessons.length} lessons</a>
                 </li>
@@ -164,11 +157,7 @@ const pageTitle = `${SITE.name}: know what you're building`;
           </div>
           <div data-dim class="reveal glass mt-16 grid overflow-hidden rounded-[28px] lg:grid-cols-2">
             <article class="border-line p-7 md:p-10 lg:border-r max-lg:border-b">
-              <p class="label flex flex-wrap items-center gap-x-3 gap-y-1 text-faint">
-                <span class="inline-flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-l1"></span>Level {pad(demo.data.level)} · {demo.data.levelName}</span>
-                <span>{demoSummary.minutes} min read</span>
-              </p>
-              <h3 class="mt-4 text-[clamp(1.6rem,2.6vw,2.2rem)] leading-tight font-medium tracking-tight">{demo.data.title}</h3>
+              <h3 class="text-[clamp(1.6rem,2.6vw,2.2rem)] leading-tight font-medium tracking-tight">{demo.data.title}</h3>
               <h4 class="mt-7 font-medium">{demoHeading}</h4>
               {demoParas.map((p) => <p class="mt-3 leading-relaxed text-soft">{p}</p>)}
               <a href={`/lessons/${demo.id}`} class="mt-6 inline-flex text-sm underline decoration-white/30 underline-offset-4 hover:decoration-white">Keep reading</a>
@@ -202,8 +191,7 @@ const pageTitle = `${SITE.name}: know what you're building`;
           </div>
           <div class="reveal mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-4 lg:grid-rows-2">
             <a href="/checklist" class="glass group flex flex-col rounded-[24px] p-7 md:col-span-2 lg:row-span-2">
-              <p class="label text-faint">{flags.length} red flags</p>
-              <h3 class="mt-3 text-3xl font-medium tracking-tight">Pre-ship checklist</h3>
+              <h3 class="text-3xl font-medium tracking-tight">Pre-ship checklist</h3>
               <p class="mt-2 text-soft">Every red flag from every lesson, in one list you can tick.</p>
               <ul class="mt-6 flex flex-col gap-2.5">
                 {sampleFlags.map((f) => (
@@ -216,23 +204,19 @@ const pageTitle = `${SITE.name}: know what you're building`;
               <span class="mt-auto pt-6 text-sm text-ink underline decoration-white/30 underline-offset-4 group-hover:decoration-white">Open the checklist</span>
             </a>
             <a href="/start" class="glass flex flex-col rounded-[24px] p-6 hover:border-white/30">
-              <p class="label text-faint">15 questions</p>
-              <h3 class="mt-3 text-xl font-medium">Where should I start?</h3>
+              <h3 class="text-xl font-medium">Where should I start?</h3>
               <p class="mt-2 text-[0.95rem] text-soft">A short quiz that suggests your first lesson.</p>
             </a>
             <a href="/review" class="glass flex flex-col rounded-[24px] p-6 hover:border-white/30">
-              <p class="label text-faint">A few a day</p>
-              <h3 class="mt-3 text-xl font-medium">Review mode</h3>
+              <h3 class="text-xl font-medium">Review mode</h3>
               <p class="mt-2 text-[0.95rem] text-soft">Old quiz questions come back, so you remember them.</p>
             </a>
             <a href="/glossary" class="glass flex flex-col rounded-[24px] p-6 hover:border-white/30">
-              <p class="label text-faint">{termCount} terms</p>
-              <h3 class="mt-3 text-xl font-medium">Glossary</h3>
+              <h3 class="text-xl font-medium">Glossary</h3>
               <p class="mt-2 text-[0.95rem] text-soft">Every key word in plain English.</p>
             </a>
             <a href="/prompts" class="glass flex flex-col rounded-[24px] p-6 hover:border-white/30">
-              <p class="label text-faint">{prompts.length} prompts</p>
-              <h3 class="mt-3 text-xl font-medium">Prompt library</h3>
+              <h3 class="text-xl font-medium">Prompt library</h3>
               <p class="mt-2 text-[0.95rem] text-soft">Questions to paste into your AI tool.</p>
             </a>
           </div>
@@ -243,7 +227,7 @@ const pageTitle = `${SITE.name}: know what you're building`;
       <section data-sky="promise" class="flex min-h-[90svh] flex-col justify-center px-5 py-28 md:px-10" aria-labelledby="promise-title">
         <div class="mx-auto w-full max-w-[1200px]">
           <h2 data-dim id="promise-title" class="reveal text-center text-[clamp(2.6rem,6vw,5.4rem)] leading-[1] font-medium tracking-[-0.04em]">
-            Free. No login.<br /><span class="text-l1">Nothing to install.</span>
+            Free. No login.<br /><span class="text-l3">Nothing to install.</span>
           </h2>
           <div data-dim class="reveal mt-16 grid gap-8 md:grid-cols-3">
             <div class="border-t border-line pt-5">
@@ -294,7 +278,6 @@ const pageTitle = `${SITE.name}: know what you're building`;
               {first && <a href={`/lessons/${first.slug}`} class="btn btn-light">Start with lesson 1</a>}
               <a href="/lessons" class="btn btn-ghost">See all lessons</a>
             </div>
-            {first && <p class="mt-6 text-sm text-faint">Lesson 1 takes about {first.minutes} minutes. No sign-up.</p>}
           </div>
         </div>
 
@@ -329,7 +312,6 @@ const pageTitle = `${SITE.name}: know what you're building`;
       </section>
     </main>
 
-    <Chip client:idle total={SECTIONS} />
 
     <script>
       // Fade sections up once when they enter the screen.

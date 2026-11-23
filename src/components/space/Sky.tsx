@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { createSky } from '../../lib/sky/engine';
 
 // Fixed sky behind the whole page. The renderer lives in lib/sky/engine.ts.
-// It tells the page which section is on screen with a `sky:section` event.
 export default function Sky() {
   const ref = useRef<HTMLCanvasElement>(null);
   const [fallback, setFallback] = useState(false);
@@ -14,7 +13,6 @@ export default function Sky() {
     try {
       sky = createSky(canvas, {
         reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches,
-        onSection: (index, name) => dispatchEvent(new CustomEvent('sky:section', { detail: { index, name } })),
       });
     } catch (err) {
       console.warn(err);
@@ -30,7 +28,7 @@ export default function Sky() {
       className="pointer-events-none fixed inset-0 z-0 overflow-hidden"
       style={
         fallback
-          ? { background: 'radial-gradient(ellipse at 50% 40%, #1a1d4a 0%, #0a0c1e 45%, #03040a 80%)' }
+          ? { background: 'radial-gradient(ellipse at 50% 40%, #2a2c30 0%, #121214 45%, #050506 80%)' }
           : undefined
       }
     >

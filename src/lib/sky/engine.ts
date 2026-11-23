@@ -22,30 +22,33 @@ export interface Scene {
   ripple: number; // rings that spread out from the centre
   stars: number; // star density multiplier
   ladder: RGB[]; // 8 tones, dark to light
+  accent: RGB[]; // a second set of 8 tones that drifts through the gas in soft patches
+  accentAmt: number; // how much of the accent shows (0 to 1)
 }
 
 const hex = (h: string): RGB => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255) as RGB;
 const L = (...c: string[]) => c.map(hex);
 
-// Tone ladders (8 steps each, index 0 is the empty sky).
-const INDIGO = L('#03040a', '#0a0e22', '#141a40', '#212a66', '#363d94', '#5652be', '#8c83e4', '#ecebff');
-const VIOLET = L('#04030a', '#120a24', '#221244', '#381b6c', '#572a96', '#8040bc', '#bb7fe0', '#fbeeff');
-const TEAL = L('#02060a', '#06131d', '#0b2234', '#11364c', '#1a5068', '#287a8a', '#5db6b4', '#e8fffb');
-const DAWN = L('#05040a', '#170d22', '#2e1440', '#4f1f56', '#7e3163', '#b8566f', '#ec9a87', '#fff2e8');
-// Aurora tones (the bright part of the curtain): deep teal, teal, green, pale cyan.
-const AURORA = L('#0f4a4f', '#2fae9c', '#7fe0a0', '#c8f5ff');
+// Tone ladders (8 steps each, index 0 is the empty sky). Mostly greys, with a little colour in the light steps.
+const GRAPHITE = L('#050506', '#0d0d0f', '#18181b', '#26262a', '#3a3a3f', '#58585e', '#8a8a91', '#e9e9ec');
+const ICE = L('#050607', '#0c0f12', '#151b21', '#212b35', '#33465a', '#52708f', '#86aed4', '#e6f3ff');
+const SMOKE = L('#060505', '#100e0d', '#1c1918', '#2b2725', '#413b38', '#625955', '#958a85', '#f1ece9');
+const DAWN = L('#070506', '#120d0e', '#201718', '#332324', '#4d3433', '#74504b', '#ad857a', '#fbeee6');
+// Aurora: a muted mint, so the curtain blends into the grey sky.
+const AURORA = L('#040606', '#0a1110', '#121e1c', '#1c2f2b', '#2c4a43', '#46736a', '#7fb3a6', '#e6fff8');
 
+const base = { aurora: 0, dawn: 0, ripple: 0, stars: 1 };
 export const SCENES: Record<string, Scene> = {
-  hero: { gas: 0.55, energy: 0.35, aurora: 0, dawn: 0, ripple: 1, stars: 1, ladder: INDIGO },
-  why: { gas: 0.8, energy: 1, aurora: 0, dawn: 0, ripple: 0, stars: 1, ladder: mixLadder(INDIGO, VIOLET, 0.35) },
-  path: { gas: 0.6, energy: 0.6, aurora: 0.35, dawn: 0, ripple: 0, stars: 1, ladder: mixLadder(INDIGO, TEAL, 0.45) },
-  lesson: { gas: 0.32, energy: 0.3, aurora: 0, dawn: 0, ripple: 0, stars: 1, ladder: INDIGO },
-  index: { gas: 0.2, energy: 0.2, aurora: 0, dawn: 0, ripple: 0, stars: 1.7, ladder: mixLadder(INDIGO, TEAL, 0.2) },
-  tools: { gas: 0.6, energy: 0.75, aurora: 0, dawn: 0, ripple: 0, stars: 1, ladder: VIOLET },
-  promise: { gas: 0.3, energy: 0.4, aurora: 1, dawn: 0, ripple: 0, stars: 1.2, ladder: TEAL },
-  faq: { gas: 0.22, energy: 0.2, aurora: 0, dawn: 0, ripple: 0, stars: 1, ladder: INDIGO },
-  start: { gas: 0.5, energy: 0.55, aurora: 0, dawn: 1, ripple: 0.35, stars: 0.8, ladder: DAWN },
-  footer: { gas: 0.35, energy: 0.3, aurora: 0, dawn: 0.6, ripple: 0, stars: 0.8, ladder: DAWN },
+  hero: { ...base, gas: 0.55, energy: 0.35, ripple: 1, ladder: GRAPHITE, accent: ICE, accentAmt: 0.55 },
+  why: { ...base, gas: 0.8, energy: 1, ladder: GRAPHITE, accent: ICE, accentAmt: 0.7 },
+  path: { ...base, gas: 0.6, energy: 0.6, aurora: 0.35, ladder: GRAPHITE, accent: ICE, accentAmt: 0.5 },
+  lesson: { ...base, gas: 0.32, energy: 0.3, ladder: GRAPHITE, accent: ICE, accentAmt: 0.4 },
+  index: { ...base, gas: 0.2, energy: 0.2, stars: 1.7, ladder: GRAPHITE, accent: ICE, accentAmt: 0.35 },
+  tools: { ...base, gas: 0.6, energy: 0.75, ladder: SMOKE, accent: ICE, accentAmt: 0.6 },
+  promise: { ...base, gas: 0.3, energy: 0.4, aurora: 1, stars: 1.2, ladder: GRAPHITE, accent: ICE, accentAmt: 0.4 },
+  faq: { ...base, gas: 0.22, energy: 0.2, ladder: GRAPHITE, accent: ICE, accentAmt: 0.3 },
+  start: { ...base, gas: 0.5, energy: 0.55, dawn: 1, ripple: 0.35, stars: 0.8, ladder: SMOKE, accent: DAWN, accentAmt: 0.6 },
+  footer: { ...base, gas: 0.35, energy: 0.3, dawn: 0.6, stars: 0.8, ladder: SMOKE, accent: DAWN, accentAmt: 0.6 },
 };
 
 function mixLadder(a: RGB[], b: RGB[], k: number): RGB[] {
@@ -56,6 +59,7 @@ function mixScene(a: Scene, b: Scene, k: number): Scene {
   return {
     gas: m(a.gas, b.gas), energy: m(a.energy, b.energy), aurora: m(a.aurora, b.aurora), dawn: m(a.dawn, b.dawn),
     ripple: m(a.ripple, b.ripple), stars: m(a.stars, b.stars), ladder: mixLadder(a.ladder, b.ladder, k),
+    accent: mixLadder(a.accent, b.accent, k), accentAmt: m(a.accentAmt, b.accentAmt),
   };
 }
 
@@ -75,7 +79,9 @@ uniform vec3 uReveal;        // intro mask: centre x, y (cells), radius (cells);
 uniform vec4 uDims[8];       // text areas in cells: left, top, right, bottom
 uniform int uNDims;
 uniform vec3 uLadder[8];
-uniform vec3 uAur[4];
+uniform vec3 uAcc[8];
+uniform float uAccAmt;
+uniform vec3 uAur[8];
 
 float hash(vec2 p){ p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }
 float noise(vec2 p){
@@ -126,7 +132,8 @@ void main(){
   float hem = 0.16 + 0.05 * sin(p.x * 2.2 + t * 0.2 + w.x * 3.0) + 0.025 * sin(p.x * 5.3 - t * 0.31);
   float above = hem - p.y;
   float rays = 0.5 + 0.5 * sin(p.x * 40.0 + 3.0 * fbm(vec2(p.x * 3.0, t * 0.08)));
-  float aur = aurAmt * smoothstep(-0.012, 0.012, above) * exp(-max(above, 0.0) * 3.2) * (0.35 + 0.65 * rays) * (0.55 + 0.6 * n);
+  // The hem fades over a short distance instead of stopping at a hard line.
+  float aur = aurAmt * smoothstep(-0.07, 0.03, above) * exp(-max(above, 0.0) * 3.2) * (0.35 + 0.65 * rays) * (0.55 + 0.6 * n);
 
   // Dawn: light rising from the bottom edge.
   float glow = dawn * smoothstep(0.05, 0.55, p.y) * (0.75 + 0.35 * n);
@@ -146,7 +153,7 @@ void main(){
   float light = uPtr.z * exp(-pd * pd / 0.012) * (0.4 + gas * 1.5);
 
   // Ladder position (0 = empty sky, 7 = brightest). Behind text, cap it at a mid tone.
-  float v = 0.25 + gas * 6.2 + glow * 4.5 + light * 2.0;
+  float v = 0.25 + gas * 6.2 + glow * 4.5 + light * 2.0 + aur * 4.5;
   v = min(v, mix(7.0, 2.6, dimM));
 
   // Stars: single cells, the brightest as a small cross. They drift slowly with scroll.
@@ -163,21 +170,22 @@ void main(){
   // Intro: the sky pours out from the centre of the title.
   if (uReveal.z >= 0.0){
     float rd = length(cell - uReveal.xy);
-    float edge = exp(-pow((rd - uReveal.z) / 7.0, 2.0));
-    if (rd > uReveal.z) v = 0.0;
-    v += edge * 2.5 * step(rd, uReveal.z + 14.0);
+    float edge = exp(-pow((rd - uReveal.z) / 9.0, 2.0));
+    v *= smoothstep(uReveal.z + 16.0, uReveal.z - 10.0, rd);   // soft edge, no hard circle
+    v += edge * 2.0;
   }
 
-  // Dither between two neighbouring tones.
+  // Brightness: dither between two neighbouring steps.
   float b = bayer4(cell);
   v = clamp(v, 0.0, 7.0);
   int idx = min(int(floor(v)) + (fract(v) > b ? 1 : 0), 7);
-  vec3 col = uLadder[idx];
 
-  // The aurora uses its own ladder and wins where it is brighter.
-  float av = clamp(aur * 4.6, 0.0, 4.0);
-  int ai = int(floor(av)) + (fract(av) > b ? 1 : 0);
-  if (ai > 0 && float(ai) * 1.6 > v) col = uAur[min(ai, 4) - 1];
+  // Colour: the scene's main tones, its accent tones and the aurora tones are mixed smoothly at the
+  // same brightness step. Only brightness is dithered, so colours blend into each other with no seams.
+  float hc = fbm(q * 0.7 + w * 1.4 + vec2(7.3, t * 0.01));
+  float wAcc = uAccAmt * smoothstep(0.3, 0.72, hc) * (0.5 + 0.5 * smoothstep(0.0, 0.6, gas));
+  float wAur = clamp(aur * 1.8, 0.0, 1.0);
+  vec3 col = mix(mix(uLadder[idx], uAcc[idx], wAcc), uAur[idx], wAur);
 
   o = vec4(col, 1.0);
 }`;
@@ -185,7 +193,6 @@ void main(){
 export interface SkyOptions {
   reducedMotion: boolean;
   ambientFps?: number;
-  onSection?: (index: number, name: string) => void;
 }
 
 export function createSky(canvas: HTMLCanvasElement, opts: SkyOptions) {
@@ -215,6 +222,7 @@ export function createSky(canvas: HTMLCanvasElement, opts: SkyOptions) {
   const u = {
     grid: U('uGrid'), time: U('uTime'), scroll: U('uScroll'), s1: U('uS1'), s2: U('uS2'), ptr: U('uPtr'),
     reveal: U('uReveal'), dims: U('uDims'), ndims: U('uNDims'), ladder: U('uLadder'), aur: U('uAur'),
+    acc: U('uAcc'), accAmt: U('uAccAmt'),
   };
   gl.uniform3fv(u.aur, AURORA.flat());
 
@@ -265,16 +273,11 @@ export function createSky(canvas: HTMLCanvasElement, opts: SkyOptions) {
   };
 
   // Scene for the current scroll position: blend into the next section over the last 40% of this one.
-  let sectionIndex = -1;
   const sceneAt = (sy: number): Scene => {
     if (!sections.length) return SCENES.hero;
     const anchor = sy + S.vh * 0.5;
     let i = sections.findIndex((s) => anchor < s.top + s.h);
     if (i < 0) i = sections.length - 1;
-    if (i !== sectionIndex) {
-      sectionIndex = i;
-      opts.onSection?.(i, sections[i].name);
-    }
     const a = SCENES[sections[i].name] || SCENES.hero;
     const next = sections[i + 1];
     if (!next) return a;
@@ -371,6 +374,8 @@ export function createSky(canvas: HTMLCanvasElement, opts: SkyOptions) {
     gl.uniform4fv(u.dims, dimBuf);
     gl.uniform1i(u.ndims, nd);
     gl.uniform3fv(u.ladder, sc.ladder.flat());
+    gl.uniform3fv(u.acc, sc.accent.flat());
+    gl.uniform1f(u.accAmt, sc.accentAmt);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
     stats.renders++;
   };

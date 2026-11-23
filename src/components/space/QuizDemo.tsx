@@ -16,9 +16,6 @@ export default function QuizDemo({ items, href }: { items: QuizItem[]; href: str
 
   return (
     <div className="flex h-full flex-col">
-      <p className="label mb-3 text-faint">
-        Quiz · question {i + 1} of {items.length}
-      </p>
       <p className="mb-5 text-[1.05rem] leading-relaxed text-ink">{q.question}</p>
       <ul className="flex flex-col gap-2.5">
         {q.options.map((o, j) => {
