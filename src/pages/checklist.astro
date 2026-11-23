@@ -1,7 +1,7 @@
 ---
 // Pre-ship checklist: every "Red flags" item from every lesson, as one checklist.
 // Ticks are saved only in this browser.
-import Base from '../layouts/Base.astro';
+import Editorial from '../layouts/Editorial.astro';
 import Icon from '../components/Icon.astro';
 import { getLessons } from '../lib/lessons';
 import { extract, inline, plain } from '../lib/extract';
@@ -27,7 +27,7 @@ const promptText =
   flags.map((f) => `- ${plain(f.text)}`).join('\n');
 ---
 
-<Base title="Pre-ship checklist" active="checklist" description="Every red flag from every lesson in one checklist to run before you launch.">
+<Editorial title="Pre-ship checklist" description="Every red flag from every lesson in one checklist to run before you launch.">
   <header class="tool-head">
     <p class="kicker"><Icon name="list-check" size={16} /> Before you launch</p>
     <h1>Pre-ship checklist</h1>
@@ -73,7 +73,7 @@ const promptText =
       </section>
     ))
   }
-</Base>
+</Editorial>
 
 <style>
   .check-group + .check-group {

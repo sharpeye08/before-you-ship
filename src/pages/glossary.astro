@@ -1,6 +1,6 @@
 ---
 // Glossary: every "Key terms" entry from every lesson, A–Z, linked to the lesson that teaches it.
-import Base from '../layouts/Base.astro';
+import Editorial from '../layouts/Editorial.astro';
 import Icon from '../components/Icon.astro';
 import { getLessons } from '../lib/lessons';
 import { extract, glossary, inline, plain } from '../lib/extract';
@@ -11,7 +11,7 @@ const letters = [...new Set(entries.map((e) => e.term[0].toUpperCase()))].filter
 const letterOf = (t: string) => (/[A-Z]/i.test(t[0]) ? t[0].toUpperCase() : '#');
 ---
 
-<Base title="Glossary" active="glossary" description="Every key term from every lesson, in plain English, with a link to the lesson that explains it.">
+<Editorial title="Glossary" description="Every key term from every lesson, in plain English, with a link to the lesson that explains it.">
   <header class="tool-head">
     <p class="kicker"><Icon name="glossary" size={16} /> {entries.length} terms</p>
     <h1>Glossary</h1>
@@ -48,17 +48,17 @@ const letterOf = (t: string) => (/[A-Z]/i.test(t[0]) ? t[0].toUpperCase() : '#')
       }
     </dl>
   </section>
-</Base>
+</Editorial>
 
 <style>
   .gl-search {
     max-width: 520px;
-    margin: 0 auto 14px;
+    margin: 0 0 14px;
   }
   .letters {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 4px;
   }
   .letters a {

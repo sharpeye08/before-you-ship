@@ -1,14 +1,15 @@
 ---
-import Base from '../../layouts/Base.astro';
+import Editorial from '../../layouts/Editorial.astro';
 import Icon from '../../components/Icon.astro';
 import Search from '../../components/Search.astro';
 import { getSummaries, groupByLevel } from '../../lib/lessons';
+import { LEVEL_COLORS } from '../../config';
 
 const lessons = await getSummaries();
 const levels = groupByLevel(lessons);
 ---
 
-<Base title="All lessons" active="lessons">
+<Editorial title="All lessons">
   <header class="list-head">
     <h1>All lessons</h1>
     <p class="muted">
@@ -29,7 +30,7 @@ const levels = groupByLevel(lessons);
       <section class="level glass" id={`level-${level.n}`} data-level-section>
         <div class="level-head">
           <div>
-            <p class="level-kicker">Level {level.n}</p>
+            <p class="level-kicker"><span class="level-dot" style={`background:${LEVEL_COLORS[level.n]}`} />Level {level.n}</p>
             <h2>{level.name}</h2>
             <p class="muted">{level.blurb}</p>
           </div>
@@ -59,43 +60,18 @@ const levels = groupByLevel(lessons);
       </section>
     ))
   }
-</Base>
+</Editorial>
 
 <style>
-  .list-head {
-    max-width: 760px;
-    margin: 12px auto 28px;
-    text-align: center;
+  .empty {
+    margin: 0 0 16px;
   }
-  h1 {
-    margin: 0 0 8px;
-    font-size: clamp(2rem, 5vw, 3rem);
-    font-weight: 300;
-    letter-spacing: -0.02em;
-  }
-  .list-head > p {
-    margin: 0 auto 22px;
-    max-width: 560px;
-  }
-  .overall {
-    max-width: 420px;
-    margin: 0 auto 22px;
-    text-align: left;
-  }
-  .overall-label {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.85rem;
-    color: var(--text-soft);
+  .search-wrap {
     margin-bottom: 8px;
   }
-  .empty {
-    text-align: center;
-  }
   .level {
-    max-width: 860px;
-    margin: 0 auto 22px;
-    padding: 24px;
+    margin: 0 0 24px;
+    padding: 28px;
   }
   .level[hidden] {
     display: none;
@@ -105,45 +81,52 @@ const levels = groupByLevel(lessons);
     justify-content: space-between;
     align-items: flex-start;
     gap: 16px;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
   }
   .level-kicker {
-    margin: 0 0 2px;
-    color: var(--accent-text);
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 6px;
+    color: var(--text-soft);
+    font-size: 0.82rem;
+  }
+  .level-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
   }
   .level h2 {
-    margin: 0 0 4px;
-    font-size: 1.35rem;
+    margin: 0 0 6px;
+    font-family: 'Inter Tight', Inter, sans-serif;
+    font-weight: 500;
+    font-size: 1.9rem;
+    letter-spacing: -0.02em;
   }
   .level-head p.muted {
     margin: 0;
-    font-size: 0.92rem;
+    max-width: 60ch;
+    font-size: 0.95rem;
+    line-height: 1.55;
   }
   .level-count {
     flex: none;
     font-size: 0.82rem;
     color: var(--muted);
-    border: 1px solid var(--border);
+    border: 1px solid var(--line);
     border-radius: 99px;
     padding: 4px 10px;
   }
   li[hidden] {
     display: none;
   }
-  @media (max-width: 760px) {
+  @media (max-width: 860px) {
     .level {
-      padding: 16px;
+      padding: 18px;
     }
     .level-head {
       flex-direction: column;
       gap: 8px;
-    }
-    .row-meta {
-      display: none;
     }
   }
 </style>

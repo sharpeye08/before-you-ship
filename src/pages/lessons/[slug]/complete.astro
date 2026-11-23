@@ -1,7 +1,7 @@
 ---
 // Opened by "Mark as completed". Cloudflare Web Analytics counts views of these pages,
 // which gives lesson-completion numbers without custom events.
-import Base from '../../../layouts/Base.astro';
+import Editorial from '../../../layouts/Editorial.astro';
 import Icon from '../../../components/Icon.astro';
 import { getLessons, summarize } from '../../../lib/lessons';
 
@@ -16,7 +16,7 @@ export async function getStaticPaths() {
 const { lesson, next, all } = Astro.props;
 ---
 
-<Base title={`Completed: ${lesson.title}`} active="lessons">
+<Editorial title={`Completed: ${lesson.title}`}>
   <section class="done glass">
     <div class="done-icon"><Icon name="check" size={34} /></div>
     <p class="done-kicker">Lesson {lesson.order} complete</p>
@@ -44,7 +44,7 @@ const { lesson, next, all } = Astro.props;
     </div>
     <p class="muted small">Progress is saved only in this browser.</p>
   </section>
-</Base>
+</Editorial>
 
 <style>
   .done {

@@ -1,6 +1,6 @@
 ---
 // Prompt library: every "Ask your AI" prompt from every lesson, grouped by level, with copy buttons.
-import Base from '../layouts/Base.astro';
+import Editorial from '../layouts/Editorial.astro';
 import Icon from '../components/Icon.astro';
 import { getLessons } from '../lib/lessons';
 import { extract, plain } from '../lib/extract';
@@ -16,7 +16,7 @@ const groups = LEVELS.map((lv) => {
 }).filter((g) => g.lessons.length);
 ---
 
-<Base title="Prompt library" active="prompts" description="Every 'Ask your AI' prompt from every lesson, ready to copy into your AI tool.">
+<Editorial title="Prompt library" description="Every 'Ask your AI' prompt from every lesson, ready to copy into your AI tool.">
   <header class="tool-head">
     <p class="kicker"><Icon name="sparkles" size={16} /> {prompts.length} prompts</p>
     <h1>Prompt library</h1>
@@ -59,15 +59,15 @@ const groups = LEVELS.map((lv) => {
       </section>
     ))
   }
-</Base>
+</Editorial>
 
 <style>
   .pl-search {
     max-width: 520px;
-    margin: 0 auto;
+    margin: 0;
   }
   .center {
-    text-align: center;
+    text-align: left;
   }
   .pl-group + .pl-group {
     margin-top: 18px;

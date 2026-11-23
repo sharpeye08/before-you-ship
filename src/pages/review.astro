@@ -2,11 +2,11 @@
 // Review mode: spaced repetition over quiz questions from lessons you've completed.
 // Each question sits in a "box" 1–5. Right answers move it up a box and push it further
 // into the future; wrong answers send it back to box 1. Stored only in this browser.
-import Base from '../layouts/Base.astro';
+import Editorial from '../layouts/Editorial.astro';
 import Icon from '../components/Icon.astro';
 ---
 
-<Base title="Review mode" active="review" description="A short daily review of quiz questions from lessons you've completed, spaced out so you remember them.">
+<Editorial title="Review mode" description="A short daily review of quiz questions from lessons you've completed, spaced out so you remember them.">
   <header class="tool-head">
     <p class="kicker"><Icon name="brain" size={16} /> Remember what you read</p>
     <h1>Review mode</h1>
@@ -22,7 +22,7 @@ import Icon from '../components/Icon.astro';
   </section>
 
   <noscript><p class="muted center">Review mode needs JavaScript.</p></noscript>
-</Base>
+</Editorial>
 
 <style>
   .review {
