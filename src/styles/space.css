@@ -1,0 +1,130 @@
+/* Styles for the /space page only. Tailwind (with its reset) loads here, so other pages are not affected. */
+/* Scan src/ for class names (explicit, so it also works when the dev server starts in another folder). */
+@import 'tailwindcss' source('..');
+
+@theme {
+  --font-sans: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
+  --color-ink: #f2f1ff;
+  --color-soft: rgb(226 228 255 / 0.74);
+  --color-faint: rgb(226 228 255 / 0.5);
+  --color-line: rgb(255 255 255 / 0.12);
+  --color-ground: #03040a;
+  /* One colour per level, from the aurora tones. */
+  --color-l1: #7fe0a0;
+  --color-l2: #4fd1e8;
+  --color-l3: #7b8cff;
+  --color-l4: #b08cff;
+  --color-l5: #f08fd0;
+}
+
+@layer base {
+  html {
+    background: var(--color-ground);
+    color: var(--color-ink);
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    font-family: var(--font-sans);
+    overflow-x: clip;
+  }
+  ::selection {
+    background: rgb(127 224 160 / 0.35);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-l2);
+    outline-offset: 3px;
+    border-radius: 8px;
+  }
+}
+
+@layer components {
+  .glass {
+    background: rgb(8 10 26 / 0.52);
+    border: 1px solid var(--color-line);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+  }
+  .label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 46px;
+    padding: 0 22px;
+    border-radius: 999px;
+    font-weight: 500;
+    transition: box-shadow 0.2s, border-color 0.2s, background 0.2s;
+  }
+  .btn-light {
+    background: var(--color-ink);
+    color: #05060f;
+  }
+  .btn-light:hover {
+    box-shadow: 0 0 0 5px rgb(127 224 160 / 0.22);
+  }
+  .btn-ghost {
+    border: 1px solid rgb(255 255 255 / 0.24);
+    background: rgb(255 255 255 / 0.04);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .btn-ghost:hover {
+    border-color: rgb(255 255 255 / 0.5);
+  }
+}
+
+/* Hero: the words come into focus one by one after the sky starts to pour in. */
+.focus-in {
+  opacity: 0;
+  filter: blur(14px);
+  animation: focus-in 1s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+@keyframes focus-in {
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+.rise-in {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: rise-in 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+@keyframes rise-in {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+/* Sections fade up once when they enter the screen. */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.reveal.shown {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .focus-in,
+  .rise-in,
+  .reveal {
+    opacity: 1;
+    filter: none;
+    transform: none;
+    animation: none;
+    transition: none;
+  }
+}

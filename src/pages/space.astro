@@ -1,0 +1,351 @@
+---
+// Draft home page "space" (see SPACE-PAGE-PLAN.md). Built from scratch with React islands and Tailwind.
+// A cell-based sky of gas waves sits behind the page; each section sets its own sky scene.
+// Standalone: it does not use the shared layouts, so other pages are not affected.
+import '../styles/space.css';
+import Sky from '../components/space/Sky';
+import Chip from '../components/space/Chip';
+import QuizDemo from '../components/space/QuizDemo';
+import LessonIndex from '../components/space/LessonIndex';
+import { SITE } from '../config';
+import { getLessons, getSummaries, groupByLevel, issueUrl } from '../lib/lessons';
+import { extract, glossary, plain } from '../lib/extract';
+
+const all = await getLessons();
+const lessons = await getSummaries();
+const levels = groupByLevel(lessons);
+const first = lessons[0];
+const hours = Math.round(lessons.reduce((sum, l) => sum + l.minutes, 0) / 60);
+const repoUrl = `https://github.com/${SITE.githubRepo}`;
+const pad = (n: number) => String(n).padStart(2, '0');
+const LEVEL_TONES = ['var(--color-l1)', 'var(--color-l2)', 'var(--color-l3)', 'var(--color-l4)', 'var(--color-l5)'];
+const LEVEL_HEX = ['#7fe0a0', '#4fd1e8', '#7b8cff', '#b08cff', '#f08fd0'];
+
+// The lesson shown in "A lesson": its title, its first paragraphs and its real quiz.
+const demo = all.find((l) => l.id === 'what-is-a-database') ?? all[0];
+const demoSummary = lessons.find((l) => l.slug === demo.id)!;
+const demoBody = (demo.body ?? '').replace(/\r\n/g, '\n');
+const firstSection = demoBody.split(/\n## /)[1] ?? '';
+const demoHeading = firstSection.split('\n')[0].trim();
+const demoParas = firstSection
+  .split('\n\n')
+  .slice(1)
+  .map((p) => plain(p.trim()))
+  .filter((p) => p && !p.startsWith('#'))
+  .slice(0, 3);
+const quizItems = demo.data.quiz.slice(0, 3).map((q) => ({
+  question: q.question,
+  options: q.options.map((o) => ({ text: o.text, correct: !!o.correct })),
+  explanation: q.explanation,
+}));
+
+// Real numbers and examples for the tools.
+const { terms, flags, prompts } = extract(all);
+const termCount = glossary(terms).length;
+const sampleFlags = [1, 2, 3]
+  .map((lv) => flags.find((f) => f.level === lv))
+  .filter(Boolean)
+  .map((f) => ({ text: plain(f!.text), title: f!.title, slug: f!.slug }));
+
+const indexLevels = levels.map((lv, i) => ({
+  n: lv.n,
+  name: lv.name,
+  color: LEVEL_HEX[i],
+  lessons: lv.lessons.map((l) => ({ slug: l.slug, title: l.title, order: l.order, minutes: l.minutes })),
+}));
+
+const faq = [
+  { q: 'Do I need to know how to code?', a: 'No. Level 1 starts from zero. Each lesson explains a new word the first time it uses it.' },
+  { q: 'Is it really free?', a: `Yes. All ${lessons.length} lessons are free, with no login and no paywall. The project is open source on GitHub.` },
+  { q: 'Where is my progress saved?', a: 'Only in your own browser. There are no accounts. If you clear your browser data, your progress is deleted too.' },
+  { q: 'How long does it take?', a: `Each lesson takes 10 to 15 minutes and ends with a short quiz. All ${lessons.length} lessons take about ${hours} hours.` },
+  { q: 'I build with AI. Why learn this?', a: 'Your AI tool writes code fast, but it does not know your users, your costs or your risks. These lessons help you read what it makes and find the problems before your users do.' },
+  { q: 'Can I skip ahead?', a: 'Yes. Take the short placement quiz, or open any level in the lesson list.' },
+];
+const SECTIONS = 9;
+const pageTitle = `${SITE.name}: know what you're building`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#03040a" />
+    <meta name="robots" content="noindex" />
+    <title>{pageTitle}</title>
+    <meta name="description" content="Free, no-login lessons on the software fundamentals behind every app." />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-lg focus:bg-white focus:px-3 focus:py-2 focus:text-black">Skip to content</a>
+    <Sky client:load />
+
+    <!-- Pill nav, centred (Aria style). -->
+    <header class="fixed inset-x-0 top-4 z-50 flex justify-center px-3">
+      <div class="glass flex w-full max-w-max items-center gap-2 rounded-full py-1.5 pr-1.5 pl-5 max-md:max-w-none max-md:justify-between">
+        <a href="/space" class="mr-3 font-semibold tracking-tight whitespace-nowrap">before<span class="text-faint">/</span>you<span class="text-faint">/</span>ship</a>
+        <nav aria-label="Sections" class="flex gap-1 max-md:hidden">
+          <a href="#path" class="rounded-full px-3 py-1.5 text-sm text-soft hover:bg-white/8 hover:text-ink">The path</a>
+          <a href="#lessons" class="rounded-full px-3 py-1.5 text-sm text-soft hover:bg-white/8 hover:text-ink">Lessons</a>
+          <a href="#tools" class="rounded-full px-3 py-1.5 text-sm text-soft hover:bg-white/8 hover:text-ink">Tools</a>
+          <a href="#faq" class="rounded-full px-3 py-1.5 text-sm text-soft hover:bg-white/8 hover:text-ink">Questions</a>
+        </nav>
+        {first && <a href={`/lessons/${first.slug}`} class="btn btn-light ml-2 h-9 px-4 text-sm">Start learning</a>}
+      </div>
+    </header>
+
+    <main id="main" class="relative z-10">
+      <!-- 1. Hero: everything centred. -->
+      <section data-sky="hero" class="flex min-h-svh flex-col items-center justify-center px-5 pt-24 pb-20 text-center" aria-labelledby="hero-title">
+        <div data-dim class="flex flex-col items-center">
+          <p class="label rise-in mb-6 text-soft" style="animation-delay:.9s">{lessons.length} free lessons · {levels.length} levels · no login</p>
+          <h1 id="hero-title" data-sky-origin class="text-[clamp(3.4rem,11vw,9.5rem)] leading-[0.92] font-medium tracking-[-0.05em]">
+            {['Before', 'you', 'ship.'].map((w, i) => <span class={`focus-in inline-block ${i < 2 ? 'mr-[0.24em]' : ''}`} style={`animation-delay:${0.35 + i * 0.18}s`}>{w}</span>)}
+          </h1>
+          <p class="rise-in mt-7 max-w-[34ch] text-[clamp(1.1rem,1.8vw,1.35rem)] leading-snug text-soft" style="animation-delay:1.1s">
+            Learn how software really works, so you know what your AI is building.
+          </p>
+          <div class="rise-in mt-9 flex flex-wrap justify-center gap-3 max-sm:w-full max-sm:flex-col" style="animation-delay:1.3s">
+            {first && <a href={`/lessons/${first.slug}`} class="btn btn-light">Start with lesson 1</a>}
+            <a href="/start" class="btn btn-ghost">Where should I start?</a>
+          </div>
+          <p class="rise-in mt-6 text-sm text-faint" style="animation-delay:1.5s">Free and open source. Each lesson takes 10 to 15 minutes.</p>
+        </div>
+      </section>
+
+      <!-- 2. Why: a centred two-line statement. -->
+      <section data-sky="why" class="flex min-h-[90svh] items-center justify-center px-5 py-28 text-center" aria-labelledby="why-title">
+        <div data-dim class="reveal max-w-5xl">
+          <h2 id="why-title" class="text-[clamp(2.6rem,6.4vw,5.8rem)] leading-[1] font-medium tracking-[-0.04em]">
+            Your AI writes the code.<br /><span class="text-[#a9a6ff]">You still ship it.</span>
+          </h2>
+          <p class="mx-auto mt-8 max-w-[52ch] text-lg leading-relaxed text-soft">
+            AI tools write code fast. They do not know your users, your costs or your risks. These lessons show you what to check before real people use your app.
+          </p>
+        </div>
+      </section>
+
+      <!-- 3. The path: five steps in a row, joined by a line. -->
+      <section id="path" data-sky="path" class="scroll-mt-24 px-5 py-28 md:px-10" aria-labelledby="path-title">
+        <div class="mx-auto max-w-[1200px]">
+          <div data-dim class="reveal mx-auto max-w-3xl text-center">
+            <h2 id="path-title" class="text-[clamp(2.4rem,5vw,4.4rem)] leading-[1.02] font-medium tracking-[-0.04em]">Five levels. One path.</h2>
+            <p class="mt-5 text-lg text-soft">Start with how a website works. Finish with systems that serve many people.</p>
+          </div>
+          <ol data-dim class="reveal relative mt-20 grid gap-10 md:grid-cols-5 md:gap-6">
+            <span aria-hidden="true" class="absolute top-[7px] right-[10%] left-[10%] h-px bg-gradient-to-r from-l1 via-l3 to-l5 opacity-60 max-md:hidden"></span>
+            <span aria-hidden="true" class="absolute top-2 bottom-2 left-[7px] w-px bg-gradient-to-b from-l1 via-l3 to-l5 opacity-60 md:hidden"></span>
+            {
+              levels.map((lv, i) => (
+                <li class="relative flex flex-col md:items-center md:text-center max-md:pl-9">
+                  <span class="relative h-[15px] w-[15px] rounded-full border-2 border-ground max-md:absolute max-md:top-1 max-md:left-0" style={`background:${LEVEL_TONES[i]};box-shadow:0 0 18px ${LEVEL_HEX[i]}`} />
+                  <p class="label mt-6 text-faint max-md:mt-0">Level {pad(lv.n)}</p>
+                  <h3 class="mt-2 text-xl font-medium tracking-tight">{lv.name}</h3>
+                  <p class="mt-2 text-[0.95rem] leading-relaxed text-soft">{lv.blurb}</p>
+                  <a href={`/lessons#level-${lv.n}`} class="mt-3 text-sm underline decoration-white/30 underline-offset-4 hover:decoration-white">{lv.lessons.length} lessons</a>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+      </section>
+
+      <!-- 4. A lesson: centred heading over one wide window with two columns. -->
+      <section data-sky="lesson" class="px-5 py-28 md:px-10" aria-labelledby="lesson-title">
+        <div class="mx-auto max-w-[1200px]">
+          <div data-dim class="reveal mx-auto max-w-3xl text-center">
+            <h2 id="lesson-title" class="text-[clamp(2.4rem,5vw,4.4rem)] leading-[1.02] font-medium tracking-[-0.04em]">Ten minutes. One real problem.</h2>
+            <p class="mt-5 text-lg text-soft">Each lesson starts from a problem you can meet in a real app. It ends with a short quiz. Try one now.</p>
+          </div>
+          <div data-dim class="reveal glass mt-16 grid overflow-hidden rounded-[28px] lg:grid-cols-2">
+            <article class="border-line p-7 md:p-10 lg:border-r max-lg:border-b">
+              <p class="label flex flex-wrap items-center gap-x-3 gap-y-1 text-faint">
+                <span class="inline-flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-l1"></span>Level {pad(demo.data.level)} · {demo.data.levelName}</span>
+                <span>{demoSummary.minutes} min read</span>
+              </p>
+              <h3 class="mt-4 text-[clamp(1.6rem,2.6vw,2.2rem)] leading-tight font-medium tracking-tight">{demo.data.title}</h3>
+              <h4 class="mt-7 font-medium">{demoHeading}</h4>
+              {demoParas.map((p) => <p class="mt-3 leading-relaxed text-soft">{p}</p>)}
+              <a href={`/lessons/${demo.id}`} class="mt-6 inline-flex text-sm underline decoration-white/30 underline-offset-4 hover:decoration-white">Keep reading</a>
+            </article>
+            <div class="p-7 md:p-10">
+              <QuizDemo client:visible items={quizItems} href={`/lessons/${demo.id}`} />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. Every lesson: left-aligned heading, level tabs, list in columns. -->
+      <section id="lessons" data-sky="index" class="scroll-mt-24 px-5 py-28 md:px-10" aria-labelledby="index-title">
+        <div class="mx-auto max-w-[1200px]">
+          <div data-dim class="reveal max-w-3xl">
+            <h2 id="index-title" class="text-[clamp(3rem,8vw,7rem)] leading-[0.95] font-medium tracking-[-0.05em]">{lessons.length} lessons.</h2>
+            <p class="mt-5 text-lg text-soft">Five levels, from your first website to systems at scale. Pick a level to see its lessons.</p>
+          </div>
+          <div data-dim class="reveal mt-12">
+            <LessonIndex client:visible levels={indexLevels} />
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Tools: heading left, note right, bento grid. -->
+      <section id="tools" data-sky="tools" class="scroll-mt-24 px-5 py-28 md:px-10" aria-labelledby="tools-title">
+        <div class="mx-auto max-w-[1200px]">
+          <div data-dim class="reveal flex flex-wrap items-end justify-between gap-6">
+            <h2 id="tools-title" class="max-w-xl text-[clamp(2.4rem,5vw,4.4rem)] leading-[1.02] font-medium tracking-[-0.04em]">Tools that make it stick.</h2>
+            <p class="max-w-sm text-lg text-soft">Use them between lessons, and before you put an app online.</p>
+          </div>
+          <div class="reveal mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-4 lg:grid-rows-2">
+            <a href="/checklist" class="glass group flex flex-col rounded-[24px] p-7 md:col-span-2 lg:row-span-2">
+              <p class="label text-faint">{flags.length} red flags</p>
+              <h3 class="mt-3 text-3xl font-medium tracking-tight">Pre-ship checklist</h3>
+              <p class="mt-2 text-soft">Every red flag from every lesson, in one list you can tick.</p>
+              <ul class="mt-6 flex flex-col gap-2.5">
+                {sampleFlags.map((f) => (
+                  <li class="flex gap-3 rounded-2xl border border-line bg-white/[0.03] px-4 py-3 text-[0.95rem] leading-snug text-soft">
+                    <span class="mt-1 h-3.5 w-3.5 shrink-0 rounded-[4px] border border-white/40"></span>
+                    {f.text}
+                  </li>
+                ))}
+              </ul>
+              <span class="mt-auto pt-6 text-sm text-ink underline decoration-white/30 underline-offset-4 group-hover:decoration-white">Open the checklist</span>
+            </a>
+            <a href="/start" class="glass flex flex-col rounded-[24px] p-6 hover:border-white/30">
+              <p class="label text-faint">15 questions</p>
+              <h3 class="mt-3 text-xl font-medium">Where should I start?</h3>
+              <p class="mt-2 text-[0.95rem] text-soft">A short quiz that suggests your first lesson.</p>
+            </a>
+            <a href="/review" class="glass flex flex-col rounded-[24px] p-6 hover:border-white/30">
+              <p class="label text-faint">A few a day</p>
+              <h3 class="mt-3 text-xl font-medium">Review mode</h3>
+              <p class="mt-2 text-[0.95rem] text-soft">Old quiz questions come back, so you remember them.</p>
+            </a>
+            <a href="/glossary" class="glass flex flex-col rounded-[24px] p-6 hover:border-white/30">
+              <p class="label text-faint">{termCount} terms</p>
+              <h3 class="mt-3 text-xl font-medium">Glossary</h3>
+              <p class="mt-2 text-[0.95rem] text-soft">Every key word in plain English.</p>
+            </a>
+            <a href="/prompts" class="glass flex flex-col rounded-[24px] p-6 hover:border-white/30">
+              <p class="label text-faint">{prompts.length} prompts</p>
+              <h3 class="mt-3 text-xl font-medium">Prompt library</h3>
+              <p class="mt-2 text-[0.95rem] text-soft">Questions to paste into your AI tool.</p>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. The promise: centred heading, three columns, aurora behind. -->
+      <section data-sky="promise" class="flex min-h-[90svh] flex-col justify-center px-5 py-28 md:px-10" aria-labelledby="promise-title">
+        <div class="mx-auto w-full max-w-[1200px]">
+          <h2 data-dim id="promise-title" class="reveal text-center text-[clamp(2.6rem,6vw,5.4rem)] leading-[1] font-medium tracking-[-0.04em]">
+            Free. No login.<br /><span class="text-l1">Nothing to install.</span>
+          </h2>
+          <div data-dim class="reveal mt-16 grid gap-8 md:grid-cols-3">
+            <div class="border-t border-line pt-5">
+              <h3 class="text-lg font-medium">Free</h3>
+              <p class="mt-2 leading-relaxed text-soft">All {lessons.length} lessons are free. There is no paywall and no trial.</p>
+            </div>
+            <div class="border-t border-line pt-5">
+              <h3 class="text-lg font-medium">No account</h3>
+              <p class="mt-2 leading-relaxed text-soft">You never sign up. Your progress stays in your own browser.</p>
+            </div>
+            <div class="border-t border-line pt-5">
+              <h3 class="text-lg font-medium">Open source</h3>
+              <p class="mt-2 leading-relaxed text-soft">The lessons and the code are on GitHub. Anyone can check them or report a mistake.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. FAQ: heading on the left stays in place, questions on the right. -->
+      <section id="faq" data-sky="faq" class="scroll-mt-24 px-5 py-28 md:px-10" aria-labelledby="faq-title">
+        <div class="mx-auto grid max-w-[1200px] gap-10 lg:grid-cols-[1fr_1.7fr]">
+          <div data-dim class="reveal lg:sticky lg:top-28 lg:self-start">
+            <h2 id="faq-title" class="text-[clamp(2.4rem,4.6vw,4rem)] leading-[1.02] font-medium tracking-[-0.04em]">Questions people ask.</h2>
+            <p class="mt-4 text-soft">Something else? <a class="underline decoration-white/30 underline-offset-4 hover:decoration-white" href={issueUrl(SITE.githubRepo)} target="_blank" rel="noopener noreferrer">Ask on GitHub</a>.</p>
+          </div>
+          <div data-dim class="reveal border-t border-line">
+            {
+              faq.map((f) => (
+                <details class="group border-b border-line">
+                  <summary class="flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-lg [&::-webkit-details-marker]:hidden">
+                    {f.q}
+                    <span class="label text-faint transition-transform group-open:rotate-45">+</span>
+                  </summary>
+                  <p class="max-w-[62ch] pb-6 leading-relaxed text-soft">{f.a}</p>
+                </details>
+              ))
+            }
+          </div>
+        </div>
+      </section>
+
+      <!-- 9. Start: huge centred call to action, then the footer, with dawn rising behind. -->
+      <section data-sky="start" class="px-5 md:px-10" aria-labelledby="start-title">
+        <div class="flex min-h-svh flex-col items-center justify-center py-28 text-center">
+          <div data-dim class="reveal flex flex-col items-center">
+            <h2 id="start-title" class="text-[clamp(3.2rem,10vw,8.8rem)] leading-[0.95] font-medium tracking-[-0.05em]">Start before<br />you ship.</h2>
+            <div class="mt-10 flex flex-wrap justify-center gap-3">
+              {first && <a href={`/lessons/${first.slug}`} class="btn btn-light">Start with lesson 1</a>}
+              <a href="/lessons" class="btn btn-ghost">See all lessons</a>
+            </div>
+            {first && <p class="mt-6 text-sm text-faint">Lesson 1 takes about {first.minutes} minutes. No sign-up.</p>}
+          </div>
+        </div>
+
+        <footer class="mx-auto max-w-[1200px] border-t border-line pt-12 pb-10">
+          <div data-dim class="grid grid-cols-2 gap-8 md:grid-cols-4">
+            <div class="col-span-2 md:col-span-1">
+              <p class="font-semibold tracking-tight">before<span class="text-faint">/</span>you<span class="text-faint">/</span>ship</p>
+              <p class="mt-3 max-w-[26ch] text-sm text-faint">Free and open source. No login, no tracking cookies.</p>
+            </div>
+            <div class="flex flex-col gap-2 text-sm">
+              <p class="label mb-1 text-faint">Learn</p>
+              <a class="text-soft hover:text-ink" href="/lessons">All lessons</a>
+              <a class="text-soft hover:text-ink" href="/start">Where should I start?</a>
+              <a class="text-soft hover:text-ink" href="/review">Review mode</a>
+            </div>
+            <div class="flex flex-col gap-2 text-sm">
+              <p class="label mb-1 text-faint">Tools</p>
+              <a class="text-soft hover:text-ink" href="/checklist">Pre-ship checklist</a>
+              <a class="text-soft hover:text-ink" href="/glossary">Glossary</a>
+              <a class="text-soft hover:text-ink" href="/prompts">Prompt library</a>
+            </div>
+            <div class="flex flex-col gap-2 text-sm">
+              <p class="label mb-1 text-faint">Project</p>
+              <a class="text-soft hover:text-ink" href={repoUrl} target="_blank" rel="noopener noreferrer">GitHub</a>
+              <a class="text-soft hover:text-ink" href={issueUrl(SITE.githubRepo)} target="_blank" rel="noopener noreferrer">Report a mistake</a>
+            </div>
+          </div>
+          <p aria-hidden="true" data-wordmark class="mt-16 bg-gradient-to-b from-white/90 to-white/0 bg-clip-text pb-[0.08em] text-center text-[clamp(2.4rem,10.4vw,9.4rem)] leading-[0.9] font-semibold tracking-[-0.06em] whitespace-nowrap text-transparent">
+            before/you/ship
+          </p>
+        </footer>
+      </section>
+    </main>
+
+    <Chip client:idle total={SECTIONS} />
+
+    <script>
+      // Fade sections up once when they enter the screen.
+      const els = document.querySelectorAll('.reveal');
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              e.target.classList.add('shown');
+              io.unobserve(e.target);
+            }
+          }
+        },
+        { rootMargin: '0px 0px -12% 0px' },
+      );
+      els.forEach((el) => io.observe(el));
+    </script>
+  </body>
+</html>
