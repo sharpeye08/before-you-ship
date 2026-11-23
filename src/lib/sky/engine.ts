@@ -18,6 +18,7 @@ export interface Scene {
   gas: number; // amount of gas
   energy: number; // height and speed of the waves
   aurora: number; // aurora curtain
+  hem: number; // height of the aurora's lower edge (0 = middle of the screen, 0.5 = bottom)
   dawn: number; // glow from the bottom of the screen
   ripple: number; // rings that spread out from the centre
   stars: number; // star density multiplier
@@ -37,18 +38,18 @@ const DAWN = L('#070506', '#120d0e', '#201718', '#332324', '#4d3433', '#74504b',
 // Aurora: a muted mint, so the curtain blends into the grey sky.
 const AURORA = L('#040606', '#08130f', '#0e2620', '#153b31', '#1f5a49', '#2f8a6c', '#6fd1a4', '#e3fff1');
 
-const base = { aurora: 0, dawn: 0, ripple: 0, stars: 1 };
+const base = { aurora: 0, hem: 0.4, dawn: 0, ripple: 0, stars: 1 };
 export const SCENES: Record<string, Scene> = {
-  hero: { ...base, gas: 0.55, energy: 0.35, ripple: 1, ladder: GRAPHITE, accent: ICE, accentAmt: 0.55 },
-  why: { ...base, gas: 0.8, energy: 1, ladder: GRAPHITE, accent: ICE, accentAmt: 0.7 },
-  path: { ...base, gas: 0.6, energy: 0.6, aurora: 0.35, ladder: GRAPHITE, accent: ICE, accentAmt: 0.5 },
-  lesson: { ...base, gas: 0.32, energy: 0.3, ladder: GRAPHITE, accent: ICE, accentAmt: 0.4 },
-  index: { ...base, gas: 0.2, energy: 0.2, stars: 1.7, ladder: GRAPHITE, accent: ICE, accentAmt: 0.35 },
-  tools: { ...base, gas: 0.6, energy: 0.75, ladder: SMOKE, accent: ICE, accentAmt: 0.6 },
-  promise: { ...base, gas: 0.3, energy: 0.4, aurora: 1.7, stars: 1.2, ladder: GRAPHITE, accent: ICE, accentAmt: 0.4 },
-  faq: { ...base, gas: 0.22, energy: 0.2, ladder: GRAPHITE, accent: ICE, accentAmt: 0.3 },
-  start: { ...base, gas: 0.5, energy: 0.55, dawn: 1, ripple: 0.35, stars: 0.8, ladder: SMOKE, accent: DAWN, accentAmt: 0.6 },
-  footer: { ...base, gas: 0.35, energy: 0.3, dawn: 0.6, stars: 0.8, ladder: SMOKE, accent: DAWN, accentAmt: 0.6 },
+  hero: { ...base, gas: 0.55, energy: 0.35, ripple: 1, aurora: 0.75, hem: 0.44, ladder: GRAPHITE, accent: ICE, accentAmt: 0.55 },
+  why: { ...base, gas: 0.8, energy: 1, aurora: 0.9, hem: 0.36, ladder: GRAPHITE, accent: ICE, accentAmt: 0.7 },
+  path: { ...base, gas: 0.6, energy: 0.6, aurora: 1.1, hem: 0.3, ladder: GRAPHITE, accent: ICE, accentAmt: 0.5 },
+  lesson: { ...base, gas: 0.32, energy: 0.3, aurora: 0.6, hem: 0.46, ladder: GRAPHITE, accent: ICE, accentAmt: 0.4 },
+  index: { ...base, gas: 0.2, energy: 0.2, aurora: 0.5, hem: 0.46, ladder: GRAPHITE, accent: ICE, accentAmt: 0.35 },
+  tools: { ...base, gas: 0.6, energy: 0.75, aurora: 1, hem: 0.38, ladder: SMOKE, accent: ICE, accentAmt: 0.6 },
+  promise: { ...base, gas: 0.3, energy: 0.4, aurora: 1.7, hem: 0.16, stars: 1.2, ladder: GRAPHITE, accent: ICE, accentAmt: 0.4 },
+  faq: { ...base, gas: 0.22, energy: 0.2, aurora: 0.55, hem: 0.46, ladder: GRAPHITE, accent: ICE, accentAmt: 0.3 },
+  start: { ...base, gas: 0.5, energy: 0.55, aurora: 0.9, hem: 0.34, dawn: 1, ripple: 0.35, stars: 0.8, ladder: SMOKE, accent: DAWN, accentAmt: 0.6 },
+  footer: { ...base, gas: 0.35, energy: 0.3, aurora: 0.7, hem: 0.42, dawn: 0.6, stars: 0.8, ladder: SMOKE, accent: DAWN, accentAmt: 0.6 },
 };
 
 function mixLadder(a: RGB[], b: RGB[], k: number): RGB[] {
@@ -57,7 +58,7 @@ function mixLadder(a: RGB[], b: RGB[], k: number): RGB[] {
 function mixScene(a: Scene, b: Scene, k: number): Scene {
   const m = (x: number, y: number) => x + (y - x) * k;
   return {
-    gas: m(a.gas, b.gas), energy: m(a.energy, b.energy), aurora: m(a.aurora, b.aurora), dawn: m(a.dawn, b.dawn),
+    gas: m(a.gas, b.gas), energy: m(a.energy, b.energy), aurora: m(a.aurora, b.aurora), hem: m(a.hem, b.hem), dawn: m(a.dawn, b.dawn),
     ripple: m(a.ripple, b.ripple), stars: m(a.stars, b.stars), ladder: mixLadder(a.ladder, b.ladder, k),
     accent: mixLadder(a.accent, b.accent, k), accentAmt: m(a.accentAmt, b.accentAmt),
   };
@@ -74,6 +75,7 @@ uniform float uTime;         // seconds (frozen with reduced motion)
 uniform float uScroll;       // scroll in screen heights
 uniform vec4 uS1;            // gas, energy, aurora, dawn
 uniform vec2 uS2;            // ripple, stars
+uniform float uHem;          // aurora lower edge height
 uniform vec3 uPtr;           // pointer x, y (cells), strength 0..1
 uniform vec3 uReveal;        // intro mask: centre x, y (cells), radius (cells); radius < 0 means off
 uniform vec4 uDims[8];       // text areas in cells: left, top, right, bottom
@@ -129,7 +131,7 @@ void main(){
   float gas = gasAmt * (n * n * 0.55 + waves * 0.7 * (0.55 + 0.45 * energy)) + uS2.x * ripple * 0.75;
 
   // Aurora curtain: a wavy bright hem with rays rising from it.
-  float hem = 0.16 + 0.05 * sin(p.x * 2.2 + t * 0.2 + w.x * 3.0) + 0.025 * sin(p.x * 5.3 - t * 0.31);
+  float hem = uHem + 0.05 * sin(p.x * 2.2 + t * 0.2 + w.x * 3.0) + 0.025 * sin(p.x * 5.3 - t * 0.31);
   float above = hem - p.y;
   float rays = 0.5 + 0.5 * sin(p.x * 40.0 + 3.0 * fbm(vec2(p.x * 3.0, t * 0.08)));
   // The hem fades over a short distance instead of stopping at a hard line.
@@ -154,8 +156,6 @@ void main(){
 
   // Ladder position (0 = empty sky, 7 = brightest). Behind text, cap it at a mid tone.
   float v = 0.25 + gas * 6.2 + glow * 4.5 + light * 2.0 + aur * 4.5;
-  // Behind text the aurora may reach a little higher than gas, since its tones are darker.
-  v = min(v, mix(7.0, 2.6 + 1.8 * clamp(aur * 1.5, 0.0, 1.0), dimM));
 
   // Stars: single cells, the brightest as a small cross. They drift slowly with scroll.
   vec2 sc = floor(cell + vec2(0.0, floor(uScroll * uGrid.y * 0.05)));
@@ -165,8 +165,11 @@ void main(){
   float star = h > 1.0 - dens ? tw : 0.0;
   float big = 1.0 - dens * 0.08;
   if (hash(sc + vec2(1, 0)) > big || hash(sc - vec2(1, 0)) > big || hash(sc + vec2(0, 1)) > big || hash(sc - vec2(0, 1)) > big) star = max(star, 0.55 * tw);
-  star *= 1.0 - 0.5 * dimM;
+  star *= 1.0 - dimM;                         // no stars behind text
   if (star > 0.0) v = max(v, 3.5 + star * 3.5);
+
+  // Behind text: cap the sky at a dark tone so text stays easy to read. The aurora may go a little higher.
+  v = min(v, mix(7.0, 1.7 + 1.3 * clamp(aur * 1.5, 0.0, 1.0), dimM));
 
   // Intro: the sky pours out from the centre of the title.
   if (uReveal.z >= 0.0){
@@ -223,7 +226,7 @@ export function createSky(canvas: HTMLCanvasElement, opts: SkyOptions) {
   const u = {
     grid: U('uGrid'), time: U('uTime'), scroll: U('uScroll'), s1: U('uS1'), s2: U('uS2'), ptr: U('uPtr'),
     reveal: U('uReveal'), dims: U('uDims'), ndims: U('uNDims'), ladder: U('uLadder'), aur: U('uAur'),
-    acc: U('uAcc'), accAmt: U('uAccAmt'),
+    acc: U('uAcc'), accAmt: U('uAccAmt'), hem: U('uHem'),
   };
   gl.uniform3fv(u.aur, AURORA.flat());
 
@@ -370,6 +373,7 @@ export function createSky(canvas: HTMLCanvasElement, opts: SkyOptions) {
     gl.uniform1f(u.scroll, sy / S.vh);
     gl.uniform4f(u.s1, sc.gas, sc.energy, sc.aurora, sc.dawn);
     gl.uniform2f(u.s2, reduce ? 0 : sc.ripple, sc.stars);
+    gl.uniform1f(u.hem, sc.hem);
     gl.uniform3f(u.ptr, P.ex * toCell, P.ey * toCell, P.a);
     gl.uniform3f(u.reveal, intro.cx * toCell, intro.cy * toCell, reveal < 0 ? -1 : reveal * toCell);
     gl.uniform4fv(u.dims, dimBuf);
