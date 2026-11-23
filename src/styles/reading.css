@@ -194,3 +194,22 @@
 .toc-link.is-current {
   color: #86dcae;
 }
+
+/* Shared pieces for every page on the Reading layout. */
+.page-title {
+  font-size: clamp(2rem, 4.4vw, 2.75rem);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+.page-intro {
+  margin-top: 1rem;
+  font-size: 1.125rem;
+  line-height: 1.7;
+}
+.card {
+  border: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 16px;
+  background: rgb(255 255 255 / 0.03);
+}

@@ -1,6 +1,6 @@
 ---
 // Glossary: every "Key terms" entry from every lesson, A–Z, linked to the lesson that teaches it.
-import Editorial from '../layouts/Editorial.astro';
+import Reading from '../layouts/Reading.astro';
 import Icon from '../components/Icon.astro';
 import { getLessons } from '../lib/lessons';
 import { extract, glossary, inline, plain } from '../lib/extract';
@@ -11,35 +11,47 @@ const letters = [...new Set(entries.map((e) => e.term[0].toUpperCase()))].filter
 const letterOf = (t: string) => (/[A-Z]/i.test(t[0]) ? t[0].toUpperCase() : '#');
 ---
 
-<Editorial title="Glossary" description="Every key term from every lesson, in plain English, with a link to the lesson that explains it.">
-  <header class="tool-head">
-    <p class="kicker"><Icon name="glossary" size={16} /> {entries.length} terms</p>
-    <h1>Glossary</h1>
-    <p class="muted">Every key term from every lesson, in plain English. Each one links to the lesson that teaches it.</p>
-    <label class="search-box glass gl-search">
-      <Icon name="search" />
-      <input type="search" placeholder="Find a term: cache, IDOR, mutex…" autocomplete="off" data-gl-filter aria-label="Filter terms" />
+<Reading title="Glossary" width="wide" description="Every key term from every lesson, in plain English, with a link to the lesson that explains it.">
+  <header>
+    <h1 class="page-title">Glossary</h1>
+    <p class="page-intro">Every key term from every lesson, in plain English. Each one links to the lesson that teaches it.</p>
+    <p class="mt-4 text-sm">{entries.length} terms</p>
+
+    <label class="mt-10 flex max-w-[520px] items-center gap-3 rounded-full border border-line bg-white/[0.03] px-5 focus-within:border-white/50">
+      <Icon name="search" size={18} class="shrink-0" />
+      <input
+        type="search"
+        placeholder="Find a term: cache, IDOR, mutex…"
+        autocomplete="off"
+        data-gl-filter
+        aria-label="Filter terms"
+        class="h-12 w-full bg-transparent text-white outline-none placeholder:text-white"
+      />
     </label>
-    <nav class="letters" aria-label="Jump to letter">
-      {letters.map((c) => <a href={`#letter-${c}`}>{c}</a>)}
+
+    <nav class="mt-6 flex flex-wrap gap-1" aria-label="Jump to letter">
+      {letters.map((c) => <a href={`#letter-${c}`} class="rounded-full px-2.5 py-1 text-sm hover:bg-white/8">{c}</a>)}
     </nav>
   </header>
 
-  <section class="tool-section glass">
-    <p class="muted" data-gl-empty hidden>No terms match that.</p>
-    <dl class="gl">
+  <section class="mt-10">
+    <p class="py-6" data-gl-empty hidden>No terms match that.</p>
+    <dl class="gl border-t border-line">
       {
         entries.map((e, i) => (
           <div
-            class="gl-item"
+            class="scroll-mt-24 border-b border-line py-6"
             id={i === entries.findIndex((x) => letterOf(x.term) === letterOf(e.term)) ? `letter-${letterOf(e.term)}` : undefined}
             data-gl={`${e.term} ${plain(e.def)}`.toLowerCase()}
           >
-            <dt>{e.term}</dt>
-            <dd>
+            <dt class="h3">{e.term}</dt>
+            <dd class="mt-2 leading-relaxed">
               <span set:html={inline(e.def)} />
-              <span class="gl-from">
-                Taught in <a href={`/lessons/${e.slug}`}>{e.order}. {e.title}</a>
+              <span class="mt-2 block text-sm">
+                Taught in{' '}
+                <a href={`/lessons/${e.slug}`} class="underline decoration-white/30 underline-offset-4 hover:decoration-white">
+                  {e.order}. {e.title}
+                </a>
                 {e.also.length > 0 && <> · also in {e.also.length} other {e.also.length === 1 ? 'lesson' : 'lessons'}</>}
               </span>
             </dd>
@@ -48,66 +60,19 @@ const letterOf = (t: string) => (/[A-Z]/i.test(t[0]) ? t[0].toUpperCase() : '#')
       }
     </dl>
   </section>
-</Editorial>
+</Reading>
 
 <style>
-  .gl-search {
-    max-width: 520px;
-    margin: 0 0 14px;
-  }
-  .letters {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 4px;
-  }
-  .letters a {
-    padding: 4px 8px;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    color: var(--text-soft);
-    text-decoration: none;
-  }
-  .letters a:hover {
-    background: var(--glass-hover);
-    color: var(--text);
-  }
-  .gl {
-    margin: 0;
-    display: grid;
-    gap: 8px;
-  }
-  .gl-item {
-    padding: 12px 14px;
-    border-radius: 12px;
-    background: var(--row);
-    scroll-margin-top: 20px;
-  }
-  dt {
-    font-weight: 600;
-    margin-bottom: 2px;
-  }
-  dd {
-    margin: 0;
-    color: var(--text-soft);
-    font-size: 0.94rem;
-    line-height: 1.55;
-  }
-  .gl-from {
-    display: block;
-    margin-top: 4px;
-    font-size: 0.8rem;
-    color: var(--muted);
-  }
-  .gl-from a {
-    color: var(--text-soft);
-  }
   .gl :global(code) {
-    font-family: var(--mono);
+    padding: 0.12em 0.38em;
+    border-radius: 6px;
+    background: rgb(255 255 255 / 0.09);
     font-size: 0.88em;
-    background: rgba(255, 255, 255, 0.07);
-    padding: 0.1em 0.35em;
-    border-radius: 5px;
+  }
+  .gl :global(a:not([class])) {
+    text-decoration: underline;
+    text-decoration-color: rgb(255 255 255 / 0.3);
+    text-underline-offset: 3px;
   }
 </style>
 

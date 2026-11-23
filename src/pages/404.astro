@@ -1,44 +1,19 @@
 ---
-import Editorial from '../layouts/Editorial.astro';
+import Reading from '../layouts/Reading.astro';
 import Icon from '../components/Icon.astro';
 ---
 
-<Editorial title="Page not found">
-  <section class="nf glass">
-    <p class="code">404</p>
-    <h1>This page doesn't exist</h1>
-    <p class="muted">
+<Reading title="Page not found">
+  <section class="pt-[10vh] text-center">
+    <p class="text-[4.5rem] leading-none font-extralight tracking-[-0.03em]">404</p>
+    <h1 class="page-title mt-6">This page doesn't exist</h1>
+    <p class="page-intro mx-auto max-w-[52ch]">
       The server got your request and answered, but there's nothing at this address. Maybe a typo, or a lesson that
       moved.
     </p>
-    <div class="actions">
-      <a class="btn btn-accent" href="/lessons"><Icon name="book" size={18} /> All lessons</a>
-      <a class="btn" href="/">Home</a>
+    <div class="mt-10 flex flex-wrap justify-center gap-3">
+      <a class="btn btn-light" href="/lessons"><Icon name="book" size={18} /> All lessons</a>
+      <a class="btn btn-ghost" href="/">Home</a>
     </div>
   </section>
-</Editorial>
-
-<style>
-  .nf {
-    max-width: 560px;
-    margin: 12vh auto 0;
-    padding: 40px 32px;
-    text-align: center;
-  }
-  .code {
-    margin: 0;
-    font-size: 4.5rem;
-    font-weight: 200;
-    letter-spacing: -0.03em;
-    color: var(--accent-text);
-  }
-  h1 {
-    margin: 0 0 10px;
-  }
-  .actions {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin-top: 24px;
-  }
-</style>
+</Reading>

@@ -20,32 +20,32 @@ const index = lessons.map((l) => ({
 }));
 ---
 
-<div class="search" data-search-root data-mode={mode}>
-  <label class="search-box glass">
-    <Icon name="search" />
+<div class="relative" data-search-root data-mode={mode}>
+  <label class="flex h-12 items-center gap-3 rounded-full border border-line bg-white/[0.03] px-5 transition-colors focus-within:border-white/50 hover:border-white/30">
+    <Icon name="search" size={18} />
     <span class="sr-only">Search lessons</span>
     <input
       type="search"
+      class="h-full min-w-0 flex-1 bg-transparent text-white outline-none placeholder:text-white"
       placeholder={placeholder}
       autocomplete="off"
       spellcheck="false"
       aria-controls={mode === 'dropdown' ? 'search-results' : undefined}
     />
-    <span class="kbd" data-kbd>Ctrl K</span>
+    <span class="hidden flex-none rounded-md border border-line px-2 py-0.5 text-xs sm:inline" data-kbd>Ctrl K</span>
   </label>
-  {mode === 'dropdown' && <ul id="search-results" class="search-results glass" role="listbox" hidden />}
+  {
+    mode === 'dropdown' && (
+      <ul
+        id="search-results"
+        class="search-results absolute inset-x-0 top-full z-40 mt-2 overflow-hidden rounded-2xl border border-line bg-[#0e0f11] py-2"
+        role="listbox"
+        hidden
+      />
+    )
+  }
   <script type="application/json" data-search-index set:html={JSON.stringify(index)} />
 </div>
-
-<style>
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-  }
-</style>
 
 <script>
   type Entry = { s: string; t: string; c: string; n: number; lv: string };
@@ -108,7 +108,7 @@ const index = lessons.map((l) => ({
       list.innerHTML = '';
       if (!hits.length) {
         const li = document.createElement('li');
-        li.className = 'search-empty';
+        li.className = 'px-5 py-3 text-sm';
         li.textContent = 'No lessons match that yet.';
         list.append(li);
       }
@@ -118,16 +118,17 @@ const index = lessons.map((l) => ({
         a.href = `/lessons/${h.s}`;
         a.setAttribute('role', 'option');
         a.setAttribute('aria-selected', String(i === active));
+        a.className = 'flex items-center gap-4 px-5 py-3 hover:bg-white/8 aria-selected:bg-white/8';
         const num = document.createElement('span');
-        num.className = 'row-num';
+        num.className = 'grid size-8 flex-none place-items-center rounded-full border border-line text-sm font-semibold tabular-nums';
         num.textContent = String(h.n);
         const text = document.createElement('span');
-        text.className = 'row-main';
+        text.className = 'min-w-0 flex-1';
         const title = document.createElement('span');
-        title.className = 'row-title';
+        title.className = 'block font-medium';
         title.textContent = h.t;
         const sub = document.createElement('span');
-        sub.className = 'row-sub';
+        sub.className = 'mt-0.5 block truncate text-sm';
         sub.textContent = `${h.lv} · ${h.c}`;
         text.append(title, sub);
         a.append(num, text);

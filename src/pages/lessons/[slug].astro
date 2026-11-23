@@ -1,13 +1,11 @@
 ---
 // Lesson reading page, modelled on a Hashnode article (see READING-PAGE-PLAN.md).
-// One centred reading column, an app bar that hides while you scroll down, a table of contents that
-// stays collapsed until you point at it, and the footer. Nothing else.
-import '@fontsource-variable/dm-sans/opsz.css';
-import '../../styles/space.css';
-import '../../styles/reading.css';
+// Uses the Reading layout (app bar that hides on scroll, one centred column, footer). This page adds a
+// table of contents that stays collapsed until you point at it. Nothing else.
 import { render } from 'astro:content';
+import Reading from '../../layouts/Reading.astro';
 import Quiz from '../../components/Quiz.astro';
-import { getLessons, summarize, issueUrl } from '../../lib/lessons';
+import { getLessons, summarize } from '../../lib/lessons';
 import { SITE } from '../../config';
 
 export async function getStaticPaths() {
@@ -33,35 +31,11 @@ const toc = [
 const lineWidth = (text: string) => Math.round(Math.min(40, Math.max(12, text.length * 0.9)));
 const firstPara = (lesson.body ?? '').split('\n').find((l) => l.trim() && !/^[#>|`<-]/.test(l.trim()));
 const description = firstPara ? firstPara.replace(/[*_`]/g, '').slice(0, 155) : SITE.description;
-const pageTitle = `${info.title} · ${SITE.name}`;
-const repoUrl = `https://github.com/${SITE.githubRepo}`;
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="color-scheme" content="dark" />
-    <meta name="theme-color" content="#08090a" />
-    <title>{pageTitle}</title>
-    <meta name="description" content={description} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-  </head>
-  <body class="reading-page">
-    <a href="#lesson" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-lg focus:bg-white focus:px-3 focus:py-2 focus:text-black">Skip to the lesson</a>
-
-    <!-- App bar: minimal. Hides on scroll down, shows on scroll up. -->
-    <header data-appbar class="appbar sticky top-0 z-50 border-b border-line bg-[#08090a]/85 backdrop-blur-md">
-      <div class="mx-auto flex h-16 max-w-[1120px] items-center justify-between px-5">
-        <a href="/" class="font-semibold tracking-tight">Before you ship</a>
-        <a href="/lessons" class="rounded-full px-3 py-1.5 text-sm hover:bg-white/8">All lessons</a>
-      </div>
-    </header>
-
-    <div class="relative mx-auto max-w-[1120px] px-5">
+<Reading title={info.title} description={description} reportTitle={info.title}>
       <!-- Contents, wide screens: collapsed lines; the full list appears on hover or keyboard focus. -->
-      <aside class="absolute top-0 right-0 hidden h-full w-52 xl:block" aria-label="Contents">
+      <aside slot="rail" class="absolute top-0 right-0 hidden h-full w-52 xl:block" aria-label="Contents">
         <div class="group/toc sticky top-24 mt-16">
           <div class="grid">
             <div class="max-h-[calc(100vh-8rem)] overflow-y-auto opacity-0 transition-opacity duration-200 [grid-area:1/1] group-focus-within/toc:opacity-100 group-hover/toc:opacity-100">
@@ -89,7 +63,6 @@ const repoUrl = `https://github.com/${SITE.githubRepo}`;
         </div>
       </aside>
 
-      <main id="lesson" class="mx-auto max-w-[680px] pt-14 pb-24">
         <p class="text-sm">Level {info.level} · {info.levelName} · Lesson {info.order} of {total}</p>
         <h1 class="mt-4 text-[clamp(2rem,4.4vw,2.75rem)] leading-[1.15] font-medium tracking-[-0.03em] text-balance">{info.title}</h1>
         <p class="mt-4 text-sm">{info.minutes} min read</p>
@@ -112,10 +85,9 @@ const repoUrl = `https://github.com/${SITE.githubRepo}`;
             )
           }
         </div>
-      </main>
-    </div>
 
     <!-- Contents, small screens: a floating button that opens the list. -->
+    <Fragment slot="overlay">
     <button type="button" data-toc-open class="glass fixed right-4 bottom-4 z-40 flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium xl:hidden" aria-haspopup="dialog">
       <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M4 6h16M4 12h10M4 18h13" /></svg>
       Contents
@@ -135,56 +107,24 @@ const repoUrl = `https://github.com/${SITE.githubRepo}`;
         }
       </nav>
     </dialog>
-
-    <footer class="border-t border-line">
-      <div class="mx-auto grid max-w-[1120px] grid-cols-2 gap-8 px-5 py-12 md:grid-cols-4">
-        <div class="col-span-2 md:col-span-1">
-          <p class="font-semibold tracking-tight">Before you ship</p>
-          <p class="mt-3 max-w-[26ch] text-sm">Free and open source. No login, no tracking cookies.</p>
-        </div>
-        <div class="flex flex-col gap-2 text-sm">
-          <p class="mb-1 font-semibold">Learn</p>
-          <a class="hover:underline" href="/lessons">All lessons</a>
-          <a class="hover:underline" href="/start">Where should I start?</a>
-          <a class="hover:underline" href="/review">Review mode</a>
-        </div>
-        <div class="flex flex-col gap-2 text-sm">
-          <p class="mb-1 font-semibold">Tools</p>
-          <a class="hover:underline" href="/checklist">Pre-ship checklist</a>
-          <a class="hover:underline" href="/glossary">Glossary</a>
-          <a class="hover:underline" href="/prompts">Prompt library</a>
-        </div>
-        <div class="flex flex-col gap-2 text-sm">
-          <p class="mb-1 font-semibold">Project</p>
-          <a class="hover:underline" href={repoUrl} target="_blank" rel="noopener noreferrer">GitHub</a>
-          <a class="hover:underline" href={issueUrl(SITE.githubRepo, info.title)} target="_blank" rel="noopener noreferrer">Report a mistake</a>
-        </div>
-      </div>
-    </footer>
-
+    </Fragment>
     <script>
       import { isCompleted, setCompleted, recordVisit } from '../../lib/progress';
 
-      // App bar: hide while scrolling down, show while scrolling up or near the top.
-      const bar = document.querySelector<HTMLElement>('[data-appbar]')!;
-      let lastY = scrollY;
+      // Keep the current section marked while reading (the layout handles the app bar).
       let ticking = false;
-      const onScroll = () => {
-        if (ticking) return;
-        ticking = true;
-        requestAnimationFrame(() => {
-          const y = scrollY;
-          const dy = y - lastY;
-          if (y < 80) bar.classList.remove('is-hidden');
-          else if (dy > 6) bar.classList.add('is-hidden');
-          else if (dy < -6) bar.classList.remove('is-hidden');
-          if (Math.abs(dy) > 6 || y < 80) lastY = y;
-          ticking = false;
-          markCurrent();
-        });
-      };
-      addEventListener('scroll', onScroll, { passive: true });
-      bar.addEventListener('focusin', () => bar.classList.remove('is-hidden'));
+      addEventListener(
+        'scroll',
+        () => {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(() => {
+            ticking = false;
+            markCurrent();
+          });
+        },
+        { passive: true },
+      );
 
       // Current section: the last heading above 30% of the screen. Positions are measured once, not per frame.
       const ids = [...new Set([...document.querySelectorAll<HTMLElement>('[data-toc-link]')].map((a) => a.dataset.tocLink!))];
@@ -240,5 +180,4 @@ const repoUrl = `https://github.com/${SITE.githubRepo}`;
         paint();
       });
     </script>
-  </body>
-</html>
+</Reading>

@@ -1,56 +1,75 @@
 ---
-import Editorial from '../../layouts/Editorial.astro';
+import Reading from '../../layouts/Reading.astro';
 import Icon from '../../components/Icon.astro';
 import Search from '../../components/Search.astro';
 import { getSummaries, groupByLevel } from '../../lib/lessons';
-import { LEVEL_COLORS } from '../../config';
 
 const lessons = await getSummaries();
 const levels = groupByLevel(lessons);
 ---
 
-<Editorial title="All lessons">
-  <header class="list-head">
-    <h1>All lessons</h1>
-    <p class="muted">
-      {lessons.length} lessons in {levels.length} levels, easiest first. Each one takes about 10–15 minutes. Start at the top, <a href="/start">take the placement test</a>, or jump to
-      what you need.
+<Reading title="All lessons" width="wide">
+  <header>
+    <h1 class="page-title">All lessons</h1>
+    <p class="page-intro max-w-[62ch]">
+      {lessons.length} lessons in {levels.length} levels, easiest first. Each one takes about 10–15 minutes. Start at the top,
+      <a href="/start" class="underline decoration-white/35 underline-offset-4 hover:decoration-white">take the placement test</a>, or jump to what you need.
     </p>
-    <div class="overall">
-      <div class="overall-label"><span>Your progress</span><span data-overall>0 / {lessons.length}</span></div>
-      <div class="progress-track"><div class="progress-fill" data-overall-fill></div></div>
+
+    <div class="mt-10">
+      <div class="mb-2 flex items-baseline justify-between text-sm">
+        <span class="font-medium">Your progress</span>
+        <span class="tabular-nums" data-overall>0 / {lessons.length}</span>
+      </div>
+      <div class="h-1 overflow-hidden rounded-full bg-white/10">
+        <div class="h-full w-0 rounded-full bg-mint transition-[width] duration-500" data-overall-fill></div>
+      </div>
     </div>
-    <Search lessons={lessons} mode="filter" placeholder="Filter lessons: DNS, git, login, CORS…" />
+
+    <div class="mt-8">
+      <Search lessons={lessons} mode="filter" placeholder="Filter lessons: DNS, git, login, CORS…" />
+    </div>
   </header>
 
-  <p class="muted empty" data-search-empty hidden>No lessons match that. Try a different word.</p>
+  <p class="mt-10" data-search-empty hidden>No lessons match that. Try a different word.</p>
 
   {
     levels.map((level) => (
-      <section class="level glass" id={`level-${level.n}`} data-level-section>
-        <div class="level-head">
+      <section class="mt-16 scroll-mt-24" id={`level-${level.n}`} data-level-section>
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
           <div>
-            <p class="level-kicker"><span class="level-dot" style={`background:${LEVEL_COLORS[level.n]}`} />Level {level.n}</p>
-            <h2>{level.name}</h2>
-            <p class="muted">{level.blurb}</p>
+            <h2 class="text-[1.65rem] leading-tight font-medium tracking-[-0.02em]">
+              Level {level.n}: {level.name}
+            </h2>
+            <p class="mt-2 max-w-[60ch]">{level.blurb}</p>
           </div>
-          <span class="level-count" data-level-count={JSON.stringify(level.lessons.map((l) => l.slug))}>
+          <span
+            class="flex-none self-start rounded-full border border-line px-3 py-1 text-sm tabular-nums"
+            data-level-count={JSON.stringify(level.lessons.map((l) => l.slug))}
+          >
             {level.lessons.length} lessons
           </span>
         </div>
         {level.lessons.length === 0 ? (
-          <p class="muted">Lessons for this level are being written.</p>
+          <p class="mt-6">Lessons for this level are being written.</p>
         ) : (
-          <ul class="rows">
+          <ul class="mt-6 border-t border-line">
             {level.lessons.map((l) => (
-              <li data-search={`${l.title} ${l.concepts.join(' ')} ${l.levelName}`}>
-                <a class="row" href={`/lessons/${l.slug}`} data-row={l.slug}>
-                  <span class="row-num">{l.order}</span>
-                  <span class="row-main">
-                    <span class="row-title">{l.title}</span>
-                    <span class="row-sub">{l.concepts.join(' · ')}</span>
+              <li class="border-b border-line" data-search={`${l.title} ${l.concepts.join(' ')} ${l.levelName}`}>
+                <a class="group flex items-center gap-4 px-1 py-4" href={`/lessons/${l.slug}`} data-row={l.slug}>
+                  <span class="grid size-8 flex-none place-items-center rounded-full border border-line text-sm font-semibold tabular-nums group-[.is-done]:border-mint group-[.is-done]:bg-mint group-[.is-done]:text-[#0b0b0b]">
+                    <span class="group-[.is-done]:hidden">{l.order}</span>
+                    <span class="hidden group-[.is-done]:block">
+                      <Icon name="check" size={16} />
+                    </span>
                   </span>
-                  <span class="row-meta">{l.minutes} min</span>
+                  <span class="min-w-0 flex-1">
+                    <span class="block text-[1.08rem] font-medium underline-offset-4 group-hover:underline" data-row-title>
+                      {l.title}
+                    </span>
+                    <span class="mt-0.5 block truncate text-sm">{l.concepts.join(' · ')}</span>
+                  </span>
+                  <span class="hidden flex-none text-sm sm:block">{l.minutes} min</span>
                   <Icon name="chevron-right" size={18} />
                 </a>
               </li>
@@ -60,76 +79,7 @@ const levels = groupByLevel(lessons);
       </section>
     ))
   }
-</Editorial>
-
-<style>
-  .empty {
-    margin: 0 0 16px;
-  }
-  .search-wrap {
-    margin-bottom: 8px;
-  }
-  .level {
-    margin: 0 0 24px;
-    padding: 28px;
-  }
-  .level[hidden] {
-    display: none;
-  }
-  .level-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 16px;
-    margin-bottom: 12px;
-  }
-  .level-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin: 0 0 6px;
-    color: var(--text-soft);
-    font-size: 0.82rem;
-  }
-  .level-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-  }
-  .level h2 {
-    margin: 0 0 6px;
-    font-family: 'Inter Tight', Inter, sans-serif;
-    font-weight: 500;
-    font-size: 1.9rem;
-    letter-spacing: -0.02em;
-  }
-  .level-head p.muted {
-    margin: 0;
-    max-width: 60ch;
-    font-size: 0.95rem;
-    line-height: 1.55;
-  }
-  .level-count {
-    flex: none;
-    font-size: 0.82rem;
-    color: var(--muted);
-    border: 1px solid var(--line);
-    border-radius: 99px;
-    padding: 4px 10px;
-  }
-  li[hidden] {
-    display: none;
-  }
-  @media (max-width: 860px) {
-    .level {
-      padding: 18px;
-    }
-    .level-head {
-      flex-direction: column;
-      gap: 8px;
-    }
-  }
-</style>
+</Reading>
 
 <script>
   import { getCompleted } from '../../lib/progress';
@@ -139,7 +89,7 @@ const levels = groupByLevel(lessons);
   for (const row of rows) {
     if (done.has(row.dataset.row!)) {
       row.classList.add('is-done');
-      row.setAttribute('aria-label', `${row.querySelector('.row-title')?.textContent} (completed)`);
+      row.setAttribute('aria-label', `${row.querySelector('[data-row-title]')?.textContent?.trim()} (completed)`);
       count++;
     }
   }
