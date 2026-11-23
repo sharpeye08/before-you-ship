@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" role="img" aria-labelledby="t d">
+  <title id="t">A cache stampede</title>
+  <desc id="d">3,000 requests per second reach Redis just after the cached copy expired. Every request misses, and each one sends the same slow query to the database. About 2,400 identical queries arrive during the 0.8-second rebuild.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#e5484d"/>
+    </marker>
+  </defs>
+  <rect width="720" height="300" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <rect x="30" y="110" width="160" height="80" rx="10" fill="#f2c94c"/>
+    <text x="110" y="145" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Requests</text>
+    <text x="110" y="167" font-size="12" fill="#111111" text-anchor="middle">3,000 per second</text>
+
+    <rect x="270" y="110" width="160" height="80" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="350" y="145" font-size="15" fill="#f2f2f2" text-anchor="middle">Redis</text>
+    <text x="350" y="167" font-size="12" fill="#a0a0a0" text-anchor="middle">copy just expired</text>
+
+    <rect x="530" y="90" width="160" height="120" rx="10" fill="#1f1f1f" stroke="#e5484d" stroke-width="1.5"/>
+    <text x="610" y="135" font-size="15" fill="#f2f2f2" text-anchor="middle">Database</text>
+    <text x="610" y="158" font-size="12" fill="#e5484d" text-anchor="middle">about 2,400</text>
+    <text x="610" y="176" font-size="12" fill="#e5484d" text-anchor="middle">same slow queries</text>
+
+    <line x1="190" y1="150" x2="266" y2="150" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <line x1="430" y1="122" x2="526" y2="104" stroke="#e5484d" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrow-red)"/>
+    <line x1="430" y1="136" x2="526" y2="127" stroke="#e5484d" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrow-red)"/>
+    <line x1="430" y1="150" x2="526" y2="150" stroke="#e5484d" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrow-red)"/>
+    <line x1="430" y1="164" x2="526" y2="173" stroke="#e5484d" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrow-red)"/>
+    <line x1="430" y1="178" x2="526" y2="196" stroke="#e5484d" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrow-red)"/>
+    <text x="478" y="84" font-size="12" fill="#e5484d" text-anchor="middle">every request misses</text>
+
+    <text x="360" y="262" font-size="12" fill="#a0a0a0" text-anchor="middle">During the 0.8-second rebuild, every new request misses</text>
+    <text x="360" y="280" font-size="12" fill="#a0a0a0" text-anchor="middle">and starts the same slow query.</text>
+  </g>
+</svg>

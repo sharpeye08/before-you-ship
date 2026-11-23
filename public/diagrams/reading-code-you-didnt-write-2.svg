@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 220" role="img" aria-labelledby="t d">
+  <title id="t">The order to read a diff</title>
+  <desc id="d">Step 1: the file list, in about 2 minutes. Step 2: the removed lines, where damage hides. Step 3: the doors into your app, such as routes, pages and jobs. Step 4: everything else, more quickly. Do not read from top to bottom.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="220" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <text x="97" y="50" font-size="12" fill="#a0a0a0" text-anchor="middle">STEP 1</text>
+    <rect x="30" y="62" width="135" height="84" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="97" y="100" font-size="15" fill="#f2f2f2" text-anchor="middle">File list</text>
+    <text x="97" y="122" font-size="12" fill="#a0a0a0" text-anchor="middle">2 minutes</text>
+
+    <text x="272" y="50" font-size="12" fill="#a0a0a0" text-anchor="middle">STEP 2</text>
+    <rect x="205" y="62" width="135" height="84" rx="10" fill="#e98da4"/>
+    <text x="272" y="100" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Removed lines</text>
+    <text x="272" y="122" font-size="12" fill="#111111" text-anchor="middle">damage hides here</text>
+
+    <text x="447" y="50" font-size="12" fill="#a0a0a0" text-anchor="middle">STEP 3</text>
+    <rect x="380" y="62" width="135" height="84" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="447" y="100" font-size="15" fill="#f2f2f2" text-anchor="middle">Doors in</text>
+    <text x="447" y="122" font-size="12" fill="#a0a0a0" text-anchor="middle">routes, pages, jobs</text>
+
+    <text x="622" y="50" font-size="12" fill="#a0a0a0" text-anchor="middle">STEP 4</text>
+    <rect x="555" y="62" width="135" height="84" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="622" y="100" font-size="15" fill="#f2f2f2" text-anchor="middle">Everything else</text>
+    <text x="622" y="122" font-size="12" fill="#a0a0a0" text-anchor="middle">more quickly</text>
+
+    <line x1="169" y1="104" x2="201" y2="104" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="344" y1="104" x2="376" y2="104" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="519" y1="104" x2="551" y2="104" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <text x="360" y="186" font-size="12" fill="#a0a0a0" text-anchor="middle">Do not read from top to bottom. Use the checklist at step 3.</text>
+  </g>
+</svg>

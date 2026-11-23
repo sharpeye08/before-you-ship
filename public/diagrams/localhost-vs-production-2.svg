@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" role="img" aria-labelledby="t d">
+  <title id="t">Deploying to production</title>
+  <desc id="d">You build and test on your laptop. When you deploy, a copy of your app goes to a hosting server that is always on. This live copy is production. Your friend and other visitors open the production address, like your-quiz.vercel.app. Changes on your laptop stay there until you deploy again.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="320" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Laptop -->
+    <rect x="30" y="110" width="170" height="90" rx="10" fill="#f2c94c"/>
+    <text x="115" y="148" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Your laptop</text>
+    <text x="115" y="170" font-size="12" fill="#111111" text-anchor="middle">build and test</text>
+    <text x="115" y="228" font-size="12" fill="#a0a0a0" text-anchor="middle">Changes stay here</text>
+    <text x="115" y="246" font-size="12" fill="#a0a0a0" text-anchor="middle">until you deploy again</text>
+
+    <!-- Deploy arrow -->
+    <line x1="206" y1="155" x2="282" y2="155" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="243" y="143" font-size="12" fill="#f2c94c" text-anchor="middle">Deploy</text>
+
+    <!-- Hosting server -->
+    <text x="385" y="76" font-size="12" fill="#a0a0a0" text-anchor="middle">HOSTING PLATFORM</text>
+    <rect x="290" y="90" width="190" height="130" rx="10" fill="#4f6bd8"/>
+    <text x="385" y="136" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Hosting server</text>
+    <text x="385" y="160" font-size="12" fill="#e8ecff" text-anchor="middle">Production:</text>
+    <text x="385" y="178" font-size="12" fill="#e8ecff" text-anchor="middle">the live copy, always on</text>
+
+    <!-- Visitors -->
+    <rect x="560" y="70" width="130" height="60" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="625" y="105" font-size="15" fill="#f2f2f2" text-anchor="middle">Your friend</text>
+    <rect x="560" y="180" width="130" height="60" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="625" y="215" font-size="15" fill="#f2f2f2" text-anchor="middle">Other visitors</text>
+
+    <line x1="554" y1="104" x2="488" y2="134" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="554" y1="206" x2="488" y2="178" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <text x="590" y="286" font-size="12" fill="#a0a0a0" text-anchor="middle">They open your-quiz.vercel.app</text>
+  </g>
+</svg>

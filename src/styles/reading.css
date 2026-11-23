@@ -116,6 +116,7 @@
 .prose-read img {
   display: block;
   max-width: 100%;
+  height: auto;
   margin: 2em auto;
   border-radius: 14px;
 }

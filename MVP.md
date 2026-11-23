@@ -204,6 +204,9 @@ Picture a curious 13-year-old who has used apps and websites but has never studi
 - **Never say "simply", "just", "obviously" or "easy".** If it were obvious, they wouldn't be reading.
 
 ## Writing rules (all levels)
+- **ASD-STE100 style.** Descriptive sentences 25 words or fewer, instructions 20 or fewer, one instruction per sentence, paragraphs of at most 6 sentences, active voice, simple tenses, one word for one meaning, no idioms. The checker fails sentences over 25 words.
+- **No em dashes,** and no spaced en dash used as a dash. Number ranges like 10–15 are fine.
+- **Diagrams in every lesson.** 1 to 3 SVG diagrams that show the main idea, following `content/DIAGRAM-GUIDE.md`. No ASCII drawings.
 - **Catchy, honest titles.** Every title is a real problem the reader might hit, phrased as a scenario or a question: "Your API key leaked, and strangers are spending your money", "The payment timed out. Did it go through?". The title must match what the lesson actually covers. Hypothetical numbers are fine; invented "real" events are not. Keep titles under 70 characters, and in Level 1 use no term the reader doesn't know yet. The concepts show as tags under the title, so the title doesn't need to name them.
 - **Titles live in the MVP.md tables.** After changing one, run `node scripts/sync-titles.mjs` to copy it into the lesson file and into callout links in other lessons.
 - **Never use a term before it's explained.** This includes the hook, headings, code, takeaways and quiz. The hook is the most dangerous place: it's the first thing a beginner reads, so it must make sense with zero knowledge. If the hook shows something unfamiliar (like an error code), say plainly that it's normal not to understand it yet and that the lesson will explain it.

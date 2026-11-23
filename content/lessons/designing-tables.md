@@ -10,11 +10,11 @@ quiz:
   - question: "Your posts table has an author_name column that holds a copy of the user's name. A user changes their name. What happens to their old posts?"
     options:
       - text: "They update automatically, because the database knows the names are the same"
-      - text: "They keep showing the old name, unless your code finds and updates every copy"
+      - text: "They keep the old name, unless your code finds and updates every copy"
         correct: true
       - text: "They are deleted"
       - text: "The database refuses to change the name"
-    explanation: "A copy is a separate value. The database has no idea it is supposed to match the users table. Unless your code updates every copy, the old posts keep the old name. Storing user_id instead avoids the problem."
+    explanation: "A copy is a separate value. The database doesn't know it must match the users table. Unless your code updates every copy, the old posts keep the old name. If you store user_id instead, the problem can't happen."
 
   - question: "Which column makes the best primary key for a users table?"
     options:
@@ -23,60 +23,59 @@ quiz:
       - text: "An id number the database creates, which never changes"
         correct: true
       - text: "The user's age"
-    explanation: "A primary key must be unique and must never change. Emails and names can change, and other tables point to the primary key. An id the database creates is never reused and never needs to change."
+    explanation: "A primary key must be unique and must never change. Emails and names can change, and other tables point to the primary key. An id the database creates is never used again for another row, and it never needs to change."
 
   - question: "One user can write many posts. Each post has one author. Where does the foreign key go?"
     options:
-      - text: "A post_ids column in the users table, holding a list of post IDs"
+      - text: "A post_ids column in the users table, with a list of post IDs"
       - text: "Nowhere. The database works it out."
       - text: "A user_name column in the posts table"
       - text: "A user_id column in the posts table"
         correct: true
-    explanation: "In a one-to-many relationship, the foreign key goes on the \"many\" side. Each post stores the id of its one author. A list of IDs inside one column can't be checked by the database and is hard to search."
+    explanation: "In a one-to-many relationship, the foreign key goes on the \"many\" side. Each post stores the id of its one author. The database can't check a list of IDs inside one column, and the list is hard to search."
 
-  - question: "Users can like many posts, and each post can be liked by many users. How should you store likes?"
+  - question: "Users can like many posts, and many users can like each post. How should you store likes?"
     options:
-      - text: "A likes table with one row per like, holding user_id and post_id"
+      - text: "A likes table with one row per like, with user_id and post_id"
         correct: true
       - text: "A text column in posts with the names of everyone who liked it"
       - text: "A like_count number in posts, and nothing else"
       - text: "A liked_posts column in users with a list of post titles"
-    explanation: "This is a many-to-many relationship. It needs its own table in the middle, with one row for each like. Each row points to one user and one post, so the database can check both exist and stop someone liking the same post twice."
+    explanation: "This is a many-to-many relationship. It needs its own table in the middle, with one row for each like. Each row points to one user and one post. So the database can check that both exist, and stop a user who likes the same post twice."
 
   - question: "Comments have a post_id column, but no foreign key constraint. You delete a post. What happens to its comments?"
     options:
       - text: "They are deleted automatically"
       - text: "The database refuses to delete the post"
-      - text: "They stay in the database, pointing to a post that no longer exists"
+      - text: "They stay in the database, and point to a post that no longer exists"
         correct: true
       - text: "They move to the next post"
-    explanation: "Without a foreign key, the database doesn't know post_id points to the posts table. Nothing stops the delete, and nothing cleans up. You are left with comments that point to nothing."
+    explanation: "Without a foreign key, the database doesn't know that post_id points to the posts table. Nothing stops the delete, and nothing cleans up. You are left with comments that point to nothing."
 
   - question: "Your posts table has a like_count column. Your code adds 1 when someone likes a post. Later, the counts don't match the real number of likes. Why is this not surprising?"
     options:
       - text: "Databases can't store numbers correctly"
-      - text: "The count is a copy of information that already exists in the likes table, and copies drift"
+      - text: "The count is a copy of information that already exists in the likes table, and copies become different over time"
         correct: true
       - text: "Counts only work with foreign keys"
       - text: "Likes should be stored in a JSON file instead"
-    explanation: "The real number of likes is the number of rows in the likes table. like_count is a second copy of that fact. Any time code forgets to update it, or fails halfway, the two disagree."
+    explanation: "The real number of likes is the number of rows in the likes table. like_count is a second copy of that fact. If code forgets to update it, or fails halfway, the two disagree."
 ---
 
 # You changed your name. Half the app still shows the old one
 
 > **Before you start**
-> This lesson uses a few words from earlier lessons:
-> - **Database:** a program built to store data safely and find it quickly. *([Your app forgot everyone's messages overnight. Why?](/lessons/what-is-a-database))*
+> - **Database:** a program made to store data safely and find it quickly. *([Your app forgot everyone's messages overnight. Why?](/lessons/what-is-a-database))*
 > - **Table, row and column:** a table holds one kind of thing, like messages. Each row is one item. Each column is one detail about every item. *([Your app forgot everyone's messages overnight. Why?](/lessons/what-is-a-database))*
 > - **SQL:** a language many databases understand, with commands like `SELECT` (find rows) and `INSERT` (add a row). *([Your app forgot everyone's messages overnight. Why?](/lessons/what-is-a-database))*
 
 ## The name that wouldn't change
 
-You built a recipe-sharing app with AI. People sign up, post recipes and comment on each other's posts. It's going well.
+You built a recipe-sharing app with AI. People sign up, post recipes and comment on each other's posts. Everything works well.
 
-One day, a user named **sam_cooks** changes their display name to **Sam Rivera**. Their profile page shows the new name. But every recipe they ever posted still says *"by sam_cooks"*. Their comments say *"sam_cooks"* too.
+One day, a user called **sam_cooks** changes their display name to **Sam Rivera**. Their profile page shows the new name. But every recipe they ever posted still says *"by sam_cooks"*. Their comments say *"sam_cooks"* too.
 
-You ask the AI to fix it. It writes code that updates the name in the posts. Now the posts say "Sam Rivera", but the comments still say "sam_cooks". You fix the comments. A week later you notice the old name in the "top cooks" list on the homepage.
+You ask the AI to fix it. It writes code that updates the name in the posts. Now the posts say "Sam Rivera", but the comments still say "sam_cooks". You fix the comments. A week later, you see the old name in the "top cooks" list on the homepage.
 
 Then a different user deletes their account. Their comments are still there, under a name that leads nowhere. When someone clicks it, the page crashes.
 
@@ -94,9 +93,9 @@ Here is the AI's first version of the `posts` table:
 | 2 | mia_bakes | Lemon cake |
 | 3 | sam_cooks | Tomato soup |
 
-Look at `author_name`. The fact *"user 7's name is sam_cooks"* is stored in the users table. It is also copied into every post, every comment and the "top cooks" list. That's four places holding the same fact.
+Look at `author_name`. The users table stores the fact *"user 7's name is sam_cooks"*. The app also copies that fact into every post, every comment and the "top cooks" list. That's four places with the same fact.
 
-When a fact lives in four places, every change has to reach all four. Miss one, and your data **gets out of sync**: two places that should agree now disagree. Nobody gets an error. The app shows wrong information, quietly.
+When a fact is in four places, every change has to reach all four. If you miss one, your data gets **out of sync**: two places that should agree now disagree. Nobody gets an error. The app quietly shows wrong information.
 
 Here's the rule that prevents it:
 
@@ -104,7 +103,9 @@ Here's the rule that prevents it:
 
 Think about the contacts app on your phone. Your group chats don't store a copy of your friend's name. They store which contact sent each message. Rename the contact once, and every chat shows the new name.
 
-**Where this comparison stops working:** your phone does this for you. In your app, a database only points instead of copying if you design the tables that way. Deciding which tables you need, what goes in each one, and how they point to each other is called **data modeling**.
+![On the left, old copies of the name sam_cooks stay in a post, a comment and the top cooks list after the user changes their name. On the right, each of them stores user_id 7 and points to the one row in users, so one change shows everywhere.](/diagrams/designing-tables-1.svg)
+
+**Where this comparison stops working:** your phone does this for you. In your app, a database only points instead of copying if you design the tables that way. You decide which tables you need, what goes in each one, and how they point to each other. This work is called **data modeling**.
 
 ---
 
@@ -120,7 +121,7 @@ Why not use something people already know, like an email address or a username? 
 
 ## Foreign keys: pointing instead of copying
 
-Now each post can point to its author by storing the author's `id`. A column that holds another table's primary key is called a **foreign key**. "Foreign" here only means "from another table".
+Now each post can point to its author with the author's `id`. A column that holds another table's primary key is called a **foreign key**. "Foreign" here only means "from another table".
 
 Here is how you'd create the `users` table in SQL:
 
@@ -131,7 +132,7 @@ CREATE TABLE users (
 );
 ```
 
-In plain English: make a `users` table. Its `id` is a whole number (`bigint`) that the database creates by itself for each new row (`GENERATED ALWAYS AS IDENTITY`), and it's the primary key. Each user also has a `display_name`, which can't be empty (`NOT NULL`).
+In plain English: make a `users` table. Its `id` is a whole number (`bigint`). The database creates it by itself for each new row (`GENERATED ALWAYS AS IDENTITY`). The `id` is the primary key. Each user also has a `display_name`, which can't be empty (`NOT NULL`).
 
 Now the `posts` table, which points to it:
 
@@ -145,16 +146,16 @@ CREATE TABLE posts (
 
 In plain English:
 
-1. **Lines 1, 2 and 4:** make a `posts` table with its own `id`, made the same way as in `users`, and a `title`.
+1. **Lines 1, 2 and 4:** make a `posts` table with a `title` and its own `id`, made the same way as in `users`.
 2. **Line 3 is the important one.** `REFERENCES users (id)` turns `user_id` into a foreign key. The database now promises that every post's `user_id` matches a real user's `id`.
 
-That promise is enforced. If your code tries to save a post for user 999, and there's no user 999, the database refuses. If your code tries to delete a user who still has posts, the database refuses that too, with an error like this:
+A **constraint** is a rule that the database enforces, and a foreign key is one kind. So the database keeps this promise. If your code tries to save a post for user 999, and there's no user 999, the database refuses. If your code tries to delete a user who still has posts, the database refuses that too, with an error like this:
 
 ```text
 update or delete on table "users" violates foreign key constraint "posts_user_id_fkey" on table "posts"
 ```
 
-A **constraint** is a rule the database enforces, and a foreign key is one kind. The error looks scary, but it's good news. It means *"other rows still point to this user, so I won't delete it."* The database stopped bad data from getting in.
+The error looks frightening, but it's good news. It means *"other rows still point to this user, so I won't delete it."* The database stopped bad data from getting in.
 
 ### Getting the name back
 
@@ -166,7 +167,7 @@ FROM posts
 JOIN users ON users.id = posts.user_id;
 ```
 
-In plain English: for each post, find the user whose `id` matches the post's `user_id`, and give me the post's title with that user's name. A request like this to a database is called a **query**. Combining tables in a query is called a **join**.
+In plain English: for each post, find the user whose `id` matches the post's `user_id`. Give me the post's title with that user's name. A request like this to a database is called a **query**. A query that combines tables is called a **join**.
 
 Now when Sam changes their name, you change **one row** in `users`. Every post, comment and list shows the new name, because they all look it up from the same place.
 
@@ -178,13 +179,13 @@ Every connection between two tables has one of three shapes. Ask yourself two qu
 
 ### One-to-one
 
-One user has one settings record. Rare, and often you can put those columns in the users table instead.
+One user has one settings record. This is rare. Often you can put those columns in the users table instead.
 
 ### One-to-many
 
 One user writes many posts, but each post has one author. One post has many comments, but each comment belongs to one post.
 
-**The foreign key always goes on the "many" side.** Each post stores its one `user_id`. Each comment stores its one `post_id`, plus a `user_id` for who wrote it:
+**The foreign key always goes on the "many" side.** Each post stores its one `user_id`. Each comment stores its one `post_id`, plus a `user_id` for the person who wrote it:
 
 | id | post_id | user_id | body |
 |---|---|---|---|
@@ -194,7 +195,7 @@ One user writes many posts, but each post has one author. One post has many comm
 
 ### Many-to-many
 
-Likes. One user can like many posts, and one post can be liked by many users. Neither side can hold a single foreign key, because there are many on both sides.
+Likes are an example. One user can like many posts, and many users can like one post. Neither side can hold a single foreign key, because there are many on both sides.
 
 The answer is a **table in the middle**, with one row for each like:
 
@@ -208,30 +209,31 @@ CREATE TABLE likes (
 
 In plain English: each row in `likes` says *"this user liked this post"*. Both columns are foreign keys, so the database checks that the user and the post exist. The last line makes the **pair** the primary key. Each pair must be unique, so the same user can't like the same post twice.
 
-Tags work the same way: a `tags` table, and a `post_tags` table in the middle that connects posts to tags.
+Tags work the same way. You need a `tags` table, and a `post_tags` table in the middle that connects posts to tags.
 
 ---
 
 ## How it goes wrong
 
-These are the patterns to look for in tables an AI designed for you.
+Look for these patterns in tables that an AI designed for you.
 
 ### Bug 1: Copied data
 
-Columns like `author_name`, `author_email` or `author_avatar` in a posts or comments table. Each is a copy of something in the users table, and each copy will drift. This is the bug from the start of the lesson.
+Look for columns like `author_name`, `author_email` or `author_avatar` in a posts or comments table. Each is a copy of something in the users table. Over time, each copy will become different from the original. This is the bug from the start of the lesson.
 
-### Bug 2: A list squeezed into one column
+### Bug 2: A list stored in one column
 
 ```text
 posts.tags      = "vegan,quick,dinner"
 posts.liked_by  = "[2, 7, 15]"
 ```
 
-The AI stores many values in one column, as text with commas or as a JSON list. It works in a demo. Then:
+The AI stores many values in one column. It uses text with commas, or a JSON list (a list in the JSON text format). It works in a demo. Then these problems start:
 
-- The database can't check that user 15 exists, or stop the same ID appearing twice.
-- Finding "all posts Sam liked" means reading every post and searching inside the text.
-- Removing one like means reading the list, editing it and writing it back. Two people liking at the same moment can overwrite each other, the same race condition you saw with JSON files.
+- The database can't check that user 15 exists. It also can't stop the same ID from appearing twice.
+- To find "all posts Sam liked", the app must read every post and search inside the text.
+- To remove one like, the app must read the list, edit it and write it back.
+- Two people who like a post at the same moment can overwrite each other. This is the **race condition** you saw with JSON files: the result depends on which request finishes first.
 
 A list in a column almost always means a missing table.
 
@@ -239,53 +241,48 @@ A list in a column almost always means a missing table.
 
 The comments table has a `post_id` column, but nobody added `REFERENCES posts (id)`. It looks the same in the table view. But the database doesn't know it points anywhere.
 
-Delete a post, and its comments stay behind, pointing to a post that no longer exists. Rows like these are called **orphans**. The page that lists "my latest comments" tries to show each post's title, finds nothing, and crashes.
+Delete a post, and its comments stay behind. They point to a post that no longer exists. Rows like these are called **orphans**. The page that lists "my latest comments" tries to show each post's title. It finds nothing, and it crashes.
 
 ### Bug 4: Stored counts
 
-A `like_count` column in posts, which your code adds 1 to on every like. It's another copy: the real count is the number of rows in `likes`. If a request fails halfway, or a new "unlike" feature forgets to subtract 1, the number is wrong forever. Count the rows instead:
+This is a `like_count` column in posts, and your code adds 1 to it on every like. It's another copy: the real count is the number of rows in `likes`. A request can fail halfway. A new "unlike" feature can forget to subtract 1. Then the number is wrong forever. Count the rows instead:
 
 ```sql
 SELECT count(*) FROM likes WHERE post_id = 1;
 ```
 
-Sometimes copying is a deliberate choice, made to make a slow page fast. That's fine when you also plan how the copy stays correct. Copying by accident is the problem.
+Sometimes a copy is a deliberate choice, to make a slow page fast. That's fine when you also plan how to keep the copy correct. An accidental copy is the problem.
 
-> **Go deeper:** [Fast, but showing yesterday's data](/lessons/caching) (Level 4) covers deliberate copies and how to keep them fresh.
+> **Go deeper:** [Fast, but showing yesterday's data](/lessons/caching) (Level 4) covers deliberate copies and how to keep them correct.
 
 ---
 
 ## What good looks like
 
-The full design for the recipe app:
+Here is the full design for the recipe app:
 
-```text
-users     (id, display_name, email)
-posts     (id, user_id → users, title, body)
-comments  (id, post_id → posts, user_id → users, body)
-likes     (user_id → users, post_id → posts)   one row per like
-```
+![Four tables. users has id, display_name and email. posts points to users. comments points to posts and users. likes has one row per like and points to users and posts. Each arrow is a foreign key.](/diagrams/designing-tables-2.svg)
 
-Every fact lives in one place. Names live only in `users`. Every arrow is a real foreign key, checked by the database.
+Every fact is in one place. Names are only in `users`. Every arrow is a real foreign key, and the database checks it.
 
 ### Decide what happens on delete
 
-When a post is deleted, what should happen to its comments and likes? You decide, and the database does it every time. You add the choice to the foreign key:
+When you delete a post, what should happen to its comments and likes? You decide, and the database does it every time. You add the choice to the foreign key:
 
-- `ON DELETE CASCADE`: delete them too. Good for comments and likes on a deleted post.
-- Leave it out: the database refuses to delete the post while anything still points to it. A safe default when you're not sure.
+- `ON DELETE CASCADE`: delete them too. This is good for comments and likes on a deleted post.
+- Leave it out: the database refuses to delete the post while anything still points to it. This is a safe default when you're not sure.
 
-For example, `post_id bigint NOT NULL REFERENCES posts (id) ON DELETE CASCADE` in the comments table means *"when a post is deleted, delete its comments too."*
+For example, look at this column in the comments table: `post_id bigint NOT NULL REFERENCES posts (id) ON DELETE CASCADE`. It means *"when a post is deleted, delete its comments too."*
 
-Be careful with CASCADE on users. Deleting one user could delete their posts, every comment on those posts and every like on them. Sometimes that's right. Decide on purpose.
+Be careful with CASCADE on users. If you delete one user, you could delete their posts, every comment on those posts and every like on them. Sometimes that's right. Decide on purpose.
 
 ### The same ideas in every tool
 
-You may never type `CREATE TABLE` yourself. You might use Supabase's table editor, or a code library such as Prisma or Drizzle. The words are the same everywhere: **primary key**, **foreign key**, **relation**. Ask your AI to show you where each one is set.
+You may never type `CREATE TABLE` yourself. You might use Supabase's table editor, or a code library such as Prisma or Drizzle. The words are the same everywhere: **primary key**, **foreign key**, **relation** (another word for relationship). Ask your AI to show you where you set each one.
 
 ### Plan before you build
 
-Before asking the AI to build a feature that stores data, write the tables down in plain words, like the design above. For each one, ask: *what is one row? What does it point to?* Changing a design later, once real users have data in it, is possible but much harder.
+Before you ask the AI to build a feature that stores data, write the tables down in plain words, like the diagram above. For each table, ask: *what is one row? What does it point to?* You can change a design later, once real users have data in it. But it is much harder.
 
 > **Go deeper:** [You renamed one column and the live app crashed](/lessons/database-migrations) (Level 2) shows how to change tables safely once they hold real data.
 
@@ -293,34 +290,37 @@ Before asking the AI to build a feature that stores data, write the tables down 
 
 ## Test your own app
 
-1. **Look at your tables.** Open your database's table view (for example, the Table Editor in Supabase), or ask your AI: *"Print my database schema: every table, column, primary key and foreign key."* A **schema** is the description of all your tables and how they connect.
-2. **Find the copies.** Look for any column that holds a name, email or picture that also lives in another table.
-3. **Find the lists.** Look for columns holding commas or square brackets, like `"a,b,c"` or `[1, 2, 3]`.
+1. **Look at your tables.** A **schema** is the description of all your tables and how they connect. Open your database's table view (for example, the Table Editor in Supabase). Or ask your AI: *"Print my database schema: every table, column, primary key and foreign key."*
+2. **Find the copies.** Look for any column with a name, email or picture that is also in another table.
+3. **Find the lists.** Look for columns with commas or square brackets, like `"a,b,c"` or `[1, 2, 3]`.
 4. **Check every `_id` column.** Each one should be a real foreign key, not only a number.
-5. **Run the rename test.** Change your display name, then visit every page that shows it: posts, comments, lists. Every one should show the new name.
-6. **Run the delete test.** With test data, delete a post that has comments. Then open any page that lists comments. It should still work.
+5. **Do the rename test.** Change your display name. Then visit every page that shows it: posts, comments, lists. Every one should show the new name.
+6. **Do the delete test.** With test data, delete a post that has comments. Then open any page that lists comments. It should still work.
 
 ---
 
 ## Takeaways
 
 **Key terms**
+
 - **Data modeling:** deciding which tables you need, what goes in each one, and how they connect
 - **Primary key:** a column that is unique for every row and never changes, usually `id`
 - **Foreign key:** a column that holds another table's primary key, checked by the database
 - **One-to-many:** one user, many posts. The foreign key goes on the "many" side.
 - **Many-to-many:** many users like many posts. It needs a table in the middle.
-- **Join:** combining rows from two tables in one query
+- **Join:** a query that combines rows from two tables
 - **Out of sync:** two copies of the same fact that now disagree
 
 **Red flags in AI-designed tables**
+
 - `author_name`, `user_email` or similar copied into other tables
-- A column holding a list: `"vegan,quick"`, `[2, 7, 15]`
-- A column ending in `_id` with no foreign key behind it
+- A column with a list: `"vegan,quick"`, `[2, 7, 15]`
+- A column that ends in `_id` with no foreign key behind it
 - A stored count (`like_count`, `comment_count`) with no plan to keep it correct
 - An email or username used as the primary key
 
 **Ask your AI**
+
 - *"List every column in my database that copies data from another table. How would I store it once instead?"*
 - *"Which columns in my database end in _id but aren't foreign keys?"*
 - *"Draw my tables and the relationships between them. Mark each one as one-to-many or many-to-many."*
@@ -331,13 +331,13 @@ Before asking the AI to build a feature that stores data, write the tables down 
 <details>
 <summary><strong>Going deeper</strong> (optional, for readers who want more detail)</summary>
 
-**Normalization.** The rule "store each fact once" has a formal name: **normalization**. Database textbooks describe it as a series of levels called normal forms (first, second, third and more). The practical version is the one in this lesson: no lists in a column, no copied facts, and every column describes the thing the row is about. The opposite, copying data on purpose for speed, is called **denormalization**.
+**Normalization.** The rule "store each fact once" has a formal name: **normalization**. Database textbooks describe it as a series of levels called normal forms (first, second, third and more). The practical version is the one in this lesson. Put no lists in a column and copy no facts. Every column describes the thing the row is about. The opposite, a copy made on purpose for speed, is called **denormalization**.
 
-**ON DELETE options.** PostgreSQL offers several. `NO ACTION` is the default if you write nothing: the delete fails if rows still point to it. `RESTRICT` is similar, but checked immediately. `CASCADE` deletes the rows that point to it. `SET NULL` keeps them but empties their foreign key, which only works if that column allows empty values.
+**ON DELETE options.** PostgreSQL offers several. `NO ACTION` is the default if you write nothing: the delete fails if rows still point to it. `RESTRICT` is similar, but the database checks it immediately. `CASCADE` deletes the rows that point to it. `SET NULL` keeps them but empties their foreign key. That only works if the column allows empty values.
 
-**Foreign keys are not automatically indexed in PostgreSQL.** Declaring a foreign key doesn't create an index on the column that points (like `posts.user_id`). The PostgreSQL docs recommend adding one, because deleting a user, or finding all of a user's posts, has to search that column. [Fast with 100 users, frozen at 10,000. The missing index](/lessons/database-indexes) explains indexes.
+**PostgreSQL doesn't index foreign keys automatically.** A foreign key doesn't create an index on the column that points (like `posts.user_id`). The PostgreSQL docs recommend that you add one. The reason: to delete a user, or to find all of a user's posts, the database has to search that column. [Fast with 100 users, frozen at 10,000. The missing index](/lessons/database-indexes) explains indexes.
 
-**Number IDs or UUIDs.** `GENERATED ALWAYS AS IDENTITY` gives 1, 2, 3. Many apps use **UUIDs** instead: long random IDs like `3f8a1c9e-72b4-4d1a-9c3e-5b6f8a2d1e7c`. They can be created outside the database, but they're longer and harder to read. Either works as a primary key. Neither one replaces proper permission checks, as [Change one number in the URL, see everyone's invoices](/lessons/logged-in-doesnt-mean-allowed) explains.
+**Number IDs or UUIDs.** `GENERATED ALWAYS AS IDENTITY` gives 1, 2, 3. Many apps use **UUIDs** instead: long random IDs like `3f8a1c9e-72b4-4d1a-9c3e-5b6f8a2d1e7c`. You can create them outside the database, but they're longer and harder to read. Either works as a primary key. Neither one replaces correct permission checks, as [Change one number in the URL, see everyone's invoices](/lessons/logged-in-doesnt-mean-allowed) explains.
 
 **Soft deletes.** Some apps never really delete rows. They set a `deleted_at` date instead and hide those rows. This makes undo possible, but every query must remember to skip deleted rows.
 

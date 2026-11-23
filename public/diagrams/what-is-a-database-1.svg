@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" role="img" aria-labelledby="t d">
+  <title id="t">A deploy throws away the old copy</title>
+  <desc id="d">On your laptop, your code has messages.json with only your test message. When you deploy, the hosting company starts your app from a fresh, clean copy of that code. The old copy, which had all the class messages in its messages.json file, is thrown away.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="340" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Laptop -->
+    <text x="150" y="48" font-size="12" fill="#a0a0a0" text-anchor="middle">YOUR LAPTOP</text>
+    <rect x="40" y="62" width="220" height="110" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="150" y="100" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Your code</text>
+    <text x="150" y="124" font-size="12" fill="#a0a0a0" text-anchor="middle">and messages.json</text>
+    <text x="150" y="142" font-size="12" fill="#a0a0a0" text-anchor="middle">(only your test message)</text>
+
+    <!-- New copy -->
+    <text x="570" y="48" font-size="12" fill="#a0a0a0" text-anchor="middle">HOSTING COMPANY</text>
+    <rect x="460" y="62" width="220" height="110" rx="10" fill="#f2c94c"/>
+    <text x="570" y="100" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">New copy (Tuesday)</text>
+    <text x="570" y="124" font-size="12" fill="#111111" text-anchor="middle">messages.json from your laptop</text>
+    <text x="570" y="142" font-size="12" fill="#111111" text-anchor="middle">(no class messages)</text>
+
+    <!-- Deploy arrow -->
+    <line x1="266" y1="117" x2="452" y2="117" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="359" y="105" font-size="12" fill="#f2c94c" text-anchor="middle">Deploy</text>
+    <text x="359" y="137" font-size="12" fill="#a0a0a0" text-anchor="middle">a fresh, clean copy</text>
+
+    <!-- Old copy -->
+    <rect x="460" y="212" width="220" height="96" rx="10" fill="#1f1f1f" stroke="#e5484d" stroke-width="1.5" stroke-dasharray="7 5"/>
+    <text x="570" y="248" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Old copy (Monday)</text>
+    <text x="570" y="272" font-size="12" fill="#a0a0a0" text-anchor="middle">messages.json had all</text>
+    <text x="570" y="290" font-size="12" fill="#a0a0a0" text-anchor="middle">the class messages</text>
+
+    <text x="436" y="252" font-size="15" font-weight="600" fill="#e5484d" text-anchor="end">Thrown away</text>
+    <text x="436" y="274" font-size="12" fill="#a0a0a0" text-anchor="end">on every deploy or restart</text>
+  </g>
+</svg>

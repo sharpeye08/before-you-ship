@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" role="img" aria-labelledby="t d">
+  <title id="t">Why the page said Saved</title>
+  <desc id="d">Before the fix: the save fails, the server replies 200 OK with the word error in the body, the page never checks, and it shows Saved even though nothing was saved. After the fix: the save fails, the server replies 500 with a short message, the page checks res.ok, and it shows the server's message.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="320" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Row 1: the bug -->
+    <text x="40" y="40" font-size="12" fill="#e5484d">BEFORE: THE BUG</text>
+    <rect x="40" y="52" width="140" height="70" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="110" y="82" font-size="15" fill="#f2f2f2" text-anchor="middle">Server</text>
+    <text x="110" y="102" font-size="12" fill="#a0a0a0" text-anchor="middle">save fails</text>
+    <rect x="206" y="52" width="140" height="70" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="276" y="82" font-size="15" fill="#f2f2f2" text-anchor="middle">200 OK</text>
+    <text x="276" y="102" font-size="12" fill="#a0a0a0" text-anchor="middle">"error" in the body</text>
+    <rect x="372" y="52" width="140" height="70" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="442" y="82" font-size="15" fill="#f2f2f2" text-anchor="middle">Page</text>
+    <text x="442" y="102" font-size="12" fill="#a0a0a0" text-anchor="middle">never checks</text>
+    <rect x="538" y="52" width="142" height="70" rx="10" fill="#1f1f1f" stroke="#e5484d" stroke-width="1.5"/>
+    <text x="609" y="82" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">"Saved!"</text>
+    <text x="609" y="102" font-size="12" fill="#e5484d" text-anchor="middle">nothing was saved</text>
+    <line x1="182" y1="87" x2="202" y2="87" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="348" y1="87" x2="368" y2="87" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="514" y1="87" x2="534" y2="87" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <!-- Row 2: the fix -->
+    <text x="40" y="170" font-size="12" fill="#1f9d6b">AFTER: THE FIX</text>
+    <rect x="40" y="182" width="140" height="70" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="110" y="212" font-size="15" fill="#f2f2f2" text-anchor="middle">Server</text>
+    <text x="110" y="232" font-size="12" fill="#a0a0a0" text-anchor="middle">save fails</text>
+    <rect x="206" y="182" width="140" height="70" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="276" y="212" font-size="15" fill="#f2f2f2" text-anchor="middle">500</text>
+    <text x="276" y="232" font-size="12" fill="#a0a0a0" text-anchor="middle">+ a short message</text>
+    <rect x="372" y="182" width="140" height="70" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="442" y="212" font-size="15" fill="#f2f2f2" text-anchor="middle">Page</text>
+    <text x="442" y="232" font-size="12" fill="#a0a0a0" text-anchor="middle">checks res.ok</text>
+    <rect x="538" y="182" width="142" height="70" rx="10" fill="#1f9d6b"/>
+    <text x="609" y="212" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Shows the error</text>
+    <text x="609" y="232" font-size="12" fill="#dff5ec" text-anchor="middle">the server's message</text>
+    <line x1="182" y1="217" x2="202" y2="217" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="348" y1="217" x2="368" y2="217" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="514" y1="217" x2="534" y2="217" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <text x="360" y="292" font-size="12" fill="#a0a0a0" text-anchor="middle">fetch() does not fail on a 500. The page must check the status code.</text>
+  </g>
+</svg>

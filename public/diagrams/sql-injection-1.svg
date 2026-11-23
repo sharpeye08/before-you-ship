@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" role="img" aria-labelledby="t d">
+  <title id="t">How the attack text becomes a command</title>
+  <desc id="d">With honest input, the order code K7Q2M stays inside its quotes as data, and the database finds one order. With the attack text, the first apostrophe closes the quotes early. Then OR '1'='1' is part of the command, it is always true, and the database returns every order.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="330" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Honest -->
+    <text x="30" y="40" font-size="12" fill="#a0a0a0">HONEST INPUT: K7Q2M</text>
+    <rect x="30" y="54" width="130" height="70" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="95" y="86" font-size="15" fill="#f2f2f2" text-anchor="middle">code = '</text>
+    <text x="95" y="108" font-size="12" fill="#a0a0a0" text-anchor="middle">command</text>
+    <rect x="170" y="54" width="130" height="70" rx="10" fill="#f2c94c"/>
+    <text x="235" y="86" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">K7Q2M</text>
+    <text x="235" y="108" font-size="12" fill="#111111" text-anchor="middle">data</text>
+    <rect x="310" y="54" width="60" height="70" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="340" y="86" font-size="15" fill="#f2f2f2" text-anchor="middle">'</text>
+    <line x1="380" y1="89" x2="508" y2="89" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="516" y="54" width="174" height="70" rx="10" fill="#1f9d6b"/>
+    <text x="603" y="95" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">One order</text>
+
+    <line x1="30" y1="160" x2="690" y2="160" stroke="#3a3a3a" stroke-width="1.5"/>
+
+    <!-- Attack -->
+    <text x="30" y="194" font-size="12" fill="#a0a0a0">ATTACK INPUT: ' OR '1'='1</text>
+    <rect x="30" y="208" width="130" height="70" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="95" y="240" font-size="15" fill="#f2f2f2" text-anchor="middle">code = ''</text>
+    <text x="95" y="262" font-size="12" fill="#a0a0a0" text-anchor="middle">text closed early</text>
+    <rect x="170" y="208" width="200" height="70" rx="10" fill="#e5484d"/>
+    <text x="270" y="240" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">OR '1'='1'</text>
+    <text x="270" y="262" font-size="12" fill="#fde8e8" text-anchor="middle">now part of the command</text>
+    <line x1="380" y1="243" x2="508" y2="243" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="444" y="233" font-size="12" fill="#a0a0a0" text-anchor="middle">always true</text>
+    <rect x="516" y="208" width="174" height="70" rx="10" fill="#e5484d"/>
+    <text x="603" y="249" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Every order</text>
+
+    <text x="30" y="310" font-size="12" fill="#a0a0a0">The database cannot see where the user's text was meant to end.</text>
+  </g>
+</svg>

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" role="img" aria-labelledby="t d">
+  <title id="t">A stranger with the public key</title>
+  <desc id="d">A stranger who is not logged in copies the public key from your page and asks the database for every entry. With Row Level Security off, the database sends every user's entries. With Row Level Security on, no policy matches the stranger, so the database sends nothing.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="330" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- RLS off -->
+    <text x="30" y="40" font-size="12" fill="#a0a0a0">ROW LEVEL SECURITY OFF</text>
+    <rect x="30" y="54" width="150" height="80" rx="10" fill="#e5484d"/>
+    <text x="105" y="90" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Stranger</text>
+    <text x="105" y="112" font-size="12" fill="#fde8e8" text-anchor="middle">has the public key</text>
+    <line x1="184" y1="94" x2="252" y2="94" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="218" y="84" font-size="12" fill="#a0a0a0" text-anchor="middle">all rows?</text>
+    <rect x="260" y="54" width="200" height="80" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="360" y="90" font-size="15" fill="#f2f2f2" text-anchor="middle">entries table</text>
+    <text x="360" y="112" font-size="12" fill="#a0a0a0" text-anchor="middle">no rules</text>
+    <line x1="464" y1="94" x2="512" y2="94" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="520" y="54" width="170" height="80" rx="10" fill="#e5484d"/>
+    <text x="605" y="90" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Every user's</text>
+    <text x="605" y="110" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">entries</text>
+
+    <line x1="30" y1="166" x2="690" y2="166" stroke="#3a3a3a" stroke-width="1.5"/>
+
+    <!-- RLS on -->
+    <text x="30" y="200" font-size="12" fill="#a0a0a0">ROW LEVEL SECURITY ON</text>
+    <rect x="30" y="214" width="150" height="80" rx="10" fill="#e5484d"/>
+    <text x="105" y="250" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Stranger</text>
+    <text x="105" y="272" font-size="12" fill="#fde8e8" text-anchor="middle">has the public key</text>
+    <line x1="184" y1="254" x2="252" y2="254" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="218" y="244" font-size="12" fill="#a0a0a0" text-anchor="middle">all rows?</text>
+    <rect x="260" y="214" width="200" height="80" rx="10" fill="#4f6bd8"/>
+    <text x="360" y="250" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">entries table</text>
+    <text x="360" y="272" font-size="12" fill="#e8ecff" text-anchor="middle">policy: own rows only</text>
+    <line x1="464" y1="254" x2="512" y2="254" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="520" y="214" width="170" height="80" rx="10" fill="#1f9d6b"/>
+    <text x="605" y="250" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Nothing</text>
+    <text x="605" y="272" font-size="12" fill="#e6f6ee" text-anchor="middle">no policy matches</text>
+  </g>
+</svg>

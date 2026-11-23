@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 370" role="img" aria-labelledby="t d">
+  <title id="t">The three states of a circuit breaker</title>
+  <desc id="d">Closed: calls go through. After too many failures, the breaker moves to open. Open: calls fail at once. After the wait time passes, for example 30 seconds, it moves to half-open. Half-open: a few trial calls go through. If the trial succeeds, it moves to closed. If the trial fails, it goes back to open. Closed means working. Open means stopped.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="370" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Closed -->
+    <rect x="40" y="60" width="180" height="80" rx="10" fill="#1f9d6b"/>
+    <text x="130" y="96" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Closed</text>
+    <text x="130" y="118" font-size="12" fill="#e6fff4" text-anchor="middle">calls go through</text>
+
+    <!-- Open -->
+    <rect x="500" y="60" width="180" height="80" rx="10" fill="#f08a4b"/>
+    <text x="590" y="96" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Open</text>
+    <text x="590" y="118" font-size="12" fill="#111111" text-anchor="middle">calls fail at once</text>
+
+    <!-- Half-open -->
+    <rect x="270" y="240" width="180" height="80" rx="10" fill="#f2c94c"/>
+    <text x="360" y="276" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Half-open</text>
+    <text x="360" y="298" font-size="12" fill="#111111" text-anchor="middle">a few trial calls</text>
+
+    <!-- Closed to Open -->
+    <line x1="226" y1="90" x2="494" y2="90" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="360" y="80" font-size="12" fill="#a0a0a0" text-anchor="middle">too many failures</text>
+
+    <!-- Open to Half-open -->
+    <line x1="540" y1="146" x2="424" y2="233" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="400" y="172" font-size="12" fill="#a0a0a0" text-anchor="middle">wait time passes</text>
+    <text x="400" y="190" font-size="12" fill="#a0a0a0" text-anchor="middle">(for example 30 s)</text>
+
+    <!-- Half-open to Open -->
+    <line x1="456" y1="270" x2="622" y2="150" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="600" y="252" font-size="12" fill="#a0a0a0">trial fails</text>
+
+    <!-- Half-open to Closed -->
+    <line x1="296" y1="234" x2="164" y2="148" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="196" y="214" font-size="12" fill="#a0a0a0" text-anchor="end">trial succeeds</text>
+
+    <text x="360" y="352" font-size="15" fill="#f2f2f2" text-anchor="middle">Closed means working. Open means stopped.</text>
+  </g>
+</svg>

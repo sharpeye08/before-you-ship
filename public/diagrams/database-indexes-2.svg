@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 230" role="img" aria-labelledby="t d">
+  <title id="t">Why the app froze at 10,000 users</title>
+  <desc id="d">Without an index, two things grow at the same time. Each request scans about 100 times more rows, and there are about 100 times more requests. Together, the database does about 10,000 times more work.</desc>
+  <rect width="720" height="230" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <rect x="30" y="60" width="190" height="90" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="125" y="100" font-size="15" fill="#f2f2f2" text-anchor="middle">100× more rows</text>
+    <text x="125" y="122" font-size="12" fill="#a0a0a0" text-anchor="middle">scanned per request</text>
+
+    <text x="245" y="112" font-size="15" fill="#cfcfcf" text-anchor="middle">×</text>
+
+    <rect x="270" y="60" width="190" height="90" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="365" y="100" font-size="15" fill="#f2f2f2" text-anchor="middle">100× more requests</text>
+    <text x="365" y="122" font-size="12" fill="#a0a0a0" text-anchor="middle">from more users</text>
+
+    <text x="485" y="112" font-size="15" fill="#cfcfcf" text-anchor="middle">=</text>
+
+    <rect x="510" y="60" width="180" height="90" rx="10" fill="#e5484d"/>
+    <text x="600" y="100" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">~10,000× work</text>
+    <text x="600" y="122" font-size="12" fill="#ffe8e8" text-anchor="middle">CPU at 100%</text>
+
+    <text x="360" y="196" font-size="12" fill="#a0a0a0" text-anchor="middle">With 100 users, the scan was quick. With 10,000 users, every page waits in line.</text>
+  </g>
+</svg>

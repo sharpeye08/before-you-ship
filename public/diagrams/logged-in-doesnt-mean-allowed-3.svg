@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" role="img" aria-labelledby="t d">
+  <title id="t">Before and after the fix</title>
+  <desc id="d">Before the fix, User B asks for invoice 1041. The server finds invoice 1041 by its ID only, so User B sees User A's invoice. After the fix, the server looks for invoice 1041 that belongs to User B. It finds nothing and replies Not found.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="330" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Before -->
+    <text x="30" y="40" font-size="12" fill="#a0a0a0">BEFORE: CHECKS THE ID ONLY</text>
+    <rect x="30" y="54" width="140" height="80" rx="10" fill="#f2c94c"/>
+    <text x="100" y="90" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">User B</text>
+    <text x="100" y="112" font-size="12" fill="#111111" text-anchor="middle">asks for 1041</text>
+    <line x1="174" y1="94" x2="222" y2="94" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="230" y="54" width="230" height="80" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="345" y="90" font-size="15" fill="#f2f2f2" text-anchor="middle">Find invoice 1041</text>
+    <text x="345" y="112" font-size="12" fill="#a0a0a0" text-anchor="middle">(any owner)</text>
+    <line x1="464" y1="94" x2="512" y2="94" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="520" y="54" width="170" height="80" rx="10" fill="#e5484d"/>
+    <text x="605" y="90" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Sees User A's</text>
+    <text x="605" y="110" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">invoice</text>
+
+    <line x1="30" y1="166" x2="690" y2="166" stroke="#3a3a3a" stroke-width="1.5"/>
+
+    <!-- After -->
+    <text x="30" y="200" font-size="12" fill="#a0a0a0">AFTER: CHECKS THE ID AND THE OWNER</text>
+    <rect x="30" y="214" width="140" height="80" rx="10" fill="#f2c94c"/>
+    <text x="100" y="250" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">User B</text>
+    <text x="100" y="272" font-size="12" fill="#111111" text-anchor="middle">asks for 1041</text>
+    <line x1="174" y1="254" x2="222" y2="254" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="230" y="214" width="230" height="80" rx="10" fill="#4f6bd8"/>
+    <text x="345" y="250" font-size="15" fill="#f2f2f2" text-anchor="middle">Find invoice 1041</text>
+    <text x="345" y="272" font-size="12" fill="#e8ecff" text-anchor="middle">that belongs to User B</text>
+    <line x1="464" y1="254" x2="512" y2="254" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="520" y="214" width="170" height="80" rx="10" fill="#1f9d6b"/>
+    <text x="605" y="260" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">"Not found"</text>
+  </g>
+</svg>

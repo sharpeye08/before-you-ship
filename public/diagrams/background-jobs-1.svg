@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" role="img" aria-labelledby="t d">
+  <title id="t">Sign-up with a queue and a worker</title>
+  <desc id="d">The user clicks Create account. The sign-up route saves the user, adds a job to the queue and replies Welcome to the user. Later, a worker takes the job from the queue and tells the email service to send the email. The user waits only for steps 1 to 3.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="340" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <text x="30" y="44" font-size="12" fill="#a0a0a0">IN THE REQUEST</text>
+    <text x="690" y="44" font-size="12" fill="#a0a0a0" text-anchor="end">IN THE BACKGROUND</text>
+
+    <rect x="30" y="70" width="120" height="80" rx="10" fill="#f2c94c"/>
+    <text x="90" y="115" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">User</text>
+
+    <rect x="300" y="70" width="160" height="80" rx="10" fill="#4f6bd8"/>
+    <text x="380" y="106" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Sign-up route</text>
+    <text x="380" y="128" font-size="12" fill="#e8ecff" text-anchor="middle">saves the user</text>
+
+    <rect x="560" y="70" width="130" height="80" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="625" y="106" font-size="15" fill="#f2f2f2" text-anchor="middle">Queue</text>
+    <text x="625" y="128" font-size="12" fill="#a0a0a0" text-anchor="middle">list of jobs</text>
+
+    <rect x="560" y="230" width="130" height="80" rx="10" fill="#1f9d6b"/>
+    <text x="625" y="266" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Worker</text>
+    <text x="625" y="288" font-size="12" fill="#e6fff4" text-anchor="middle">runs later</text>
+
+    <rect x="300" y="230" width="160" height="80" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="380" y="275" font-size="15" fill="#f2f2f2" text-anchor="middle">Email service</text>
+
+    <line x1="156" y1="92" x2="294" y2="92" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="225" y="83" font-size="12" fill="#f2c94c" text-anchor="middle">1. Create account</text>
+
+    <line x1="466" y1="110" x2="554" y2="110" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="510" y="101" font-size="12" fill="#a0a0a0" text-anchor="middle">2. Add job</text>
+
+    <line x1="294" y1="130" x2="156" y2="130" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="225" y="149" font-size="12" fill="#8ea2ff" text-anchor="middle">3. "Welcome!"</text>
+
+    <line x1="625" y1="156" x2="625" y2="224" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="635" y="195" font-size="12" fill="#a0a0a0">4. Take job</text>
+
+    <line x1="554" y1="270" x2="466" y2="270" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="510" y="261" font-size="12" fill="#a0a0a0" text-anchor="middle">5. Send</text>
+
+    <text x="30" y="258" font-size="12" fill="#a0a0a0">The user waits only for</text>
+    <text x="30" y="276" font-size="12" fill="#a0a0a0">steps 1 to 3: a few</text>
+    <text x="30" y="294" font-size="12" fill="#a0a0a0">milliseconds.</text>
+  </g>
+</svg>

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" role="img" aria-labelledby="t d">
+  <title id="t">Many kitchens, one pantry</title>
+  <desc id="d">A load balancer sends 5,000 users' requests to many instances. Every instance opens connections to the same single database. The database has a limit on connections, often 100, so more instances do not make it bigger.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="360" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Users and load balancer -->
+    <text x="115" y="138" font-size="12" fill="#a0a0a0" text-anchor="middle">5,000 USERS</text>
+    <rect x="40" y="150" width="150" height="64" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="115" y="187" font-size="15" fill="#f2f2f2" text-anchor="middle">Load balancer</text>
+
+    <!-- Instances (the kitchens) -->
+    <text x="345" y="44" font-size="12" fill="#a0a0a0" text-anchor="middle">MANY KITCHENS</text>
+    <rect x="270" y="60" width="150" height="50" rx="10" fill="#4f6bd8"/>
+    <text x="345" y="90" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Instance 1</text>
+    <rect x="270" y="157" width="150" height="50" rx="10" fill="#4f6bd8"/>
+    <text x="345" y="187" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Instance 2</text>
+    <rect x="270" y="254" width="150" height="50" rx="10" fill="#4f6bd8"/>
+    <text x="345" y="284" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Instance 3</text>
+    <text x="345" y="328" font-size="12" fill="#a0a0a0" text-anchor="middle">...and hundreds more</text>
+
+    <!-- Database (the pantry) -->
+    <text x="600" y="114" font-size="12" fill="#a0a0a0" text-anchor="middle">ONE PANTRY</text>
+    <rect x="520" y="128" width="160" height="108" rx="10" fill="#f2c94c"/>
+    <text x="600" y="168" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Database</text>
+    <text x="600" y="192" font-size="12" fill="#111111" text-anchor="middle">one machine</text>
+    <text x="600" y="212" font-size="12" fill="#111111" text-anchor="middle">limit: often 100</text>
+
+    <!-- Load balancer to instances -->
+    <line x1="196" y1="176" x2="264" y2="88" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="196" y1="182" x2="264" y2="182" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="196" y1="188" x2="264" y2="276" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <!-- Instances to database -->
+    <line x1="426" y1="88" x2="514" y2="156" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="426" y1="182" x2="514" y2="182" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="426" y1="276" x2="514" y2="208" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <text x="600" y="272" font-size="12" fill="#f08a4b" text-anchor="middle">Every instance opens</text>
+    <text x="600" y="290" font-size="12" fill="#f08a4b" text-anchor="middle">its own connections</text>
+  </g>
+</svg>

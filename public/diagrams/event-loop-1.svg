@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" role="img" aria-labelledby="t d">
+  <title id="t">The event loop</title>
+  <desc id="d">Work that is ready to run, such as a new request or a database answer, waits in a list. The main thread picks the next piece of work and runs it to the end, then picks again. At an await, the waiting happens elsewhere, in the database, the operating system or helper threads. When the answer is ready, it goes back into the list.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="320" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Ready list -->
+    <text x="105" y="44" font-size="12" fill="#a0a0a0" text-anchor="middle">READY TO RUN</text>
+    <rect x="30" y="56" width="150" height="156" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <rect x="44" y="72" width="122" height="30" rx="6" fill="#141414" stroke="#3a3a3a"/>
+    <text x="105" y="92" font-size="12" fill="#f2f2f2" text-anchor="middle">new request</text>
+    <rect x="44" y="114" width="122" height="30" rx="6" fill="#141414" stroke="#3a3a3a"/>
+    <text x="105" y="134" font-size="12" fill="#f2f2f2" text-anchor="middle">database answer</text>
+    <rect x="44" y="156" width="122" height="30" rx="6" fill="#141414" stroke="#3a3a3a"/>
+    <text x="105" y="176" font-size="12" fill="#f2f2f2" text-anchor="middle">new request</text>
+
+    <!-- Main thread -->
+    <text x="360" y="44" font-size="12" fill="#a0a0a0" text-anchor="middle">ONE MAIN THREAD</text>
+    <rect x="270" y="56" width="180" height="64" rx="10" fill="#f2c94c"/>
+    <text x="360" y="94" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Pick next work</text>
+    <rect x="270" y="160" width="180" height="64" rx="10" fill="#f2c94c"/>
+    <text x="360" y="198" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Run it to the end</text>
+    <line x1="360" y1="122" x2="360" y2="152" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <path d="M268 200 H228 V104 H262" fill="none" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="182" y1="76" x2="262" y2="76" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <!-- Waiting elsewhere -->
+    <text x="605" y="44" font-size="12" fill="#a0a0a0" text-anchor="middle">WAITING HAPPENS ELSEWHERE</text>
+    <rect x="530" y="56" width="160" height="156" rx="10" fill="#4f6bd8"/>
+    <text x="610" y="118" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Database,</text>
+    <text x="610" y="140" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">files, helper</text>
+    <text x="610" y="162" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">threads</text>
+    <line x1="452" y1="192" x2="522" y2="192" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="487" y="182" font-size="12" fill="#a0a0a0" text-anchor="middle">await</text>
+
+    <!-- Answer back -->
+    <path d="M610 214 V262 H105 V220" fill="none" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="300" y="252" width="120" height="20" rx="10" fill="#141414"/>
+    <text x="360" y="266" font-size="12" fill="#a0a0a0" text-anchor="middle">answer is ready</text>
+
+    <text x="360" y="302" font-size="12" fill="#a0a0a0" text-anchor="middle">Only one piece of your JavaScript runs at a time.</text>
+  </g>
+</svg>

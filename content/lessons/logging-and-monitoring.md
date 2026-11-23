@@ -14,25 +14,25 @@ quiz:
       - text: "Logs don't record errors at night"
       - text: "500 errors are not real errors"
       - text: "The hosting platform hides errors from the owner"
-    explanation: "Logs answer \"what happened?\" when you go and look. An alert is what tells you to look. Without alerts, you find out when a user emails you."
+    explanation: "Logs answer \"what happened?\" when you go and look. An alert tells you to look. Without alerts, you find out when a user sends you an email."
 
-  - question: "Which log line is the most useful when you are searching for one failed payment later?"
+  - question: "Later, you search for one failed payment. Which log line is the most useful?"
     options:
       - text: "console.log(\"error\")"
       - text: "console.log(\"here 2\")"
       - text: "console.log(req.body)"
       - text: "logger.error({ err, orderId, userId }, \"payment failed\")"
         correct: true
-    explanation: "A structured log line has named fields. You can search for that order ID, count failures, and see which user was affected. \"error\" and \"here 2\" tell you almost nothing, and logging the whole request body can record passwords and card details."
+    explanation: "A structured log line has named fields. You can search for that order ID, count failures and see which user had the problem. \"error\" and \"here 2\" tell you almost nothing. A log of the whole request body can record passwords and card details."
 
-  - question: "Your login route has console.log(req.body) in it, left over from debugging. What is the problem?"
+  - question: "Your login route still has console.log(req.body) in it from an old debugging session. What is the problem?"
     options:
       - text: "It makes login slower"
       - text: "It writes every user's password into your logs in plain text"
         correct: true
       - text: "It shows the password in the user's browser"
       - text: "Nothing. Logs are private."
-    explanation: "The request body of a login contains the password. Logs are copied to dashboards and log tools, and more people can read them than your database. A log full of passwords undoes your password hashing."
+    explanation: "The request body of a login contains the password. Logs are copied to dashboards and log tools, and more people can read them than your database. A log full of passwords cancels the protection of your password hashing."
 
   - question: "You want to know if your error rate doubled after today's deploy. Which tool answers that best?"
     options:
@@ -41,16 +41,16 @@ quiz:
       - text: "A metric: a number tracked over time, like errors per minute"
         correct: true
       - text: "A migration"
-    explanation: "Logs tell the story of single events. Metrics count events over time, so you can compare before and after a deploy at a glance."
+    explanation: "Logs tell the story of single events. Metrics count events over time. So you can quickly compare the numbers before and after a deploy."
 
-  - question: "An uptime check visits your home page every few minutes and it always loads. Users still report that sign-up is broken. Why didn't the check catch it?"
+  - question: "An uptime check visits your home page every few minutes, and the page always loads. But users report that sign-up is broken. Why didn't the check find the problem?"
     options:
       - text: "Uptime checks only work at night"
       - text: "The check was too fast"
-      - text: "Sign-up bugs can't be detected by any tool"
-      - text: "The check only knows whether that one page answers, not whether sign-up works"
+      - text: "No tool can find sign-up bugs"
+      - text: "The check only knows if that one page answers, not if sign-up works"
         correct: true
-    explanation: "An uptime check is a simple outside visitor. It catches \"the site is down\", not \"one feature is broken\". Error tracking, a health check that touches the database, and watching sign-up numbers catch more."
+    explanation: "An uptime check is a simple visitor from outside. It finds \"the site is down\", not \"one feature is broken\". Error tracking, a health check that tests the database, and a watch on sign-up numbers find more."
 
   - question: "You set up alerts for every warning in your app. A month later, you ignore most alert emails. What went wrong?"
     options:
@@ -59,7 +59,7 @@ quiz:
       - text: "Email is too slow for alerts"
       - text: "You need even more alerts"
       - text: "Alerts should only be checked once a month"
-    explanation: "This is called alert fatigue. Alert only on things that need a person to act soon, like the site being down or payments failing. Everything else can wait in a dashboard."
+    explanation: "This is called alert fatigue. Send alerts only for things that need a person to act soon, like a site that is down or payments that fail. Everything else can wait in a dashboard."
 ---
 
 # Your app was down for six hours and nobody noticed
@@ -73,23 +73,23 @@ quiz:
 
 ## Six hours of silence
 
-Saturday, 2 a.m. Your database stops accepting new connections. Every page that needs data now shows "Something went wrong". Your error handling works perfectly: users see a polite message, not a crash.
+Saturday, 2 a.m. Your database stops accepting new connections from your app. Every page that needs data now shows "Something went wrong". Your error handling works perfectly: users see a polite message, not a crash.
 
-You are asleep. Then you're at breakfast. Then you're out with friends.
+You are asleep. Then you are at breakfast. Then you are out with friends.
 
-At 8 a.m., a user emails: "Is the site down? It's been broken all night." You open your hosting dashboard. The logs are full of the same database error, over and over. Your app had been reporting the problem the whole time.
+At 8 a.m., a user sends an email: "Is the site down? It's been broken all night." You open your hosting dashboard. The logs are full of the same database error, again and again. Your app reported the problem the whole time.
 
-Then you notice something worse. Your plan only keeps logs for one hour. The lines from 2 a.m., which would show what happened first, are already gone.
+Then you see something worse. Your plan keeps logs for only one hour. The lines from 2 a.m. would show what happened first. But they are already gone.
 
-How many people tried your app during those six hours, saw an error, and left without saying anything? You'll never know.
+How many people tried your app during those six hours, saw an error and left without a word? You will never know.
 
-The app wasn't silent. **Nobody was listening.** This lesson is about listening: knowing your app is broken before your users tell you, and having the information to fix it.
+The app wasn't silent. **But nothing told you.** This lesson shows you how to know that your app is broken before your users tell you. It also shows you how to get the information that you need to fix it.
 
 ---
 
 ## Three tools, three questions
 
-**Monitoring** means watching your running app so you know whether it is healthy. It is built from three different tools. Each one answers a different question.
+**Monitoring** means that you watch your running app, so that you know if it is healthy. Monitoring uses three different tools. Each tool answers a different question.
 
 | Tool | Question it answers | Example |
 |---|---|---|
@@ -97,15 +97,17 @@ The app wasn't silent. **Nobody was listening.** This lesson is about listening:
 | **Metrics** | How much, how often, how fast? | "3% of requests failed in the last 5 minutes" |
 | **Alerts** | Does a person need to act right now? | "Error rate above 5% for 10 minutes: phone notification" |
 
+![Your app writes logs, which answer what happened. Metrics count events over time and answer how much and how often. An alert decides if a person must act now, and sends a notification to your phone.](/diagrams/logging-and-monitoring-1.svg)
+
 Think of a small shop:
 
-- **Logs** are the security camera recording. Every event is there, but nobody watches it live. You rewind it when something went wrong.
-- **Metrics** are the totals on the till: sales per hour, refunds per day. You notice when today looks very different from usual.
-- **Alerts** are the burglar alarm. It stays quiet until something specific happens, and then it wakes you up.
+- **Logs** are the recording from the security camera. Every event is there, but nobody watches it live. You go back to it when something went wrong.
+- **Metrics** are the totals on the cash register: sales per hour, refunds per day. You notice when today looks very different from a normal day.
+- **Alerts** are the burglar alarm. It stays quiet until something specific happens. Then it wakes you up.
 
-**Where the comparison stops working:** a camera records everything it can see. Your logs only contain what your code chose to write. If your code never logs a failed payment, there is nothing to rewind.
+**Where the comparison stops working:** a camera records everything that it can see. Your logs contain only what your code chose to write. If your code never logs a failed payment, there is nothing to go back to.
 
-In the story, the logs worked. There were no metrics anyone looked at, and no alerts at all.
+In the story, the logs worked. But nobody looked at any metrics, and there were no alerts.
 
 ---
 
@@ -121,9 +123,9 @@ console.log("error");
 console.log("payment failed for " + user.email + " " + err);
 ```
 
-The first two mean something only to the person who wrote them, and only that day. The third is better, but it is one long sentence. To find "every failed payment for this order", you must search inside sentences. It also writes the user's email address into your logs, which we'll come back to.
+The first two lines mean something only to the person who wrote them, and only on that day. The third line is better, but it is one long sentence. To find "every failed payment for this order", you must search inside sentences. It also writes the user's email address into your logs. This is a problem that you will see later in this lesson.
 
-**Structured logging** means writing each log line as data with named fields, usually as JSON. A popular package for this in Node.js is **pino**:
+**Structured logging** means that you write each log line as data with named fields, usually as **JSON** (a text format for data). A popular package for this in Node.js is **pino**:
 
 ```js
 import pino from "pino";
@@ -137,7 +139,7 @@ In plain English:
 
 - **Lines 1–2:** create a logger.
 - **Line 4:** write an **info** line: something normal happened. The object holds the details, and the text says what happened.
-- **Line 5:** write an **error** line, including the error itself (`err`), which pino turns into fields like its message and stack trace.
+- **Line 5:** write an **error** line. It includes the error itself (`err`). Pino turns the error into fields, like its message and its stack trace (the list of functions that ran before the error).
 
 Each call prints one line of JSON, like this (shortened):
 
@@ -145,44 +147,46 @@ Each call prints one line of JSON, like this (shortened):
 {"level":50,"time":1767225600000,"userId":"u_81","orderId":"o_1042","msg":"payment failed"}
 ```
 
-Now your log tool can answer questions such as "show every error for order `o_1042`", or "how many `payment failed` lines in the last hour?". `level` 50 is pino's number for "error"; 30 is "info".
+Now your log tool can answer questions such as "show every error for order `o_1042`". It can also answer "how many `payment failed` lines in the last hour?". `level` 50 is pino's number for "error", and 30 is "info".
 
 ### Log levels
 
-**Log levels** mark how serious a line is. The common ones, from least to most serious:
+**Log levels** show how serious a line is. Here are the common levels, from least serious to most serious:
 
-- **debug:** details only useful while building. Usually switched off in production.
-- **info:** normal events: user signed up, order placed.
-- **warn:** something odd but handled: a retry, a slow response.
+- **debug:** details that are useful only while you build. Usually switched off in production.
+- **info:** normal events: a user signed up, an order was placed.
+- **warn:** something unusual, but the app handled it: a second try, a slow response.
 - **error:** something failed: a payment, a database query.
 
-Levels let you filter. During an outage, you look at errors first.
+With levels, you can filter. During an **outage** (a time when the app doesn't work), you look at errors first.
 
 ### What to log
 
-Log the events you would need to rebuild the story of a problem:
+Log the events that you need to tell the story of a problem:
 
 - **Errors, with context:** which user ID, which record, which step
 - **Important actions:** sign-ups, logins, payments, deletions
-- **Security events:** failed logins, "not allowed" answers, rate limits being hit. OWASP's logging guidance lists authentication and authorization failures among the events to always record.
+- **Security events:** failed logins, "not allowed" answers, and users who hit a rate limit (a limit on how many requests one user can send)
+
+OWASP is a well-known organization for web security. Its logging guidance lists failed logins and "not allowed" answers among the events to always record.
 
 ### What never to log
 
-This is the part AI-written code often gets wrong. Never write these into logs:
+AI-written code often gets this part wrong. Never write these into logs:
 
 - **Passwords**, even wrong ones
 - **Session IDs, cookies, tokens and API keys**
 - **Full card or bank numbers**
 - **Database connection strings** (they contain the database password)
-- **Personal data you don't need:** email addresses, home addresses, phone numbers, message contents. Log the user's ID instead.
+- **Personal data that you don't need:** email addresses, home addresses, phone numbers, message contents. Log the user's ID instead.
 
-Why does it matter so much? Logs are usually **less protected** than your database:
+Why is this so important? Logs usually have **less protection** than your database:
 
-- They are copied to your hosting dashboard, log tools and error trackers.
+- Your hosting dashboard, log tools and error trackers all get copies of them.
 - More people can read them: teammates, support staff, outside services.
-- They get pasted into chats, bug reports and AI tools.
+- People paste them into chats, bug reports and AI tools.
 
-The most common leak is one forgotten debugging line:
+The most common leak is one forgotten debugging line (a line that you added to find a problem):
 
 ```js
 app.post("/api/login", async (req, res) => {
@@ -191,37 +195,39 @@ app.post("/api/login", async (req, res) => {
 });
 ```
 
-The request body of a login contains the password. This one line writes every user's password, in plain text, into your logs. All your careful password hashing is undone.
+The request body of a login contains the password. This one line writes every user's password, in plain text, into your logs. It cancels all the protection of your careful password hashing.
 
-> **Go deeper:** [Never store a password. Here's what to store instead](/lessons/how-login-works) (Level 2) explains why passwords must never be stored readable.
+> **Go deeper:** [Never store a password. Here's what to store instead](/lessons/how-login-works) (Level 2) explains why you must never store passwords in a readable form.
 
-As a safety net, pino can hide fields automatically. With `pino({ redact: ["password", "token"] })`, any field with those names is printed as `[Redacted]`. It's a safety net, not a fix: the real fix is not logging the whole request.
+For extra protection, pino can hide fields automatically. With `pino({ redact: ["password", "token"] })`, pino prints any field with those names as `[Redacted]`. This is extra protection, not a fix. The real fix is to stop logging the whole request.
 
 ---
 
 ## Where your hosting platform shows logs
 
-Anything your backend prints ends up in your hosting platform's dashboard:
+Everything that your backend prints goes to your hosting platform's dashboard:
 
-- **Vercel:** open your project and choose **Logs**. These are called **runtime logs**: everything your functions printed, grouped by request, with filters for errors, status codes and routes. Build logs are separate, on each deployment.
-- **Netlify:** open your site, then **Cloud compute → Functions**, and pick a function to see its log.
+- **Vercel:** open your project and choose **Logs**. These are **runtime logs**: everything that your functions printed, grouped by request. You can filter by errors, status codes and routes. Build logs are separate, on each deployment.
+- **Netlify:** open your site, then **Cloud compute → Functions**. Choose a function to see its log.
 
-**Check how long logs are kept.** As of writing, Vercel's docs list one hour of runtime logs on the free Hobby plan and one day on Pro. Netlify's docs say function logs are kept for at least 24 hours, and up to 7 days on some plans. That's fine for watching what happens right now, but too short for "what happened on Saturday night?". To keep logs longer, platforms let you send them to a separate log service (Vercel calls this a **drain**).
+**Check how long the platform keeps logs.** At the time of writing, Vercel's docs list one hour of runtime logs on the free Hobby plan and one day on Pro. Netlify's docs say that it keeps function logs for at least 24 hours, and up to 7 days on some plans.
+
+That is enough to watch what happens right now. But it is too short for "what happened on Saturday night?". To keep logs longer, platforms let you send them to a separate log service. Vercel calls this a **drain**.
 
 ---
 
 ## Error tracking: errors that come to you
 
-Logs wait for you to read them. An **error tracker** is a service that catches errors in your app automatically, in the browser and on the server, and comes to you with a report.
+Logs wait for you to read them. An **error tracker** is a service that catches errors in your app automatically. It works in the browser and on the server. Then it sends a report to you.
 
-**Sentry** is one widely used example. Others exist, and they work in similar ways. An error tracker:
+**Sentry** is one widely used example. Other error trackers exist, and they work in similar ways. An error tracker:
 
-- catches errors your code didn't handle, plus ones you report yourself
-- **groups** identical errors into one **issue**, so 3,000 copies of the same crash show up as one problem with a count
-- shows how many users are affected and the stack trace of each error
-- emails or messages you when a new issue appears
+- catches errors that your code didn't handle, plus errors that you report yourself
+- **groups** identical errors into one **issue**, so 3,000 copies of the same crash appear as one problem with a count
+- shows how many users have the problem and the stack trace of each error
+- sends you an email or a message when a new issue appears
 
-For a Next.js app, Sentry's setup wizard is started with `npx @sentry/wizard@latest -i nextjs`. When you catch an error yourself and still want to know about it, you report it:
+For a Next.js app, start Sentry's setup wizard with `npx @sentry/wizard@latest -i nextjs`. Sometimes you catch an error yourself but still want to know about it. Then you report it:
 
 ```js
 try {
@@ -232,21 +238,21 @@ try {
 }
 ```
 
-The user gets a safe message, and you get a full report. Without line 4, this error would be handled so politely that nobody would ever know it happened. That's what happened on Saturday night.
+The user gets a safe message, and you get a full report. Without line 4, the app would handle this error so politely that nobody would ever know about it. That is what happened on Saturday night.
 
-**Check what it collects.** Error trackers can send extra details with each error: the user's IP address, user ID or email, request data, cookies. What is sent by default depends on the tool, its version and your settings. Read its "data collected" page and switch off what you don't need. The rules from "What never to log" apply here too.
+**Check what it collects.** Error trackers can send extra details with each error: the user's IP address, user ID or email, request data and cookies. What they send by default depends on the tool, its version and your settings. Read the tool's "data collected" page, and switch off what you don't need. The rules from "What never to log" apply here too.
 
-Sentry has a free plan for one person, as of writing. Check its pricing page for current limits.
+At the time of writing, Sentry has a free plan for one person. Check its pricing page for the current limits.
 
 ---
 
 ## Uptime checks: a visitor from outside
 
-Error trackers live inside your app. If the whole app is down, or its domain stops working, there may be nothing running to report the error.
+Error trackers run inside your app. If the whole app is down, or its domain stops working, maybe nothing runs that can report the error.
 
-An **uptime check** is an outside service that visits your app every few minutes, like a robot visitor. If it gets no answer, or an error status code, it alerts you. Services such as UptimeRobot offer this on free plans, and some error trackers include it too.
+An **uptime check** is an outside service that visits your app every few minutes, like a robot visitor. If it gets no answer, or an error status code, it sends you an alert. Services such as UptimeRobot offer this on free plans, and some error trackers include it too.
 
-To make the check smarter than "does the home page load?", add a **health check** route that also tests the database:
+A check of the home page only tells you that the page loads. To learn more, add a **health check** route that also tests the database:
 
 ```js
 app.get("/api/health", async (req, res) => {
@@ -259,23 +265,31 @@ app.get("/api/health", async (req, res) => {
 });
 ```
 
-`SELECT 1` is the smallest possible database question. If the database answers, the route replies "ok". If not, it replies with status `503` (Service Unavailable), and the uptime check alerts you. Notice it doesn't send the error details: anyone can open this address. On Saturday night, this check would have woken your phone a few minutes after 2 a.m.
+`SELECT 1` is the smallest possible database question. If the database answers, the route replies "ok". If not, it replies with status `503` (Service Unavailable), and the uptime check sends you an alert. Note that the route doesn't send the error details, because anyone can open this address. On Saturday night, this check would have sent an alert to your phone a few minutes after 2 a.m.
+
+![An uptime check outside your app visits /api/health every few minutes. The route sends SELECT 1 to the database. If the database answers, the route replies ok: true. If not, it replies 503, and the uptime check sends an alert to your phone.](/diagrams/logging-and-monitoring-2.svg)
 
 ---
 
-## Metrics and alerts: noticing what doesn't crash
+## Metrics and alerts: problems that don't crash
 
-Some problems never throw an error. The sign-up button stops doing anything. A payment provider rejects every card with a "normal" decline. The app looks healthy, and nobody signs up.
+Some problems never cause an error. The sign-up button stops working. A payment provider rejects every card with a "normal" decline. The app looks healthy, but nobody signs up.
 
-**Metrics** catch these. Your hosting platform's dashboard usually shows a few: number of requests, error rate (the share of requests with `5xx` status codes) and response time. Add the numbers that matter for your app: sign-ups per hour, orders per hour. If Tuesday's sign-ups are zero when they're usually fifty, something is broken, error or not.
+**Metrics** find these problems. Your hosting platform's dashboard usually shows a few metrics:
+
+- the number of requests
+- the error rate (the share of requests with `5xx` status codes)
+- the response time
+
+Add the numbers that are important for your app, like sign-ups per hour or orders per hour. Maybe you usually get fifty sign-ups on a Tuesday, and today you get zero. Then something is broken, even without an error.
 
 **Alerts** turn metrics into action. A good alert:
 
-- fires on something users feel: site down, error rate high, payments failing, sign-ups at zero
+- starts for something that users feel: the site is down, the error rate is high, payments fail, sign-ups are at zero
 - needs a person to do something soon
-- goes somewhere you will see it, like a phone notification, not an inbox you check weekly
+- goes to a place where you will see it, like a phone notification, not an inbox that you check once a week
 
-The opposite is **alert fatigue**: so many alerts that you stop reading them, including the real ones. Start with two or three alerts. Add more only when a real problem slipped through.
+The opposite is **alert fatigue**: there are so many alerts that you stop reading them, also the real ones. Start with two or three alerts. Add more only when you miss a real problem.
 
 ---
 
@@ -283,11 +297,11 @@ The opposite is **alert fatigue**: so many alerts that you stop reading them, in
 
 - **No alerts.** Logs and dashboards exist, but nothing tells you to look. You hear about problems from users, or from nobody.
 - **Logs that say nothing.** "error", "here", "done". No user ID, no record ID, no step.
-- **Logs that say too much.** Passwords, tokens, emails and whole request bodies, kept in more places than your database.
-- **Errors swallowed.** A `catch` block that shows a nice message but never logs or reports the error.
+- **Logs that say too much.** Passwords, tokens, emails and whole request bodies, stored in more places than your database.
+- **Hidden errors.** A `catch` block shows a nice message but never logs or reports the error.
 - **Logs that disappear.** One hour of history isn't enough to investigate the night before.
-- **Only watching "is it up?".** The home page loads, while sign-up or checkout is broken.
-- **Too many alerts.** Every warning sends an email, so all of them get ignored.
+- **Only "is it up?".** The home page loads, but sign-up or checkout is broken.
+- **Too many alerts.** Every warning sends an email, so you ignore all of them.
 
 > **Go deeper:** [It only breaks in production. How do you find out why?](/lessons/debugging-production) (Level 3) shows how to use these logs and reports to find the cause.
 
@@ -295,22 +309,22 @@ The opposite is **alert fatigue**: so many alerts that you stop reading them, in
 
 ## What good looks like
 
-A small app doesn't need a big setup. This is enough for most:
+A small app doesn't need a big setup. For most apps, this is enough:
 
 1. **Structured logs** with user IDs and record IDs, and no secrets or personal data.
-2. **An error tracker** on both the frontend and the backend, sending new issues to your email or phone.
+2. **An error tracker** on both the frontend and the backend. It sends new issues to your email or phone.
 3. **An uptime check** on your home page and on a health check route that tests the database.
-4. **Two or three alerts** that reach your phone: site down, error spike, a key action (sign-ups or payments) dropping to zero.
-5. **A quick look at your dashboard** after every deploy. Did errors go up?
+4. **Two or three alerts** that reach your phone. For example: the site is down, errors go up fast, or sign-ups or payments drop to zero.
+5. **A quick look at your dashboard** after every deploy. Check if errors went up.
 
 ---
 
 ## Test your own app
 
-1. **Find your logs.** Open your hosting platform's log page. Visit your app, then find the log lines for your own request.
-2. **Check retention.** Find out how long your plan keeps logs. Could you see what happened last night?
-3. **Hunt for leaks.** Search your code for `console.log(req.body)`, `password`, `token` and `email` near log calls. Ask your AI to check every log call.
-4. **Break something on purpose, safely.** In a preview deployment, add a route that throws an error. Does your error tracker report it? Did a message reach you?
+1. **Find your logs.** Open your hosting platform's log page. Visit your app. Then find the log lines for your own request.
+2. **Check how long logs are kept.** Find out how long your plan keeps logs. Ask yourself if you could see what happened last night.
+3. **Look for leaks.** Search your code for `console.log(req.body)`. Also search for `password`, `token` and `email` near log calls. Ask your AI to check every log call.
+4. **Break something on purpose, safely.** In a preview deployment, add a route that throws an error. Check if your error tracker reports it and if a message reaches you.
 5. **Set up one uptime check** for your live app, with alerts to your phone.
 
 ---
@@ -318,23 +332,23 @@ A small app doesn't need a big setup. This is enough for most:
 ## Takeaways
 
 **Key terms**
-- **Monitoring:** watching your running app so you know whether it's healthy
-- **Logs:** a record of individual events: what happened
+- **Monitoring:** you watch your running app, so you know if it is healthy
+- **Logs:** a record of single events: what happened
 - **Structured logging:** log lines as data with named fields, usually JSON
 - **Log levels:** debug, info, warn, error: how serious a line is
 - **Metrics:** numbers tracked over time, like error rate or sign-ups per hour
-- **Alert:** a rule that notifies a person when something needs action
+- **Alert:** a rule that tells a person when something needs action
 - **Error tracker:** a service that collects, groups and reports errors, like Sentry
-- **Uptime check:** an outside robot visitor that alerts you when your app doesn't answer
-- **Health check:** a route that tests whether the app and its database are working
+- **Uptime check:** a robot visitor from outside that alerts you when your app doesn't answer
+- **Health check:** a route that tests if the app and its database work
 - **Alert fatigue:** so many alerts that people stop paying attention
 
 **Red flags**
 - `console.log(req.body)`, or any log that includes passwords, tokens or cookies
-- `catch` blocks that hide errors without logging or reporting them
+- `catch` blocks that hide errors and don't log or report them
 - You found out about the last outage from a user
 - Nobody gets a notification when the site is down
-- Logs are kept for less time than it takes you to notice a problem
+- Logs are kept for less time than you need to notice a problem
 
 **Ask your AI**
 - *"Find every log statement in my app. Do any of them log passwords, tokens, cookies, emails or whole request bodies?"*
@@ -347,17 +361,24 @@ A small app doesn't need a big setup. This is enough for most:
 <details>
 <summary><strong>Going deeper</strong> (optional, for readers who want more detail)</summary>
 
-**OWASP and logging.** The OWASP Top 10 (2025) includes **A09: Security Logging and Alerting Failures**: not recording security events, or recording them with nobody alerted. OWASP's *Logging Cheat Sheet* lists data to keep out of logs, including passwords, session identifiers, access tokens, encryption keys, payment card and bank data, database connection strings and sensitive personal data.
+**OWASP and logging.** The OWASP Top 10 (2025) includes **A09: Security Logging and Alerting Failures**. This means security events that are not recorded, or that are recorded but nobody gets an alert. OWASP's *Logging Cheat Sheet* lists data to keep out of logs:
 
-**Request IDs.** One request can produce many log lines, from several functions. Giving each request an ID, and adding it to every line, lets you pull out the whole story of one request. Vercel's runtime logs already group lines by request and show a request ID.
+- passwords
+- session identifiers and access tokens
+- encryption keys
+- payment card and bank data
+- database connection strings
+- sensitive personal data
 
-**pino's redaction options.** Redacted values are replaced with `[Redacted]` by default. You can choose another replacement text with `censor`, or remove the fields completely with `remove: true`. Paths can reach inside objects, like `"req.headers.authorization"`.
+**Request IDs.** One request can produce many log lines, from several functions. Give each request an ID, and add it to every line. Then you can find the whole story of one request. Vercel's runtime logs already group lines by request and show a request ID.
 
-**Why logs cost money.** Log services usually charge by how much data you send and how long they keep it. Logging every request in full gets expensive quickly. Keep debug logs off in production and log what you'd actually search for.
+**pino's redaction options.** By default, pino replaces hidden values with `[Redacted]`. You can choose a different replacement text with `censor`. You can also remove the fields completely with `remove: true`. Paths can reach inside objects, like `"req.headers.authorization"`.
 
-**Percentiles.** Response time is often shown as a **percentile**: "p95 = 800 ms" means 95% of requests were faster than 800 milliseconds. An average hides the slow requests that users complain about; a high percentile shows them.
+**Why logs cost money.** Log services usually charge for how much data you send and how long they keep it. If you log every request in full, the cost goes up fast. Keep debug logs off in production. Log what you would really search for.
 
-**Traces.** A **trace** follows one request as it moves through several services: your function, the database, a payment API. It shows where the time went. **OpenTelemetry** is an open-source, vendor-neutral toolkit and standard for collecting traces, metrics and logs, supported by many monitoring tools.
+**Percentiles.** Dashboards often show response time as a **percentile**. "p95 = 800 ms" means that 95% of requests were faster than 800 milliseconds. An average hides the slow requests that users complain about. A high percentile shows them.
+
+**Traces.** A **trace** follows one request as it moves through several services: your function, the database, a payment API. It shows where the time went. **OpenTelemetry** is an open-source toolkit and standard for collecting traces, metrics and logs. It is vendor-neutral: it is not tied to one company. Many monitoring tools support it.
 
 </details>
 

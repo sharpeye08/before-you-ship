@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" role="img" aria-labelledby="t d">
+  <title id="t">The parts of an error</title>
+  <desc id="d">The error line has two parts: the type of error, TypeError, and the details, Cannot read properties of undefined (reading 'name'). One line of the stack trace, at showWinner (/home/sam/quiz-app/src/scores.js:3:36), has four parts: the function showWinner, the file /home/sam/quiz-app/src/scores.js, line 3 and column 36.</desc>
+  <rect width="720" height="300" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Row 1: the error line -->
+    <text x="40" y="36" font-size="12" fill="#a0a0a0">THE ERROR LINE</text>
+    <rect x="40" y="48" width="150" height="50" rx="10" fill="#f2c94c"/>
+    <text x="115" y="78" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">TypeError</text>
+    <rect x="210" y="48" width="470" height="50" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="445" y="78" font-size="15" fill="#f2f2f2" text-anchor="middle">Cannot read properties of undefined (reading 'name')</text>
+    <text x="115" y="120" font-size="12" fill="#a0a0a0" text-anchor="middle">Type of error</text>
+    <text x="445" y="120" font-size="12" fill="#a0a0a0" text-anchor="middle">Details: what went wrong</text>
+
+    <!-- Row 2: one stack trace line -->
+    <text x="40" y="160" font-size="12" fill="#a0a0a0">ONE LINE OF THE STACK TRACE</text>
+    <text x="40" y="180" font-size="12" fill="#cfcfcf">at showWinner (/home/sam/quiz-app/src/scores.js:3:36)</text>
+    <rect x="40" y="194" width="150" height="50" rx="10" fill="#4f6bd8"/>
+    <text x="115" y="224" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">showWinner</text>
+    <rect x="210" y="194" width="290" height="50" rx="10" fill="#1f9d6b"/>
+    <text x="355" y="224" font-size="15" fill="#f2f2f2" text-anchor="middle">/home/sam/quiz-app/src/scores.js</text>
+    <rect x="520" y="194" width="70" height="50" rx="10" fill="#f08a4b"/>
+    <text x="555" y="224" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">3</text>
+    <rect x="610" y="194" width="70" height="50" rx="10" fill="#e98da4"/>
+    <text x="645" y="224" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">36</text>
+    <text x="115" y="266" font-size="12" fill="#a0a0a0" text-anchor="middle">Function</text>
+    <text x="355" y="266" font-size="12" fill="#a0a0a0" text-anchor="middle">File</text>
+    <text x="555" y="266" font-size="12" fill="#a0a0a0" text-anchor="middle">Line</text>
+    <text x="645" y="266" font-size="12" fill="#a0a0a0" text-anchor="middle">Column</text>
+  </g>
+</svg>

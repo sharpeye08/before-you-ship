@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" role="img" aria-labelledby="t d">
+  <title id="t">A dual write with a crash in the gap</title>
+  <desc id="d">The order route saves and commits the order in the database. Then the server crashes before the publish. The event never reaches the message broker, so the email and warehouse services never hear about the order.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#e5484d"/>
+    </marker>
+  </defs>
+  <rect width="720" height="300" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Route -->
+    <rect x="30" y="110" width="150" height="80" rx="10" fill="#f2c94c"/>
+    <text x="105" y="146" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Order route</text>
+    <text x="105" y="166" font-size="12" fill="#111111" text-anchor="middle">two writes</text>
+
+    <!-- Database -->
+    <rect x="290" y="30" width="170" height="80" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="375" y="66" font-size="15" fill="#f2f2f2" text-anchor="middle">Database</text>
+    <text x="375" y="86" font-size="12" fill="#1f9d6b" text-anchor="middle">order saved</text>
+
+    <!-- Broker -->
+    <rect x="290" y="190" width="170" height="80" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="375" y="226" font-size="15" fill="#f2f2f2" text-anchor="middle">Message broker</text>
+    <text x="375" y="246" font-size="12" fill="#e5484d" text-anchor="middle">no event</text>
+
+    <!-- Other services -->
+    <rect x="540" y="190" width="150" height="80" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="615" y="226" font-size="15" fill="#f2f2f2" text-anchor="middle">Email, warehouse</text>
+    <text x="615" y="246" font-size="12" fill="#a0a0a0" text-anchor="middle">never hear about it</text>
+
+    <!-- 1. Save -->
+    <line x1="184" y1="128" x2="284" y2="72" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="184" y="62" font-size="12" fill="#f2c94c">1. Save + commit</text>
+
+    <!-- 2. Publish (never happens) -->
+    <line x1="184" y1="172" x2="284" y2="228" stroke="#e5484d" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrow-red)"/>
+    <text x="150" y="240" font-size="12" fill="#e5484d">2. Publish</text>
+    <text x="150" y="256" font-size="12" fill="#e5484d">crash first</text>
+
+    <line x1="464" y1="230" x2="534" y2="230" stroke="#e5484d" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrow-red)"/>
+
+    <text x="690" y="66" font-size="12" fill="#a0a0a0" text-anchor="end">No ROLLBACK covers</text>
+    <text x="690" y="84" font-size="12" fill="#a0a0a0" text-anchor="end">both systems.</text>
+  </g>
+</svg>

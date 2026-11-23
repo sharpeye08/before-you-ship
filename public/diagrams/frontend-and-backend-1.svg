@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 350" role="img" aria-labelledby="t d">
+  <title id="t">Who counts the score?</title>
+  <desc id="d">Unsafe: the browser counts the score. Sam changes it, and the browser sends "Save this score: 999999". The server saves any number that arrives. Safe: the browser sends only the answers. The server checks them against the answer key and counts the score itself.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#e5484d"/>
+    </marker>
+  </defs>
+  <rect width="720" height="350" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Unsafe -->
+    <text x="40" y="38" font-size="12" fill="#e5484d">UNSAFE</text>
+    <rect x="40" y="50" width="180" height="80" rx="10" fill="#f2c94c"/>
+    <text x="130" y="84" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Browser</text>
+    <text x="130" y="106" font-size="12" fill="#111111" text-anchor="middle">counts the score</text>
+
+    <rect x="500" y="50" width="180" height="80" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="590" y="84" font-size="15" fill="#f2f2f2" text-anchor="middle">Server</text>
+    <text x="590" y="106" font-size="12" fill="#a0a0a0" text-anchor="middle">saves any number</text>
+
+    <line x1="226" y1="90" x2="492" y2="90" stroke="#e5484d" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrowRed)"/>
+    <text x="360" y="80" font-size="12" fill="#e5484d" text-anchor="middle">"Save this score: 999999"</text>
+    <text x="360" y="112" font-size="12" fill="#a0a0a0" text-anchor="middle">Sam changed the score first</text>
+
+    <line x1="40" y1="160" x2="680" y2="160" stroke="#2a2a2a" stroke-width="1"/>
+
+    <!-- Safe -->
+    <text x="40" y="188" font-size="12" fill="#1f9d6b">SAFE</text>
+    <rect x="40" y="200" width="180" height="80" rx="10" fill="#f2c94c"/>
+    <text x="130" y="234" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Browser</text>
+    <text x="130" y="256" font-size="12" fill="#111111" text-anchor="middle">sends only answers</text>
+
+    <rect x="500" y="200" width="180" height="80" rx="10" fill="#1f9d6b"/>
+    <text x="590" y="228" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Server</text>
+    <text x="590" y="249" font-size="12" fill="#e6f7ef" text-anchor="middle">checks the answer key</text>
+    <text x="590" y="267" font-size="12" fill="#e6f7ef" text-anchor="middle">counts the score</text>
+
+    <line x1="226" y1="240" x2="492" y2="240" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="360" y="230" font-size="12" fill="#f2c94c" text-anchor="middle">"Mars, Saturn, 8, The Sun"</text>
+    <text x="360" y="262" font-size="12" fill="#a0a0a0" text-anchor="middle">Sam can only send wrong answers</text>
+
+    <text x="360" y="322" font-size="12" fill="#a0a0a0" text-anchor="middle">The browser can ask. Only the server decides.</text>
+  </g>
+</svg>

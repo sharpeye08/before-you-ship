@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" role="img" aria-labelledby="t d">
+  <title id="t">CQRS with event sourcing</title>
+  <desc id="d">Write side: a command such as withdraw 100 dollars goes to the write side, which checks the rules and appends an event to the event store. Read side: a moment later, the projection updater reads the new event and updates the projection table. A query such as show my balance reads from the projection table.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="320" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <text x="30" y="38" font-size="12" fill="#a0a0a0">WRITE SIDE</text>
+    <text x="30" y="198" font-size="12" fill="#a0a0a0">READ SIDE</text>
+
+    <!-- Top row -->
+    <rect x="30" y="50" width="170" height="70" rx="10" fill="#f2c94c"/>
+    <text x="115" y="80" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Command</text>
+    <text x="115" y="100" font-size="12" fill="#111111" text-anchor="middle">"withdraw $100"</text>
+
+    <rect x="270" y="50" width="180" height="70" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="360" y="80" font-size="15" fill="#f2f2f2" text-anchor="middle">Rules</text>
+    <text x="360" y="100" font-size="12" fill="#a0a0a0" text-anchor="middle">enough money?</text>
+
+    <rect x="520" y="50" width="170" height="70" rx="10" fill="#4f6bd8"/>
+    <text x="605" y="80" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Event store</text>
+    <text x="605" y="100" font-size="12" fill="#e8ecff" text-anchor="middle">append the event</text>
+
+    <!-- Bottom row -->
+    <rect x="30" y="210" width="170" height="70" rx="10" fill="#1f9d6b"/>
+    <text x="115" y="240" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Query</text>
+    <text x="115" y="260" font-size="12" fill="#e6fff4" text-anchor="middle">"show my balance"</text>
+
+    <rect x="270" y="210" width="180" height="70" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="360" y="240" font-size="15" fill="#f2f2f2" text-anchor="middle">Projection</text>
+    <text x="360" y="260" font-size="12" fill="#a0a0a0" text-anchor="middle">wallet_balances table</text>
+
+    <rect x="520" y="210" width="170" height="70" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="605" y="240" font-size="15" fill="#f2f2f2" text-anchor="middle">Updater</text>
+    <text x="605" y="260" font-size="12" fill="#a0a0a0" text-anchor="middle">reads new events</text>
+
+    <!-- Arrows -->
+    <line x1="204" y1="85" x2="264" y2="85" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="454" y1="85" x2="514" y2="85" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="605" y1="124" x2="605" y2="204" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="615" y="168" font-size="12" fill="#a0a0a0">a moment later</text>
+    <line x1="516" y1="245" x2="456" y2="245" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="204" y1="245" x2="264" y2="245" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="234" y="236" font-size="12" fill="#a0a0a0" text-anchor="middle">reads</text>
+  </g>
+</svg>

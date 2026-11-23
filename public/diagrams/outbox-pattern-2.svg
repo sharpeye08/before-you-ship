@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" role="img" aria-labelledby="t d">
+  <title id="t">The transactional outbox</title>
+  <desc id="d">In one database transaction, the order route saves the order row and an outbox row that describes the event. Later, the relay, a worker, reads new outbox rows, publishes each one to the message broker, and marks it as sent.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="320" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Route -->
+    <rect x="30" y="125" width="130" height="70" rx="10" fill="#f2c94c"/>
+    <text x="95" y="157" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Order route</text>
+    <text x="95" y="177" font-size="12" fill="#111111" text-anchor="middle">one write</text>
+
+    <!-- Database with one transaction -->
+    <rect x="210" y="40" width="230" height="240" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="325" y="68" font-size="15" fill="#f2f2f2" text-anchor="middle">Database</text>
+    <text x="325" y="88" font-size="12" fill="#a0a0a0" text-anchor="middle">one transaction</text>
+    <rect x="230" y="110" width="190" height="50" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="325" y="140" font-size="15" fill="#f2f2f2" text-anchor="middle">Order 1042</text>
+    <rect x="230" y="180" width="190" height="50" rx="10" fill="#4f6bd8"/>
+    <text x="325" y="210" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Outbox row</text>
+    <text x="325" y="262" font-size="12" fill="#a0a0a0" text-anchor="middle">saved together, or not at all</text>
+
+    <!-- Relay -->
+    <rect x="510" y="175" width="180" height="70" rx="10" fill="#1f9d6b"/>
+    <text x="600" y="206" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Relay (worker)</text>
+    <text x="600" y="226" font-size="12" fill="#e6fff4" text-anchor="middle">every second</text>
+
+    <!-- Broker -->
+    <rect x="510" y="40" width="180" height="70" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="600" y="72" font-size="15" fill="#f2f2f2" text-anchor="middle">Message broker</text>
+    <text x="600" y="92" font-size="12" fill="#a0a0a0" text-anchor="middle">to the consumers</text>
+
+    <!-- Arrows -->
+    <line x1="164" y1="160" x2="204" y2="160" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="185" y="113" font-size="12" fill="#f2c94c" text-anchor="middle">1. Save</text>
+    <text x="185" y="128" font-size="12" fill="#f2c94c" text-anchor="middle">both</text>
+
+    <line x1="424" y1="205" x2="504" y2="205" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="464" y="196" font-size="12" fill="#a0a0a0" text-anchor="middle">2. Read</text>
+
+    <line x1="600" y1="171" x2="600" y2="116" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="610" y="148" font-size="12" fill="#a0a0a0">3. Publish</text>
+
+    <text x="600" y="270" font-size="12" fill="#a0a0a0" text-anchor="middle">4. Mark the row as sent</text>
+  </g>
+</svg>

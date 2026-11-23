@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" role="img" aria-labelledby="t d">
+  <title id="t">git bisect cuts the suspects in half</title>
+  <desc id="d">At the start, 80 commits are suspects, between the good commit a1b2c3d and the bad current version. After each test, git bisect keeps only half: 40, 20, 10, 5, 3, 2 and then 1, the first bad commit. That is about 7 tests instead of 80.</desc>
+  <rect width="720" height="340" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <text x="150" y="44" font-size="12" fill="#1f9d6b">good: a1b2c3d</text>
+    <text x="670" y="44" font-size="12" fill="#e5484d" text-anchor="end">bad: current version</text>
+
+    <g font-size="12" fill="#a0a0a0" text-anchor="end">
+      <text x="134" y="70">start: 80</text>
+      <text x="134" y="100">test 1: 40</text>
+      <text x="134" y="130">test 2: 20</text>
+      <text x="134" y="160">test 3: 10</text>
+      <text x="134" y="190">test 4: 5</text>
+      <text x="134" y="220">test 5: 3</text>
+      <text x="134" y="250">test 6: 2</text>
+      <text x="134" y="280">test 7: 1</text>
+    </g>
+
+    <rect x="150" y="56" width="520" height="18" rx="4" fill="#4f6bd8"/>
+    <rect x="150" y="86" width="260" height="18" rx="4" fill="#4f6bd8"/>
+    <rect x="150" y="116" width="130" height="18" rx="4" fill="#4f6bd8"/>
+    <rect x="150" y="146" width="65" height="18" rx="4" fill="#4f6bd8"/>
+    <rect x="150" y="176" width="33" height="18" rx="4" fill="#4f6bd8"/>
+    <rect x="150" y="206" width="20" height="18" rx="4" fill="#4f6bd8"/>
+    <rect x="150" y="236" width="13" height="18" rx="4" fill="#4f6bd8"/>
+    <rect x="150" y="266" width="8" height="18" rx="3" fill="#e5484d"/>
+    <text x="172" y="280" font-size="15" fill="#f2f2f2">the first bad commit</text>
+
+    <text x="360" y="318" font-size="12" fill="#a0a0a0" text-anchor="middle">Each answer, good or bad, cuts the suspects in half. About 7 tests instead of 80.</text>
+  </g>
+</svg>

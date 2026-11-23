@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" role="img" aria-labelledby="t d">
+  <title id="t">A copy that follows every change is not a backup</title>
+  <desc id="d">The agent's DELETE command reaches the live database. An instant copy follows every change, so it deletes the bookings too. Last night's backup is separate, so the DELETE can't reach it, and you can restore from it.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#e5484d"/>
+    </marker>
+  </defs>
+  <rect width="720" height="300" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- DELETE -->
+    <rect x="24" y="115" width="150" height="70" rx="10" fill="#f08a4b"/>
+    <text x="99" y="146" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">DELETE</text>
+    <text x="99" y="166" font-size="12" fill="#111111" text-anchor="middle">from the agent</text>
+
+    <!-- Live database -->
+    <rect x="280" y="40" width="180" height="70" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="370" y="71" font-size="15" fill="#f2f2f2" text-anchor="middle">Live database</text>
+    <text x="370" y="91" font-size="12" fill="#a0a0a0" text-anchor="middle">bookings deleted</text>
+
+    <!-- Instant copy -->
+    <rect x="520" y="40" width="176" height="70" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="608" y="71" font-size="15" fill="#f2f2f2" text-anchor="middle">Instant copy</text>
+    <text x="608" y="91" font-size="12" fill="#a0a0a0" text-anchor="middle">deletes them too</text>
+
+    <!-- Backup -->
+    <rect x="280" y="200" width="180" height="70" rx="10" fill="#1f9d6b"/>
+    <text x="370" y="231" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Last night's backup</text>
+    <text x="370" y="251" font-size="12" fill="#e6f6ef" text-anchor="middle">separate and safe</text>
+
+    <!-- Arrows -->
+    <line x1="178" y1="135" x2="274" y2="82" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="464" y1="75" x2="514" y2="75" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="608" y="134" font-size="12" fill="#a0a0a0" text-anchor="middle">copies every change,</text>
+    <text x="608" y="150" font-size="12" fill="#a0a0a0" text-anchor="middle">also the mistake</text>
+
+    <line x1="178" y1="168" x2="274" y2="228" stroke="#e5484d" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrow-red)"/>
+    <text x="180" y="230" font-size="12" fill="#e5484d" text-anchor="middle">can't reach</text>
+
+    <line x1="370" y1="196" x2="370" y2="116" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="382" y="160" font-size="12" fill="#1f9d6b">restore</text>
+  </g>
+</svg>

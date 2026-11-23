@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" role="img" aria-labelledby="t d">
+  <title id="t">Copying a name versus pointing to it</title>
+  <desc id="d">Left, copying: the users table says Sam Rivera, but a post, a comment and the top cooks list each keep an old copy that says sam_cooks. Right, pointing: the post, the comment and the top cooks list each store user_id 7 and point to the one row in users, so a change in one place shows everywhere.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="330" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Left: copying -->
+    <text x="40" y="38" font-size="12" fill="#e5484d">COPYING</text>
+    <rect x="40" y="50" width="290" height="56" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="56" y="83" font-size="12" fill="#a0a0a0">users</text>
+    <text x="110" y="84" font-size="15" fill="#f2f2f2">7: Sam Rivera</text>
+    <rect x="40" y="130" width="290" height="40" rx="10" fill="#1f1f1f" stroke="#e5484d" stroke-width="1.5"/>
+    <text x="56" y="155" font-size="15" fill="#f2f2f2">post: by sam_cooks</text>
+    <rect x="40" y="180" width="290" height="40" rx="10" fill="#1f1f1f" stroke="#e5484d" stroke-width="1.5"/>
+    <text x="56" y="205" font-size="15" fill="#f2f2f2">comment: sam_cooks</text>
+    <rect x="40" y="230" width="290" height="40" rx="10" fill="#1f1f1f" stroke="#e5484d" stroke-width="1.5"/>
+    <text x="56" y="255" font-size="15" fill="#f2f2f2">top cooks: sam_cooks</text>
+    <text x="185" y="300" font-size="12" fill="#a0a0a0" text-anchor="middle">Old copies stay wrong until you fix each one</text>
+
+    <!-- Right: pointing -->
+    <text x="380" y="38" font-size="12" fill="#1f9d6b">POINTING</text>
+    <rect x="380" y="50" width="270" height="56" rx="10" fill="#1f9d6b"/>
+    <text x="396" y="83" font-size="12" fill="#dff5ec">users</text>
+    <text x="450" y="84" font-size="15" font-weight="600" fill="#f2f2f2">7: Sam Rivera</text>
+    <rect x="380" y="130" width="270" height="40" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="396" y="155" font-size="15" fill="#f2f2f2">post: user_id 7</text>
+    <rect x="380" y="180" width="270" height="40" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="396" y="205" font-size="15" fill="#f2f2f2">comment: user_id 7</text>
+    <rect x="380" y="230" width="270" height="40" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="396" y="255" font-size="15" fill="#f2f2f2">top cooks: user_id 7</text>
+
+    <!-- Pointers -->
+    <path d="M652 150 L680 150" fill="none" stroke="#cfcfcf" stroke-width="2"/>
+    <path d="M652 200 L680 200" fill="none" stroke="#cfcfcf" stroke-width="2"/>
+    <path d="M652 250 L680 250" fill="none" stroke="#cfcfcf" stroke-width="2"/>
+    <path d="M680 250 L680 78 L658 78" fill="none" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="515" y="300" font-size="12" fill="#a0a0a0" text-anchor="middle">Change the name once, every page shows it</text>
+  </g>
+</svg>

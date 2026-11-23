@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 400" role="img" aria-labelledby="t d">
+  <title id="t">Two instances that do not share memory</title>
+  <desc id="d">Mia is connected to instance A, and Leo is connected to instance B. Instance A keeps only Mia's connection in its memory, so Mia's message does not reach Leo. The fix is a shared store, such as Redis, that both instances use to pass messages to each other.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="400" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <text x="40" y="34" font-size="12" fill="#a0a0a0">ONE APP, TWO INSTANCES</text>
+
+    <!-- Users -->
+    <rect x="75" y="50" width="130" height="60" rx="10" fill="#f2c94c"/>
+    <text x="140" y="85" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Mia</text>
+    <rect x="515" y="50" width="130" height="60" rx="10" fill="#f2c94c"/>
+    <text x="580" y="85" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Leo</text>
+
+    <!-- Instances -->
+    <rect x="40" y="170" width="200" height="84" rx="10" fill="#4f6bd8"/>
+    <text x="140" y="204" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Instance A</text>
+    <text x="140" y="228" font-size="12" fill="#e8ecff" text-anchor="middle">memory: Mia</text>
+    <rect x="480" y="170" width="200" height="84" rx="10" fill="#4f6bd8"/>
+    <text x="580" y="204" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Instance B</text>
+    <text x="580" y="228" font-size="12" fill="#e8ecff" text-anchor="middle">memory: Leo</text>
+
+    <!-- Connections -->
+    <line x1="140" y1="116" x2="140" y2="162" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="150" y="144" font-size="12" fill="#a0a0a0">sends a message</text>
+    <line x1="580" y1="116" x2="580" y2="162" stroke="#cfcfcf" stroke-width="2" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+    <text x="570" y="144" font-size="12" fill="#a0a0a0" text-anchor="end">connected</text>
+
+    <!-- Message does not reach Leo -->
+    <line x1="246" y1="196" x2="368" y2="149" stroke="#e5484d" stroke-width="2" stroke-dasharray="6 5"/>
+    <line x1="369" y1="140" x2="385" y2="156" stroke="#e5484d" stroke-width="3"/>
+    <line x1="369" y1="156" x2="385" y2="140" stroke="#e5484d" stroke-width="3"/>
+    <text x="377" y="196" font-size="12" fill="#e5484d" text-anchor="middle">A does not know Leo</text>
+
+    <!-- The fix: shared store -->
+    <text x="360" y="288" font-size="12" fill="#1f9d6b" text-anchor="middle">The fix</text>
+    <rect x="250" y="300" width="220" height="70" rx="10" fill="#1f9d6b"/>
+    <text x="360" y="332" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Shared store</text>
+    <text x="360" y="354" font-size="12" fill="#e6fff4" text-anchor="middle">such as Redis</text>
+    <line x1="196" y1="260" x2="256" y2="304" stroke="#cfcfcf" stroke-width="2" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+    <line x1="524" y1="260" x2="464" y2="304" stroke="#cfcfcf" stroke-width="2" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+  </g>
+</svg>

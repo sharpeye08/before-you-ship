@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" role="img" aria-labelledby="t d">
+  <title id="t">The saw shape of a memory leak</title>
+  <desc id="d">A memory graph over several days. Memory climbs slowly for about two days until it reaches the memory limit. The process crashes, memory drops to the bottom, and the slow climb starts again. The pattern repeats like the teeth of a saw.</desc>
+  <rect width="720" height="300" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Axes -->
+    <line x1="70" y1="40" x2="70" y2="240" stroke="#3a3a3a" stroke-width="1.5"/>
+    <line x1="70" y1="240" x2="690" y2="240" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="78" y="36" font-size="12" fill="#a0a0a0">Memory</text>
+    <text x="690" y="262" font-size="12" fill="#a0a0a0" text-anchor="end">Time</text>
+
+    <!-- Limit -->
+    <line x1="70" y1="72" x2="690" y2="72" stroke="#e5484d" stroke-width="1.5" stroke-dasharray="6 5"/>
+    <text x="80" y="64" font-size="12" fill="#e5484d">Memory limit (1 GB)</text>
+
+    <!-- Saw line -->
+    <polyline points="80,220 260,74 262,220 442,74 444,220 624,74 626,220 680,176" fill="none" stroke="#f08a4b" stroke-width="3" stroke-linejoin="round"/>
+
+    <!-- Crash markers -->
+    <circle cx="260" cy="74" r="5" fill="#e5484d"/>
+    <text x="268" y="96" font-size="12" fill="#f2f2f2">crash</text>
+    <circle cx="442" cy="74" r="5" fill="#e5484d"/>
+    <text x="450" y="96" font-size="12" fill="#f2f2f2">crash</text>
+    <circle cx="624" cy="74" r="5" fill="#e5484d"/>
+    <text x="632" y="96" font-size="12" fill="#f2f2f2">crash</text>
+
+    <!-- Notes -->
+    <line x1="80" y1="250" x2="260" y2="250" stroke="#a0a0a0" stroke-width="1"/>
+    <text x="170" y="266" font-size="12" fill="#a0a0a0" text-anchor="middle">slow climb: about 2 days</text>
+    <text x="360" y="288" font-size="12" fill="#a0a0a0" text-anchor="middle">Each drop is a crash and a restart. Then the leak starts to fill memory again.</text>
+  </g>
+</svg>

@@ -7,124 +7,126 @@ levelName: Shipping
 concepts: [Timeouts, Retries, Exponential backoff, Jitter, Idempotency keys, Unknown outcomes]
 readTime: 14 min
 quiz:
-  - question: "Your server asks a payment service to charge a customer. After 30 seconds, your code gives up waiting. What do you know about the payment?"
+  - question: "Your server asks a payment service to charge a customer. After 30 seconds, your code stops waiting. What do you know about the payment?"
     options:
-      - text: "It failed, so it's safe to charge again"
+      - text: "It failed, so it is safe to charge again"
       - text: "It succeeded"
-      - text: "Nothing for certain: it may have failed, succeeded, or still be running"
+      - text: "Nothing for certain: it can be failed, successful, or still in progress"
         correct: true
       - text: "The payment service will always cancel it"
-    explanation: "A timeout only means you stopped waiting. The request may never have arrived, may have succeeded with the answer lost on the way back, or may still be in progress. All three look the same from your side."
+    explanation: "A timeout only means that you stopped waiting. Maybe the request never arrived. Maybe it succeeded, and the answer got lost on the way back. Maybe it is still in progress. From your side, all three look the same."
 
-  - question: "Which of these errors is worth retrying automatically?"
+  - question: "Which of these errors is it good to retry automatically?"
     options:
       - text: "400 Bad Request"
       - text: "401 Unauthorized"
       - text: "404 Not Found"
       - text: "503 Service Unavailable"
         correct: true
-    explanation: "503 means the other service is temporarily unable to answer, so trying again later may work. A 400, 401 or 404 will give the same answer every time until you change the request."
+    explanation: "503 means that the other service cannot answer for a short time, so a later attempt can work. A 400, 401 or 404 gives the same answer every time, until you change the request."
 
-  - question: "An AI-written retry loop tries again immediately and forever until the call succeeds. The service you call is overloaded. What happens?"
+  - question: "An AI-written retry loop tries again immediately, and continues forever until the call succeeds. The service that you call has too much work. What happens?"
     options:
       - text: "The service recovers faster because it gets more requests"
-      - text: "Your app adds even more load to a struggling service, which can keep it down longer"
+      - text: "Your app adds more work to a service that already has problems, so the service can stay down longer"
         correct: true
       - text: "Nothing, because retries are always safe"
       - text: "The loop stops after one try"
-    explanation: "Retries add load. Without waiting longer between attempts and a maximum number of tries, many copies of your app hammer the service exactly when it is weakest."
+    explanation: "Retries add work for the service. Without longer waits and a maximum number of tries, many copies of your app send requests when the service is weakest."
 
   - question: "Why add a little randomness (jitter) to the wait between retries?"
     options:
-      - text: "So thousands of clients that failed at the same moment don't all retry at the same moment"
+      - text: "So that thousands of clients that failed at the same moment do not all retry at the same moment"
         correct: true
       - text: "To make the code harder to read"
       - text: "Because servers prefer random numbers"
       - text: "To make each retry faster"
     explanation: "If every client waits exactly 2 seconds, they all come back together and overload the service again. Random waits spread the retries out."
 
-  - question: "You send a payment request with an idempotency key. The connection drops, and you retry with the same key and the same details. What does Stripe do?"
+  - question: "You send a payment request with an idempotency key. The connection drops. You retry with the same key and the same details. What does Stripe do?"
     options:
       - text: "It charges the customer a second time"
       - text: "It returns an error because the key was already used"
-      - text: "It returns the saved result of the first request instead of charging again"
+      - text: "It returns the saved result of the first request, and does not charge again"
         correct: true
       - text: "It ignores the key"
-    explanation: "Stripe remembers the result of the first request made with that key, for at least 24 hours. A retry with the same key gets that saved result back, so the customer is charged once."
+    explanation: "Stripe keeps the result of the first request with that key for at least 24 hours. A retry with the same key gets that saved result back, so Stripe charges the customer only once."
 
-  - question: "When should your app create a new idempotency key?"
+  - question: "When must your app make a new idempotency key?"
     options:
       - text: "For every retry attempt"
-      - text: "Once per operation, such as one checkout, and reuse it for every retry of that operation"
+      - text: "Once per operation, such as one checkout, and use it again for every retry of that operation"
         correct: true
       - text: "Once per day for all requests"
       - text: "Only after a request succeeds"
-    explanation: "The key says \"this is the same operation as before\". A new key on each retry would look like a brand-new payment, which is exactly the double charge you're trying to prevent."
+    explanation: "The key says \"this is the same operation as before\". With a new key on each retry, each retry looks like a new payment. That is exactly the double charge that you want to prevent."
 ---
 
 # The payment timed out. Did it go through?
 
 > **Before you start**
 > This lesson uses a few words from earlier lessons:
-> - **Status code:** the number a server sends back with its answer, such as 200 (worked), 429 (too many requests) or 503 (temporarily unavailable). *([The app said "Saved!". The note was never saved](/lessons/http-methods-and-status-codes))*
-> - **Idempotent:** doing something twice has the same effect as doing it once, like pressing a lift button twice. *([The app said "Saved!". The note was never saved](/lessons/http-methods-and-status-codes))*
-> - **Webhook:** a message a service like Stripe sends to your server when something happens, such as a payment succeeding. *([Free stuff with one fake "payment succeeded" message](/lessons/webhooks))*
-> - **Background job:** work your app does outside the user's request, often with automatic retries. *([Sign-up takes 10 seconds because of one email](/lessons/background-jobs))*
+> - **Status code:** the number in a server's answer, such as 200 (worked), 429 (too many requests) or 503 (not available for a short time). *([The app said "Saved!". The note was never saved](/lessons/http-methods-and-status-codes))*
+> - **Idempotent:** if you do it twice, the effect is the same as if you do it once. A lift button is an example. *([The app said "Saved!". The note was never saved](/lessons/http-methods-and-status-codes))*
+> - **Webhook:** a message that a service like Stripe sends to your server when something happens, such as a successful payment. *([Free stuff with one fake "payment succeeded" message](/lessons/webhooks))*
+> - **Background job:** work that your app does outside the user's request, often with automatic retries. *([Sign-up takes 10 seconds because of one email](/lessons/background-jobs))*
 
 ## Two charges for one pair of shoes
 
 A customer clicks **Pay $49** in your shop. Your server sends the payment to your payment service and waits.
 
-And waits. The payment service is having a slow moment. After 30 seconds, your code gives up and shows: *"Payment failed. Please try again."*
+And waits. The payment service is slow for a moment. After 30 seconds, your code stops waiting and shows: *"Payment failed. Please try again."*
 
-The customer clicks **Pay** again. This time it works in two seconds. They see "Thank you for your order!"
+The customer clicks **Pay** again. This time, the payment works in two seconds. The customer sees "Thank you for your order!"
 
-The next day, they email you a screenshot of their bank app. Two charges of $49.
+The next day, the customer sends you an email with a screenshot of their bank app. It shows two charges of $49.
 
-What happened? The first payment **did not fail**. It went through. Only the *answer* was slow. Your code stopped waiting, assumed the worst, and asked the customer to pay again.
+What happened? The first payment **did not fail**. It went through. Only the *answer* was slow. Your code stopped waiting, guessed the worst result, and asked the customer to pay again.
 
-This lesson is about the most confusing moment in any app that talks to another service: you asked, and you got no answer. Did it work?
+This lesson is about the most confusing moment in any app that talks to another service. You asked, and you got no answer. Did it work?
 
 ---
 
 ## The mental model: the phone call that cuts off
 
-Imagine you phone a pizza shop. You give your order and your address. Right after you say "That's all", the line goes silent. The call dropped.
+Imagine that you phone a pizza shop. You give your order and your address. Right after you say "That's all", the line goes silent. The call dropped.
 
-Did they get your order? There are three possibilities:
+Did the shop get your order? There are three possibilities:
 
 1. **The order never arrived.** The line dropped before they heard it.
-2. **The order arrived, and they're making it.** Only their "Thank you, 30 minutes!" got lost.
-3. **They're still writing it down.** The answer just hasn't come yet.
+2. **The order arrived, and they are making it.** Only their answer ("Thank you, 30 minutes!") got lost.
+3. **They are still writing it down.** The answer has not come yet.
 
-From your side, all three sound exactly the same: silence. If you call again and order again, in case 2 you get two pizzas.
+From your side, all three sound exactly the same: silence. You can call again and order again. But in case 2, you then get two pizzas.
 
-Requests between computers work the same way. Your server sends a request to another service and waits. A **timeout** is the longest time you're willing to wait. When the time is up, you stop waiting.
+Requests between computers work in the same way. Your server sends a request to another service and waits. A **timeout** is the longest time that you agree to wait. When the time is up, you stop waiting.
 
-Here's the key idea of this lesson:
+![Three cases look the same from your server. In case 1, the request is lost on the way. In case 2, the payment service charges the card, but the answer is lost on the way back. In case 3, the payment service is still working.](/diagrams/timeouts-and-retries-1.svg)
+
+Here is the key idea of this lesson:
 
 > **A timeout tells you that you stopped waiting. It does not tell you what happened.**
 
-**Where the comparison stops working:** a pizza shop can recognize your voice on the second call and say "We already have your order." A computer can't, unless you give it a way to recognize the repeat. That way is called an **idempotency key**, and it's the big fix later in this lesson.
+**Where the comparison stops working:** on the second call, a pizza shop can recognize your voice and tell you that they already have your order. A computer cannot do this, unless you give it a way to recognize the repeat. That way is an **idempotency key**. It is the big fix later in this lesson.
 
 ### Why you need timeouts anyway
 
-If timeouts cause this confusion, why not wait forever?
+Timeouts cause this confusion. So why not wait forever?
 
-Because waiting is never free. While your server waits, the user stares at a spinner. Your serverless function keeps running until the platform stops it, and you may pay for that time. If many requests are stuck waiting, your app slows down for everyone.
+Because each second of waiting has a cost. While your server waits, the user looks at a spinner. Your serverless function continues to run until the platform stops it, and you can pay for that time. If many requests wait at the same time, your app becomes slow for everyone.
 
-Many tools wait a surprisingly long time by default. The `fetch` function built into Node.js can wait for minutes before giving up. The official OpenAI and Anthropic libraries for JavaScript wait 10 minutes per attempt by default, and then retry a timed-out request twice more. That's sensible for long AI answers, and far too long for a payment button.
+Many tools wait for a surprisingly long time by default. The `fetch` function in Node.js can wait for minutes before it stops. The official OpenAI and Anthropic libraries for JavaScript wait 10 minutes per attempt by default. Then they retry a timed-out request two more times. That is sensible for long AI answers, but much too long for a payment button.
 
-So you set a timeout that fits the job, and then you deal with the uncertainty properly.
+So set a timeout that fits the job. Then handle the uncertain result correctly.
 
 ### Retries: trying again
 
-When a request fails or times out, the obvious thing is to send it again. This is a **retry**. Many failures are short: a network hiccup, a service restarting, a brief overload. A retry a moment later often works.
+When a request fails or times out, the natural next step is to send it again. This is a **retry**. Many failures are short: a small network problem, a service that restarts, or a service with too much work for a short time. A retry a moment later often works.
 
-But a retry is only safe if one of these is true:
+But a retry is safe only if one of these is true:
 
-- The request is **idempotent**, like reading data (GET) or deleting one specific record. Doing it twice changes nothing.
-- Or you've given the request a way to be recognized as a repeat. That's what idempotency keys do.
+- The request is **idempotent**, like reading data (GET) or deleting one specific record. If you do it twice, nothing changes.
+- You gave the request a way to show that it is a repeat. Idempotency keys do this.
 
 ---
 
@@ -136,7 +138,7 @@ But a retry is only safe if one of these is true:
 const res = await fetch("https://api.example.com/rates");
 ```
 
-This line waits as long as `fetch` allows: minutes. If that service hangs, your function runs until the platform stops it, and the user gets a `504` error after a long wait. Meanwhile, users click again, and every click starts another stuck request.
+This line waits as long as `fetch` allows: minutes. If that service stops answering, your function runs until the platform stops it. After a long wait, the user gets a `504` error. Meanwhile, users click again, and every click starts another request that waits.
 
 ### Bug 2: Treating a timeout as a failure
 
@@ -148,9 +150,9 @@ try {
 }
 ```
 
-In plain English: if anything goes wrong while charging, including a timeout, tell the user the payment failed and invite them to pay again.
+In plain English: if any problem happens during the charge, tell the user that the payment failed. This includes a timeout. Then the user pays again.
 
-This is exactly the bug from the story. "I didn't get an answer" became "it failed". For reading data, that's harmless. For anything that creates, sends or charges, it leads to doubles.
+This is exactly the bug from the story. "I got no answer" became "it failed". For reading data, that causes no harm. For anything that creates, sends or charges, it causes doubles.
 
 ### Bug 3: The retry loop that never stops
 
@@ -164,13 +166,13 @@ while (true) {
 }
 ```
 
-In plain English: call the AI model; if it fails for any reason, call it again at once, forever.
+In plain English: call the AI model. If the call fails for any reason, call it again at once, forever.
 
-Imagine the AI service is overloaded and returning errors. Your app, and every other app written like this, immediately sends more requests. The service gets *more* traffic exactly when it can handle *less*, so it stays down longer. And an error that will never go away, like an invalid API key, turns into an endless loop.
+Imagine that the AI service has too much work and returns errors. Your app immediately sends more requests, and so does every other app with this code. The service gets *more* requests exactly when it can handle *fewer*, so it stays down longer. Also, some errors never go away, like an invalid API key. With those errors, the loop never ends.
 
 ### Bug 4: Retrying the wrong errors
 
-Not every error is temporary. A `400 Bad Request` means your request is wrong. A `401` means your key is wrong. A `404` means the thing doesn't exist. Sending the same request again gets the same answer every time. Retrying these only wastes time, and hides the real problem from your logs.
+Not every error is temporary. A `400 Bad Request` means that your request is wrong. A `401` means that your key is wrong. A `404` means that the item does not exist. If you send the same request again, you get the same answer every time. Retries for these errors waste time and hide the real problem from your logs.
 
 ---
 
@@ -184,11 +186,11 @@ const res = await fetch("https://api.example.com/rates", {
 });
 ```
 
-`AbortSignal.timeout(5000)` creates a signal that cancels the request after 5,000 milliseconds (5 seconds). If that happens, `fetch` throws an error named `TimeoutError`, which your code can catch and handle.
+`AbortSignal.timeout(5000)` makes a signal that cancels the request after 5,000 milliseconds (5 seconds). Then `fetch` throws an error named `TimeoutError`. Your code can catch and handle this error.
 
-Pick the number for the job. A quick lookup might get 5 seconds. A long AI answer might get 60, preferably streamed so the user sees progress. Most service libraries also have a `timeout` setting. Ask your AI to set it explicitly for every service you call.
+Choose the number for the job. A quick lookup can get 5 seconds. A long AI answer can get 60 seconds. If possible, stream the AI answer (send it piece by piece), so the user sees progress. Most service libraries also have a `timeout` setting. Tell your AI to set it for every service that you call.
 
-### Fix 2: Retry the right errors, with growing waits
+### Fix 2: Retry the right errors, with longer waits
 
 ```js
 async function withRetries(fn, attempts = 3) {
@@ -204,32 +206,34 @@ async function withRetries(fn, attempts = 3) {
 In plain English:
 
 1. **Lines 2–3:** try the call, up to 3 times. If it works, return the result.
-2. **Line 4:** if the error isn't **temporary**, or this was the last attempt, give up and pass the error on. `isTemporary` is a small helper that returns true only for a timeout, "too many requests" (429), or a server-side error (500, 502, 503, 504). Permanent errors fail fast.
-3. **Line 5:** otherwise, wait before trying again (`sleep` is a helper that waits that many milliseconds). The wait roughly doubles each time.
+2. **Line 4:** if the error is not **temporary**, or this was the last attempt, stop and pass the error on. `isTemporary` is a small function. It returns true only for a timeout, "too many requests" (429), or a server error (500, 502, 503, 504). Permanent errors fail fast.
+3. **Line 5:** if not, wait before the next try. `sleep` is a small function that waits that many milliseconds. Each wait is about two times the previous wait.
 
-Two ideas here have names:
+These two ideas have names:
 
-- **Exponential backoff:** wait longer after each failure (1 second, then 2, then 4). This gives a struggling service time to recover.
-- **Jitter:** add a little randomness to each wait. If a thousand users all failed at the same moment, they shouldn't all come back at the same moment. The random part spreads them out.
+- **Exponential backoff:** wait longer after each failure (1 second, then 2, then 4). This gives a service with problems time to recover.
+- **Jitter:** add a little randomness to each wait. Imagine that a thousand users all failed at the same moment. They must not all come back at the same moment. The random part spreads them out.
 
-Some services tell you exactly how long to wait, in a `Retry-After` header on a `429` or `503` reply. If it's there, use it.
+![A timeline of retries. Try 1 fails, then the code waits about 1 second. Try 2 fails, then the code waits about 2 seconds. Try 3 works. Each wait has a small random part.](/diagrams/timeouts-and-retries-2.svg)
 
-Also check before adding your own retries: the official OpenAI, Anthropic and Stripe libraries already retry some errors with backoff. Two layers of retries multiply: 3 retries in your code around 3 retries in the library is up to 16 attempts.
+Some services tell you exactly how long to wait. They put the time in a `Retry-After` header on a `429` or `503` reply. If the header is there, use it.
 
-> **Go deeper:** [One slow service took your whole app down](/lessons/circuit-breakers) (Level 5) shows how to stop calling a service that keeps failing.
+Also, check the library before you add your own retries. The official OpenAI, Anthropic and Stripe libraries already retry some errors with backoff. Two layers of retries multiply. For example, 3 retries in your code around 3 retries in the library can give up to 16 attempts.
+
+> **Go deeper:** [One slow service took your whole app down](/lessons/circuit-breakers) (Level 5) shows how to stop calls to a service that continues to fail.
 
 ### Fix 3: Idempotency keys for anything that charges or creates
 
-Now the real fix for the double charge. An **idempotency key** is a unique label you attach to one operation. It tells the service: *"If you've seen this label before, this is a repeat, not a new request."*
+Now the real fix for the double charge. An **idempotency key** is a unique label that you attach to one operation. It tells the service: *"If you saw this label before, this is a repeat, not a new request."*
 
 Stripe's documentation describes how it works:
 
-- You send the key in a header called `Idempotency-Key`. Stripe suggests a random value such as a UUID, or a value tied to your own record, like the ID of a shopping cart.
-- Stripe saves the result of the first request with that key, and returns that same saved result to any retry with the same key. No second charge.
-- Keys are kept for at least 24 hours.
-- If you reuse a key with *different* details, Stripe returns an error instead of guessing.
+- You send the key in a header named `Idempotency-Key`. Stripe suggests a random value such as a UUID (a long random ID). You can also use a value from your own records, like the ID of a shopping cart.
+- Stripe saves the result of the first request with that key. Then it returns that same saved result to any retry with the same key. There is no second charge.
+- Stripe keeps keys for at least 24 hours.
+- If you use a key again with *different* details, Stripe returns an error. It does not guess.
 
-With Stripe's Node.js library, it's one extra option:
+With Stripe's Node.js library, the key is one extra option:
 
 ```js
 const payment = await stripe.paymentIntents.create(
@@ -241,25 +245,27 @@ const payment = await stripe.paymentIntents.create(
 In plain English:
 
 1. **Line 2:** the payment details: $49.00 (Stripe counts in cents), in US dollars, for this customer.
-2. **Line 3:** the idempotency key, built from your own order's ID. Every attempt to pay for *this order* uses the same key.
+2. **Line 3:** the idempotency key, made from the ID of your own order. Every attempt to pay for *this order* uses the same key.
 
-Now replay the story. The first request times out. Your code retries with the same key. Stripe recognizes it and returns the result of the first payment. One charge.
+Now run the story again. The first request times out. Your code retries with the same key. Stripe recognizes the key and returns the result of the first payment. There is one charge.
 
-The most important rule: **one key per operation, not per attempt.** If you create a fresh random key on every retry, each retry looks like a brand-new payment, and the key protects nothing. If your app might retry later, from a background job or after a restart, save the key with the order so every attempt uses the same one.
+![Your server sends a charge with the key order-42-payment. Stripe charges $49 and saves the result, but the answer is lost. Your server retries with the same key. Stripe sees the key and returns the saved result, so there is only one charge.](/diagrams/timeouts-and-retries-3.svg)
 
-### Fix 4: When you don't know, check instead of guessing
+The most important rule: **one key per operation, not per attempt.** If you make a new random key on every retry, each retry looks like a new payment. Then the key protects nothing. Your app can retry later, from a background job or after a restart. In that case, save the key with the order, so that every attempt uses the same key.
 
-Sometimes retries run out and you still have no answer. Don't tell the user "failed", and don't start a new payment with a new key. Instead:
+### Fix 4: When you don't know, check and do not guess
+
+Sometimes all the retries fail, and you still have no answer. Do not tell the user "failed". Do not start a new payment with a new key. Do these things:
 
 - Show an honest message: *"We're confirming your payment. This can take a minute."*
 - Mark the order as `pending`.
-- Find out what really happened. Stripe sends a webhook when the payment succeeds, and you can look the payment up through its API. Then update the order.
+- Find out what really happened. Stripe sends a webhook when the payment succeeds. You can also look up the payment through Stripe's API. Then update the order.
 
-Stripe's own advice is the same: if the outcome is still unknown after the 24-hour window, stop retrying and check what happened before you try again.
+Stripe gives the same advice. If you still do not know the result after the 24-hour period, stop the retries. Check what happened before you try again.
 
 ### Fix 5: Protect your own API too
 
-Your own users have the same problem with *your* server. They double-click, or their phone loses signal and the browser sends the form again. Your "Place order" route can accept an idempotency key too:
+Your own users have the same problem with *your* server. They double-click. Or their phone loses signal, and the browser sends the form again. Your "Place order" route can also accept an idempotency key:
 
 ```js
 app.post("/api/orders", requireLogin, async (req, res) => {
@@ -274,11 +280,13 @@ app.post("/api/orders", requireLogin, async (req, res) => {
 
 In plain English:
 
-1. **Lines 2–3:** read the key from the request header. Refuse requests without one.
-2. **Lines 4–5:** look for an order this user already created with this key. If there is one, this request is a repeat, so send back the same order.
-3. **Lines 6–7:** otherwise, create the order and save the key with it.
+1. **Lines 2–3:** read the key from the request header. Refuse requests without a key.
+2. **Lines 4–5:** look for an order that this user already made with this key. If there is one, this request is a repeat, so send back the same order.
+3. **Lines 6–7:** if not, create the order and save the key with it.
 
-The page creates the key once, when the checkout form opens, with `crypto.randomUUID()`, and sends the same key with every submit of that form. Make the user and key pair **unique** in your database, so two copies arriving at the same instant can't both create an order. Disabling the button after the first click helps too, but only as a convenience: the server check is what protects you.
+The page makes the key once, when the checkout form opens, with `crypto.randomUUID()`. It sends the same key with every submit of that form. In your database, make the pair of user and key **unique**. Then the database refuses a second row with the same pair. So two copies that arrive at the same moment cannot both create an order.
+
+You can also disable the button after the first click. This helps the user, but only the server check protects you.
 
 > **Go deeper:** [A customer got charged twice. How?](/lessons/charged-twice) (Level 4) covers what happens when two copies of a request run at exactly the same time.
 
@@ -286,31 +294,31 @@ The page creates the key once, when the checkout form opens, with `crypto.random
 
 ## Test your own app
 
-Use your payment service's **test mode** for all of these.
+Use the **test mode** of your payment service for all of these tests.
 
 1. **Search for missing timeouts.** Ask your AI: *"List every call to an outside service in my code, and the timeout each one uses. Mark the ones that use the default."*
-2. **Double-click the pay button.** In test mode, click **Pay** twice quickly, or submit the form and press refresh. Then check the payment service's dashboard. Is there one payment or two?
-3. **Lose the network mid-request.** In Chrome, open developer tools and click the **Network** tab. Find the throttling menu (it usually says "No throttling") and choose **Offline** right after you click **Pay**. Then switch back. What does your app tell the user? Does it invite them to pay again?
-4. **Read your retry settings.** For each service library you use, find its default timeout and number of retries in its docs. Write them down.
+2. **Double-click the pay button.** In test mode, click **Pay** two times quickly. Or submit the form and then press refresh. Then check the dashboard of the payment service. Is there one payment or two?
+3. **Lose the network during a request.** In Chrome, open developer tools and click the **Network** tab. Find the throttling menu, which changes the network speed (it usually says "No throttling"). Click **Pay**, then choose **Offline** immediately. Then switch back. What does your app tell the user? Does it tell them to pay again?
+4. **Read your retry settings.** For each service library that you use, find its default timeout and number of retries in its docs. Write them down.
 
 ---
 
 ## Takeaways
 
 **Key terms**
-- **Timeout:** the longest you'll wait for an answer. It tells you that you stopped waiting, not what happened.
+- **Timeout:** the longest time that you will wait for an answer. It tells you that you stopped waiting, not what happened.
 - **Retry:** sending a failed request again
 - **Exponential backoff:** waiting longer after each failed attempt
-- **Jitter:** randomness added to the wait, so clients don't all retry together
+- **Jitter:** randomness added to the wait, so that clients do not all retry together
 - **Idempotency key:** a unique label for one operation, so the receiver can recognize repeats
 
 **Red flags in AI-written code**
-- `fetch` or a service library used with no timeout set
-- A timeout or network error shown to the user as "Payment failed, try again"
-- A retry loop with no maximum attempts or no wait between attempts
+- `fetch` or a service library with no timeout set
+- A timeout or network error that the user sees as "Payment failed, try again"
+- A retry loop with no maximum number of attempts or no wait between attempts
 - Retries on `400`, `401`, `403` or `404` errors
 - A payment, order or email request with no idempotency key
-- A new random idempotency key generated inside the retry loop
+- A new random idempotency key made inside the retry loop
 
 **Ask your AI**
 - *"Find every place where my app charges money, creates an order or sends a message. Does each one use an idempotency key that stays the same across retries?"*
@@ -322,16 +330,19 @@ Use your payment service's **test mode** for all of these.
 <details>
 <summary><strong>Going deeper</strong> (optional, for readers who want more detail)</summary>
 
-**Why retries can make outages worse.** An AWS article by Marc Brooker calls retries "selfish": each one asks the server for more of its capacity. When many layers of a system each retry, the numbers multiply. If your browser retries 3 times, your API retries 3 times, and your database library retries 3 times, one click can become dozens of database requests during an outage. A common rule is to retry at one layer only, usually the one closest to the failure.
+**Why retries can make outages worse.** An outage is a time when a service is down. An AWS article by Marc Brooker calls retries "selfish". Each retry asks the server for more of its capacity. When many layers of a system each retry, the numbers multiply. Imagine that your browser retries 3 times, your API retries 3 times, and your database library retries 3 times. During an outage, one click can then become dozens of database requests.
 
-**Retry budgets.** Some systems limit retries as a share of normal traffic, for example "retries may be at most 10% of requests". When the service is healthy, almost nothing needs retrying, so the budget is never used. When it's failing badly, the budget runs out and the app stops piling on.
+A common practice is to retry at one layer only, usually the layer closest to the failure.
 
-**Nested timeouts.** If your page waits 10 seconds for your API, and your API waits 30 seconds for a payment service, the page gives up long before your server does. The server then finishes the payment for a user who has already seen an error. Inner timeouts should be shorter than outer ones.
+**Retry budgets.** Some systems limit retries to a share of normal traffic, for example "retries can be at most 10% of requests". When the service is healthy, almost no requests need a retry, so the app never uses the budget. When the service fails badly, the budget runs out. Then the app stops adding more requests.
 
-**Stripe's saved errors.** Stripe saves the result of the first request with a key once the work has started, including `500` server errors. A retry with the same key returns the same saved `500`. Stripe treats a `500` as "outcome unknown": check what happened before trying again with a new key. Requests that fail before the work starts, such as invalid parameters or rate limiting, are not saved and can be retried.
+**Nested timeouts.** Imagine that your page waits 10 seconds for your API, and your API waits 30 seconds for a payment service. The page stops waiting long before your server does. The server then finishes the payment for a user who already saw an error. Inner timeouts must be shorter than outer ones.
 
-**A standard header.** Stripe uses the `Idempotency-Key` header, and an IETF draft (still a draft as of writing) describes it as a general standard for HTTP APIs. Many payment and messaging APIs accept a header with this name, but check each service's docs: some use a different name or keep keys for a different time.
+**Stripe's saved errors.** After the work starts, Stripe saves the result of the first request with a key. This includes `500` server errors. A retry with the same key returns the same saved `500`. Stripe treats a `500` as "result unknown". Check what happened before you try again with a new key.
 
+Some requests fail before the work starts, for example because of invalid parameters (wrong values in the request) or rate limiting. Stripe does not save those results, so you can retry them.
+
+**A standard header.** Stripe uses the `Idempotency-Key` header. The IETF is the group that writes internet standards. An IETF draft (still a draft at the time of writing) describes this header as a general standard for HTTP APIs. Many payment and messaging APIs accept a header with this name. But read the docs of each service, because some use a different name or keep keys for a different time.
 
 </details>
 

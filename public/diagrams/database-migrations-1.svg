@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" role="img" aria-labelledby="t d">
+  <title id="t">Migrations give every database the same shape</title>
+  <desc id="d">You change the schema file. The generate command writes migration files, which you keep in git. The migrate command applies the same files in the same order to your laptop's database, a test database and the production database, so all three get the same shape.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="330" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Schema file -->
+    <rect x="30" y="125" width="150" height="80" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="105" y="161" font-size="15" fill="#f2f2f2" text-anchor="middle">Schema file</text>
+    <text x="105" y="183" font-size="12" fill="#a0a0a0" text-anchor="middle">you change it</text>
+
+    <!-- Migration files -->
+    <rect x="250" y="95" width="180" height="140" rx="10" fill="#f2c94c"/>
+    <text x="340" y="128" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Migration files</text>
+    <text x="270" y="156" font-size="12" fill="#111111">1. create members</text>
+    <text x="270" y="174" font-size="12" fill="#111111">2. add phone</text>
+    <text x="270" y="192" font-size="12" fill="#111111">3. ...</text>
+    <text x="340" y="220" font-size="12" fill="#111111" text-anchor="middle">kept in git</text>
+
+    <!-- Databases -->
+    <rect x="520" y="40" width="170" height="60" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="605" y="75" font-size="15" fill="#f2f2f2" text-anchor="middle">Your laptop</text>
+
+    <rect x="520" y="135" width="170" height="60" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="605" y="170" font-size="15" fill="#f2f2f2" text-anchor="middle">Test database</text>
+
+    <rect x="520" y="230" width="170" height="60" rx="10" fill="#4f6bd8"/>
+    <text x="605" y="265" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Production</text>
+
+    <!-- Arrows -->
+    <line x1="182" y1="165" x2="242" y2="165" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="212" y="155" font-size="12" fill="#a0a0a0" text-anchor="middle">generate</text>
+    <line x1="432" y1="150" x2="512" y2="72" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="432" y1="165" x2="512" y2="165" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="432" y1="180" x2="512" y2="258" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="474" y="157" font-size="12" fill="#a0a0a0" text-anchor="middle">migrate</text>
+
+    <text x="30" y="300" font-size="12" fill="#a0a0a0">Same files, same order:</text>
+    <text x="30" y="316" font-size="12" fill="#a0a0a0">every database gets the same shape.</text>
+  </g>
+</svg>

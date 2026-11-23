@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" role="img" aria-labelledby="t d">
+  <title id="t">The same SVG file on two different domains</title>
+  <desc id="d">An uploaded SVG file contains a script. When the browser opens it from yourapp.com, the script runs as yourapp.com and can use your users' cookies. When the browser opens the same file from yourapp-files.com, the script runs as that other domain, which has no cookies or user data.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="330" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Left column -->
+    <text x="180" y="40" font-size="12" fill="#a0a0a0" text-anchor="middle">OPENED AT yourapp.com/uploads/logo.svg</text>
+    <rect x="30" y="56" width="300" height="80" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="180" y="92" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">logo.svg</text>
+    <text x="180" y="114" font-size="12" fill="#a0a0a0" text-anchor="middle">a user's upload with a script inside</text>
+    <line x1="180" y1="140" x2="180" y2="182" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="30" y="190" width="300" height="86" rx="10" fill="#e5484d"/>
+    <text x="180" y="226" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Runs as yourapp.com</text>
+    <text x="180" y="250" font-size="12" fill="#fde8e8" text-anchor="middle">can use your users' cookies</text>
+
+    <!-- Right column -->
+    <text x="540" y="40" font-size="12" fill="#a0a0a0" text-anchor="middle">OPENED AT yourapp-files.com/logo.svg</text>
+    <rect x="390" y="56" width="300" height="80" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="540" y="92" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">logo.svg</text>
+    <text x="540" y="114" font-size="12" fill="#a0a0a0" text-anchor="middle">the same file, the same script</text>
+    <line x1="540" y1="140" x2="540" y2="182" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="390" y="190" width="300" height="86" rx="10" fill="#1f9d6b"/>
+    <text x="540" y="226" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Runs as yourapp-files.com</text>
+    <text x="540" y="250" font-size="12" fill="#e6f6ef" text-anchor="middle">no cookies or user data there</text>
+
+    <text x="360" y="308" font-size="12" fill="#a0a0a0" text-anchor="middle">The browser decides what a script may do from the domain it came from (its origin).</text>
+  </g>
+</svg>

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" role="img" aria-labelledby="t d">
+  <title id="t">How much of the app each kind of test uses</title>
+  <desc id="d">Four parts of an app in a row: the browser, an API route, a function such as calculateTotal, and the test database. A unit test uses only the function. An integration test uses the API route, the function and the database together. An end-to-end test uses the whole app, from the browser to the database.</desc>
+  <rect width="720" height="330" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Test bars -->
+    <rect x="30" y="40" width="660" height="28" rx="14" fill="#e98da4"/>
+    <text x="360" y="59" font-size="12" font-weight="600" fill="#111111" text-anchor="middle">End-to-end test: the whole app in a real browser</text>
+    <rect x="200" y="84" width="490" height="28" rx="14" fill="#4f6bd8"/>
+    <text x="445" y="103" font-size="12" font-weight="600" fill="#f2f2f2" text-anchor="middle">Integration test: several parts together</text>
+    <rect x="370" y="128" width="150" height="28" rx="14" fill="#1f9d6b"/>
+    <text x="445" y="147" font-size="12" font-weight="600" fill="#f2f2f2" text-anchor="middle">Unit test</text>
+
+    <!-- App parts -->
+    <rect x="30" y="180" width="150" height="70" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="105" y="211" font-size="15" fill="#f2f2f2" text-anchor="middle">Browser</text>
+    <text x="105" y="231" font-size="12" fill="#a0a0a0" text-anchor="middle">types and clicks</text>
+    <rect x="200" y="180" width="150" height="70" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="275" y="211" font-size="15" fill="#f2f2f2" text-anchor="middle">API route</text>
+    <text x="275" y="231" font-size="12" fill="#a0a0a0" text-anchor="middle">/api/checkout</text>
+    <rect x="370" y="180" width="150" height="70" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="445" y="211" font-size="15" fill="#f2f2f2" text-anchor="middle">Function</text>
+    <text x="445" y="231" font-size="12" fill="#a0a0a0" text-anchor="middle">calculateTotal</text>
+    <rect x="540" y="180" width="150" height="70" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="615" y="211" font-size="15" fill="#f2f2f2" text-anchor="middle">Database</text>
+    <text x="615" y="231" font-size="12" fill="#a0a0a0" text-anchor="middle">a test database</text>
+
+    <text x="360" y="288" font-size="12" fill="#a0a0a0" text-anchor="middle">A smaller test is faster and tells you exactly what broke.</text>
+    <text x="360" y="306" font-size="12" fill="#a0a0a0" text-anchor="middle">A bigger test is slower, but it is closer to what a real user does.</text>
+  </g>
+</svg>

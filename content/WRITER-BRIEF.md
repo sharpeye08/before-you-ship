@@ -71,6 +71,11 @@ Use the title from the MVP.md table exactly. Titles are deliberately catchy scen
 - All levels: simple English, no idioms. Many readers aren't native English speakers.
 - **Jargon check before you finish:** list every technical word in order of first appearance. Each must be explained at or before that point, or be a core concept of an earlier lesson in the MVP table (and then linked in "Before you start" if it matters). Developer-basic words count: server, terminal, route, header, cache, deploy, repository, etc.
 
+## Readability (ASD-STE100), punctuation and diagrams
+- Write in ASD-STE100 (Simplified Technical English) style: descriptive sentences 25 words or fewer, instructions 20 or fewer, one instruction per sentence, paragraphs of at most 6 sentences, active voice, simple tenses, one word for one meaning, no idioms.
+- No em dashes (—) anywhere, and no spaced en dash used as a dash. Number ranges like 10–15 are fine.
+- 1 to 3 diagrams per lesson, following `content/DIAGRAM-GUIDE.md`, saved as `public/diagrams/<slug>-<n>.svg`. Never use ASCII drawings.
+
 ## Fact-checking (mandatory)
 - Check every factual claim twice with WebSearch, preferring official docs, MDN, OWASP, RFCs, vendor docs. This includes error messages, tool names and behavior, rankings, dates, numbers and prices.
 - If you can't verify a claim, cut it or rewrite it so it's true without the detail. Don't invent statistics, incidents or quotes.
