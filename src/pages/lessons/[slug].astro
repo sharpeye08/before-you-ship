@@ -447,6 +447,13 @@ const color = LEVEL_COLORS[info.level] ?? '#f2c94c';
     padding: 0;
     font-size: inherit;
   }
+  .prose :global(img) {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 1.8em auto;
+    border-radius: 14px;
+  }
   .prose :global(.table-wrap) {
     overflow-x: auto;
     margin: 0 0 1.3em;
