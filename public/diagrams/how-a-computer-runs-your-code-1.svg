@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 350" role="img" aria-labelledby="t d">
+  <title id="t">Disk, memory and CPU</title>
+  <desc id="d">The disk is like the cupboard: it keeps files without power, and it is slower but bigger. Memory is like the worktop: a fast workspace that is cleared when the power goes off. The CPU is like the cook: it reads instructions from memory and follows them. Run copies the program from the disk into memory. Save copies your data from memory to the disk.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="350" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Kitchen names -->
+    <text x="115" y="48" font-size="12" fill="#a0a0a0" text-anchor="middle">THE CUPBOARD</text>
+    <text x="360" y="48" font-size="12" fill="#a0a0a0" text-anchor="middle">THE WORKTOP</text>
+    <text x="605" y="48" font-size="12" fill="#a0a0a0" text-anchor="middle">THE COOK</text>
+
+    <!-- Disk -->
+    <rect x="30" y="62" width="170" height="120" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="115" y="98" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Disk</text>
+    <text x="115" y="124" font-size="12" fill="#a0a0a0" text-anchor="middle">Keeps files</text>
+    <text x="115" y="142" font-size="12" fill="#a0a0a0" text-anchor="middle">without power</text>
+    <text x="115" y="160" font-size="12" fill="#a0a0a0" text-anchor="middle">Slower, bigger</text>
+
+    <!-- Memory -->
+    <rect x="275" y="62" width="170" height="120" rx="10" fill="#f2c94c"/>
+    <text x="360" y="98" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Memory (RAM)</text>
+    <text x="360" y="124" font-size="12" fill="#111111" text-anchor="middle">Fast workspace</text>
+    <text x="360" y="142" font-size="12" fill="#111111" text-anchor="middle">Cleared when the</text>
+    <text x="360" y="160" font-size="12" fill="#111111" text-anchor="middle">power goes off</text>
+
+    <!-- CPU -->
+    <rect x="520" y="62" width="170" height="120" rx="10" fill="#4f6bd8"/>
+    <text x="605" y="98" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">CPU</text>
+    <text x="605" y="124" font-size="12" fill="#e8ecff" text-anchor="middle">Follows the</text>
+    <text x="605" y="142" font-size="12" fill="#e8ecff" text-anchor="middle">instructions, billions</text>
+    <text x="605" y="160" font-size="12" fill="#e8ecff" text-anchor="middle">of steps a second</text>
+
+    <!-- Run: disk to memory -->
+    <line x1="206" y1="100" x2="267" y2="100" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="237" y="90" font-size="12" fill="#f2c94c" text-anchor="middle">Run</text>
+
+    <!-- Save: memory to disk -->
+    <line x1="269" y1="148" x2="208" y2="148" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="238" y="168" font-size="12" fill="#1f9d6b" text-anchor="middle">Save</text>
+
+    <!-- CPU reads memory -->
+    <line x1="453" y1="122" x2="512" y2="122" stroke="#cfcfcf" stroke-width="2" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+    <text x="482" y="112" font-size="12" fill="#8ea2ff" text-anchor="middle">reads</text>
+
+    <!-- Legend -->
+    <rect x="30" y="210" width="660" height="110" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="50" y="244" font-size="15" fill="#f2f2f2"><tspan fill="#f2c94c" font-weight="600">Run:</tspan> copy the program from the disk into memory.</text>
+    <text x="50" y="272" font-size="15" fill="#f2f2f2"><tspan fill="#1f9d6b" font-weight="600">Save:</tspan> copy your data from memory to the disk.</text>
+    <text x="50" y="300" font-size="15" fill="#f2f2f2"><tspan fill="#e98da4" font-weight="600">Power off:</tspan> memory is cleared. The disk keeps its files.</text>
+  </g>
+</svg>

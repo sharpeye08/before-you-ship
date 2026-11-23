@@ -1,8 +1,7 @@
 ---
 // "Where should I start?" placement test: 3 questions per level, taken from the lessons'
 // own quizzes, plus an "I'm not sure" option so guessing doesn't skew the result.
-import Base from '../layouts/Base.astro';
-import Icon from '../components/Icon.astro';
+import Reading from '../layouts/Reading.astro';
 import { getLessons } from '../lib/lessons';
 import { inline } from '../lib/extract';
 import { LEVELS } from '../config';
@@ -41,31 +40,29 @@ const firstOfLevel = Object.fromEntries(
 );
 ---
 
-<Base title="Where should I start?" active="start" description="Answer 15 quick questions and get a recommended starting lesson.">
-  <header class="tool-head">
-    <p class="kicker"><Icon name="compass" size={16} /> Placement test</p>
-    <h1>Where should I start?</h1>
-    <p class="muted">
-      15 questions, 3 from each level. Pick "I'm not sure" instead of guessing; it gives a better answer. Takes about 5
-      minutes, and nothing is saved or sent anywhere.
-    </p>
-  </header>
+<Reading title="Where should I start?" description="Answer 15 quick questions and get a recommended starting lesson.">
+  <h1 class="page-title">Where should I start?</h1>
+  <p class="page-intro">
+    15 questions, 3 from each level. Pick "I'm not sure" instead of guessing; it gives a better answer. Takes about 5
+    minutes, and nothing is saved or sent anywhere.
+  </p>
+  <hr class="my-10 border-line" />
 
-  <form class="tool-section glass placement" data-placement data-first={JSON.stringify(firstOfLevel)}>
-    <ol class="p-list">
+  <form class="placement" data-placement data-first={JSON.stringify(firstOfLevel)}>
+    <ol class="p-list mb-12 grid list-none gap-12 p-0">
       {
         questions.map((item, qi) => (
           <li class="p-q" data-level={item.level}>
-            <p class="p-question" set:html={inline(item.q.question)} />
-            <div class="p-options">
-              {item.q.options.map((o, oi) => (
-                <label>
-                  <input type="radio" name={`q${qi}`} value={o.correct ? 'right' : 'wrong'} required />
+            <p class="p-question mb-4 font-medium leading-normal" set:html={inline(item.q.question)} />
+            <div class="p-options grid gap-2">
+              {item.q.options.map((o) => (
+                <label class="flex cursor-pointer items-start gap-3 rounded-xl border border-line px-4 py-3 leading-normal hover:bg-white/4 has-[:checked]:border-white/60 has-[:checked]:bg-white/8">
+                  <input type="radio" name={`q${qi}`} value={o.correct ? 'right' : 'wrong'} required class="mt-1 flex-none accent-white" />
                   <span set:html={inline(o.text)} />
                 </label>
               ))}
-              <label class="unsure">
-                <input type="radio" name={`q${qi}`} value="unsure" />
+              <label class="unsure flex italic cursor-pointer items-start gap-3 rounded-xl border border-line px-4 py-3 leading-normal hover:bg-white/4 has-[:checked]:border-white/60 has-[:checked]:bg-white/8">
+                <input type="radio" name={`q${qi}`} value="unsure" class="mt-1 flex-none accent-white" />
                 <span>I'm not sure</span>
               </label>
             </div>
@@ -73,82 +70,26 @@ const firstOfLevel = Object.fromEntries(
         ))
       }
     </ol>
-    <button type="submit" class="btn btn-accent">See my starting point</button>
+    <button type="submit" class="btn btn-light">See my starting point</button>
   </form>
 
-  <section class="tool-section glass result" data-result hidden aria-live="polite"></section>
-</Base>
+  <section class="result card mt-12 scroll-mt-24 p-8" data-result hidden aria-live="polite"></section>
+</Reading>
 
 <style>
   .p-list {
-    list-style: none;
-    margin: 0 0 22px;
-    padding: 0;
     counter-reset: q;
-    display: grid;
-    gap: 22px;
   }
   .p-q {
     counter-increment: q;
   }
-  .p-question {
-    margin: 0 0 10px;
-    font-weight: 600;
-    line-height: 1.5;
-  }
   .p-question::before {
     content: counter(q) '. ';
-    color: var(--muted);
-  }
-  .p-options {
-    display: grid;
-    gap: 6px;
-  }
-  .p-options label {
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    padding: 10px 12px;
-    border-radius: 12px;
-    background: var(--row);
-    cursor: pointer;
-    font-size: 0.95rem;
-    line-height: 1.5;
-    color: var(--text-soft);
-  }
-  .p-options label:has(input:checked) {
-    background: var(--glass-hover);
-    color: var(--text);
-    outline: 1px solid var(--border-strong);
-  }
-  .p-options input {
-    margin-top: 4px;
-    accent-color: var(--accent);
-    flex: none;
-  }
-  .p-options .unsure {
-    font-style: italic;
-  }
-  .result :global(h2) {
-    margin: 0 0 6px;
-  }
-  .result :global(.bars) {
-    display: grid;
-    gap: 10px;
-    margin: 18px 0 22px;
-  }
-  .result :global(.bar-label) {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.88rem;
-    color: var(--text-soft);
-    margin-bottom: 6px;
   }
   :global(.placement code),
   :global(.result code) {
-    font-family: var(--mono);
     font-size: 0.88em;
-    background: rgba(255, 255, 255, 0.07);
+    background: rgb(255 255 255 / 0.09);
     padding: 0.1em 0.35em;
     border-radius: 5px;
   }
@@ -192,8 +133,8 @@ const firstOfLevel = Object.fromEntries(
     const bars = LEVELS.map((lv) => {
       const s = score[lv.n] ?? { right: 0, total: 0 };
       const pct = s.total ? (s.right / s.total) * 100 : 0;
-      return `<div><div class="bar-label"><span>Level ${lv.n} · ${esc(lv.name)}</span><span>${s.right} / ${s.total}</span></div>
-        <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div></div>`;
+      return `<div><div class="mb-2 flex justify-between text-sm"><span>Level ${lv.n} · ${esc(lv.name)}</span><span>${s.right} / ${s.total}</span></div>
+        <div class="h-1 overflow-hidden rounded-full bg-white/14"><div class="h-full bg-mint" style="width:${pct}%"></div></div></div>`;
     }).join('');
 
     const headline = startLevel
@@ -206,12 +147,13 @@ const firstOfLevel = Object.fromEntries(
         : 'You got at least 2 of 3 right on every level. The last level covers how bigger systems stay reliable.';
 
     result.innerHTML = `
-      <p class="kicker">Your result</p>
-      <h2>${headline}</h2>
-      <p class="muted">${advice}</p>
-      <div class="bars">${bars}</div>
-      ${lesson ? `<a class="btn btn-accent" href="/lessons/${lesson.slug}">Start with lesson ${lesson.order}: ${esc(lesson.title)}</a>` : ''}
-      <a class="btn" href="/lessons">See all lessons</a>`;
+      <h2 class="text-[1.65rem] font-medium tracking-[-0.02em] leading-tight">${headline}</h2>
+      <p class="mt-3">${advice}</p>
+      <div class="my-8 grid gap-4">${bars}</div>
+      <div class="flex flex-wrap gap-3">
+        ${lesson ? `<a class="btn btn-light h-auto min-h-[46px] py-2.5 text-left" href="/lessons/${lesson.slug}">Start with lesson ${lesson.order}: ${esc(lesson.title)}</a>` : ''}
+        <a class="btn btn-ghost" href="/lessons">See all lessons</a>
+      </div>`;
     result.hidden = false;
     result.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" role="img" aria-labelledby="t d">
+  <title id="t">.env stays on your laptop</title>
+  <desc id="d">Your project folder on your laptop has your code, a .env.example file and a .env file. When git uploads the project to GitHub, your code and .env.example go up. Git skips the .env file, because it is on the .gitignore list, so your secrets stay on your laptop.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="340" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Project folder -->
+    <text x="170" y="40" font-size="12" fill="#a0a0a0" text-anchor="middle">YOUR LAPTOP: PROJECT FOLDER</text>
+    <rect x="40" y="54" width="260" height="226" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <rect x="60" y="80" width="220" height="48" rx="10" fill="#4f6bd8"/>
+    <text x="170" y="109" font-size="15" fill="#f2f2f2" text-anchor="middle">Your code</text>
+    <rect x="60" y="144" width="220" height="48" rx="10" fill="#4f6bd8"/>
+    <text x="170" y="173" font-size="15" fill="#f2f2f2" text-anchor="middle">.env.example (no values)</text>
+    <rect x="60" y="208" width="220" height="48" rx="10" fill="#e98da4"/>
+    <text x="170" y="237" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">.env (your secrets)</text>
+
+    <!-- GitHub -->
+    <text x="570" y="40" font-size="12" fill="#a0a0a0" text-anchor="middle">GITHUB (ANYONE CAN READ)</text>
+    <rect x="460" y="54" width="220" height="226" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <rect x="480" y="80" width="180" height="48" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="570" y="109" font-size="15" fill="#f2f2f2" text-anchor="middle">Your code</text>
+    <rect x="480" y="144" width="180" height="48" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="570" y="173" font-size="15" fill="#f2f2f2" text-anchor="middle">.env.example</text>
+    <text x="570" y="236" font-size="12" fill="#a0a0a0" text-anchor="middle">No .env here</text>
+
+    <!-- Uploads -->
+    <text x="380" y="94" font-size="12" fill="#a0a0a0" text-anchor="middle">git uploads</text>
+    <line x1="286" y1="104" x2="472" y2="104" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="286" y1="168" x2="472" y2="168" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <!-- Skipped -->
+    <line x1="286" y1="232" x2="396" y2="232" stroke="#e5484d" stroke-width="2" stroke-dasharray="7 5"/>
+    <line x1="402" y1="218" x2="402" y2="246" stroke="#e5484d" stroke-width="3"/>
+    <text x="344" y="262" font-size="12" fill="#e5484d" text-anchor="middle">skipped:</text>
+    <text x="344" y="278" font-size="12" fill="#e5484d" text-anchor="middle">in .gitignore</text>
+
+    <text x="360" y="316" font-size="15" fill="#f2f2f2" text-anchor="middle">.env stays on your laptop. Share .env.example instead.</text>
+  </g>
+</svg>

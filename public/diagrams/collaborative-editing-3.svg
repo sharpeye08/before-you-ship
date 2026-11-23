@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" role="img" aria-labelledby="t d">
+  <title id="t">OT vs CRDT for the same change</title>
+  <desc id="d">Left, OT: Alice's change insert s at 3 goes through the server, which transforms it because Bob added 4 characters before it. It becomes insert s at 7. Right, CRDT: Alice's change says insert s after the character with ID alice-3. Every device applies it as it is, in any order, even twice. Both ways give The cats.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="340" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <text x="30" y="40" font-size="12" fill="#a0a0a0">OPERATIONAL TRANSFORMATION (OT)</text>
+    <text x="390" y="40" font-size="12" fill="#a0a0a0">CRDT</text>
+
+    <!-- OT column -->
+    <rect x="30" y="55" width="300" height="56" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="180" y="88" font-size="15" fill="#f2f2f2" text-anchor="middle">"insert s at 3"</text>
+
+    <rect x="30" y="145" width="300" height="64" rx="10" fill="#4f6bd8"/>
+    <text x="180" y="173" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Server: transform</text>
+    <text x="180" y="193" font-size="12" fill="#e8ecff" text-anchor="middle">Bob added 4 characters before it</text>
+
+    <rect x="30" y="243" width="300" height="56" rx="10" fill="#1f9d6b"/>
+    <text x="180" y="276" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">"insert s at 7"</text>
+
+    <line x1="180" y1="114" x2="180" y2="140" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="180" y1="212" x2="180" y2="238" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <!-- CRDT column -->
+    <rect x="390" y="55" width="300" height="56" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="540" y="88" font-size="15" fill="#f2f2f2" text-anchor="middle">"insert s after alice-3"</text>
+
+    <rect x="390" y="243" width="300" height="56" rx="10" fill="#1f9d6b"/>
+    <text x="540" y="268" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Same change everywhere</text>
+    <text x="540" y="287" font-size="12" fill="#e6fff4" text-anchor="middle">any order, even twice</text>
+
+    <line x1="540" y1="114" x2="540" y2="238" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="552" y="172" font-size="12" fill="#a0a0a0">no transform needed:</text>
+    <text x="552" y="189" font-size="12" fill="#a0a0a0">the ID never moves</text>
+
+    <text x="360" y="324" font-size="12" fill="#a0a0a0" text-anchor="middle">Both ways, every screen shows "The cats".</text>
+  </g>
+</svg>

@@ -1,0 +1,123 @@
+---
+// Shared layout for every page except the home page, in the Hashnode reading style:
+// a minimal app bar that hides while you scroll down and returns when you scroll up,
+// one centred column, and the footer. White DM Sans text on a plain dark page.
+//
+// Slots: default = the page content (inside <main>); "rail" = something placed beside the column
+// (the lesson contents strip); "overlay" = fixed elements such as a floating button or a dialog.
+import '@fontsource-variable/dm-sans/opsz.css';
+import '../styles/space.css';
+import '../styles/reading.css';
+import { SITE } from '../config';
+import { issueUrl } from '../lib/lessons';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** 'read' = 680 px column (text pages), 'wide' = 960 px column (lists and tools). */
+  width?: 'read' | 'wide';
+  /** Lesson title, so "Report a mistake" opens an issue about that lesson. */
+  reportTitle?: string;
+}
+const { title, description = SITE.description, width = 'read', reportTitle } = Astro.props;
+const pageTitle = `${title} · ${SITE.name}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const repoUrl = `https://github.com/${SITE.githubRepo}`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#08090a" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {
+      SITE.cfBeaconToken && (
+        <script
+          is:inline
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon={JSON.stringify({ token: SITE.cfBeaconToken })}
+        />
+      )
+    }
+  </head>
+  <body class="reading-page">
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-lg focus:bg-white focus:px-3 focus:py-2 focus:text-black">Skip to content</a>
+
+    <!-- App bar: minimal. Hides on scroll down, shows on scroll up. -->
+    <header data-appbar class="appbar sticky top-0 z-50 border-b border-line bg-[#08090a]/85 backdrop-blur-md">
+      <div class="mx-auto flex h-16 max-w-[1120px] items-center justify-between px-5">
+        <a href="/" class="font-semibold tracking-tight">Before you ship</a>
+        <a href="/lessons" class="rounded-full px-3 py-1.5 text-sm hover:bg-white/8">All lessons</a>
+      </div>
+    </header>
+
+    <div class="relative mx-auto max-w-[1120px] px-5">
+      <slot name="rail" />
+      <main id="main" class:list={['mx-auto pt-14 pb-24', width === 'wide' ? 'max-w-[960px]' : 'max-w-[680px]']}>
+        <slot />
+      </main>
+    </div>
+
+    <slot name="overlay" />
+
+    <footer class="border-t border-line">
+      <div class="mx-auto grid max-w-[1120px] grid-cols-2 gap-8 px-5 py-12 md:grid-cols-4">
+        <div class="col-span-2 md:col-span-1">
+          <p class="font-semibold tracking-tight">Before you ship</p>
+          <p class="mt-3 max-w-[26ch] text-sm">Free and open source. No login, no tracking cookies.</p>
+        </div>
+        <div class="flex flex-col gap-2 text-sm">
+          <p class="mb-1 font-semibold">Learn</p>
+          <a class="hover:underline" href="/lessons">All lessons</a>
+          <a class="hover:underline" href="/start">Where should I start?</a>
+          <a class="hover:underline" href="/review">Review mode</a>
+        </div>
+        <div class="flex flex-col gap-2 text-sm">
+          <p class="mb-1 font-semibold">Tools</p>
+          <a class="hover:underline" href="/checklist">Pre-ship checklist</a>
+          <a class="hover:underline" href="/glossary">Glossary</a>
+          <a class="hover:underline" href="/prompts">Prompt library</a>
+        </div>
+        <div class="flex flex-col gap-2 text-sm">
+          <p class="mb-1 font-semibold">Project</p>
+          <a class="hover:underline" href={repoUrl} target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a class="hover:underline" href={issueUrl(SITE.githubRepo, reportTitle)} target="_blank" rel="noopener noreferrer">Report a mistake</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // App bar: hide while scrolling down, show while scrolling up or near the top.
+      const bar = document.querySelector<HTMLElement>('[data-appbar]')!;
+      let lastY = scrollY;
+      let ticking = false;
+      addEventListener(
+        'scroll',
+        () => {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(() => {
+            const y = scrollY;
+            const dy = y - lastY;
+            if (y < 80) bar.classList.remove('is-hidden');
+            else if (dy > 6) bar.classList.add('is-hidden');
+            else if (dy < -6) bar.classList.remove('is-hidden');
+            if (Math.abs(dy) > 6 || y < 80) lastY = y;
+            ticking = false;
+          });
+        },
+        { passive: true },
+      );
+      bar.addEventListener('focusin', () => bar.classList.remove('is-hidden'));
+    </script>
+  </body>
+</html>

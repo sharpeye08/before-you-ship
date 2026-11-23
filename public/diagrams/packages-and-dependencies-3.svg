@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" role="img" aria-labelledby="t d">
+  <title id="t">Without and with the lockfile</title>
+  <desc id="d">Without the lockfile, package.json says ^5.1.0. You installed express 5.1.0. Your friend installs later, and npm picks a newer version that the range allows, for example 5.2.0. With the lockfile, package-lock.json says exactly 5.1.0, so npm installs the same 5.1.0 for your friend.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="340" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Without -->
+    <text x="40" y="40" font-size="12" fill="#a0a0a0">WITHOUT THE LOCKFILE</text>
+    <rect x="40" y="52" width="200" height="80" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="140" y="86" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">You</text>
+    <text x="140" y="108" font-size="12" fill="#a0a0a0" text-anchor="middle">express 5.1.0</text>
+
+    <line x1="246" y1="92" x2="472" y2="92" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="359" y="80" font-size="12" fill="#f2c94c" text-anchor="middle">package.json says ^5.1.0</text>
+    <text x="359" y="112" font-size="12" fill="#a0a0a0" text-anchor="middle">npm picks a newer version</text>
+
+    <rect x="480" y="52" width="200" height="80" rx="10" fill="#1f1f1f" stroke="#e5484d" stroke-width="1.5"/>
+    <text x="580" y="86" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Your friend, later</text>
+    <text x="580" y="108" font-size="12" fill="#e5484d" text-anchor="middle">express 5.2.0 (different)</text>
+
+    <!-- With -->
+    <text x="40" y="186" font-size="12" fill="#a0a0a0">WITH THE LOCKFILE</text>
+    <rect x="40" y="198" width="200" height="80" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="140" y="232" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">You</text>
+    <text x="140" y="254" font-size="12" fill="#a0a0a0" text-anchor="middle">express 5.1.0</text>
+
+    <line x1="246" y1="238" x2="472" y2="238" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="359" y="226" font-size="12" fill="#1f9d6b" text-anchor="middle">package-lock.json says 5.1.0</text>
+    <text x="359" y="258" font-size="12" fill="#a0a0a0" text-anchor="middle">npm installs exactly that</text>
+
+    <rect x="480" y="198" width="200" height="80" rx="10" fill="#1f1f1f" stroke="#1f9d6b" stroke-width="1.5"/>
+    <text x="580" y="232" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Your friend, later</text>
+    <text x="580" y="254" font-size="12" fill="#1f9d6b" text-anchor="middle">express 5.1.0 (the same)</text>
+
+    <text x="360" y="316" font-size="12" fill="#a0a0a0" text-anchor="middle">The version numbers are examples.</text>
+  </g>
+</svg>

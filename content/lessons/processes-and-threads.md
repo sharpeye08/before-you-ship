@@ -7,14 +7,14 @@ levelName: Reliability & scale
 concepts: [Processes vs threads, Concurrency vs parallelism, CPU cores, Shared memory, Thread pool, Worker threads, Cluster, Instances]
 readTime: 14 min
 quiz:
-  - question: "Your server has 2 CPU cores. 2,000 users are online, and each request spends 2 ms using the CPU and 198 ms waiting for the database. Why can one Node.js process keep up?"
+  - question: "Your server has 2 CPU cores, and 2,000 users are online. Each request uses the CPU for 2 ms and waits 198 ms for the database. Why can one Node.js process keep up?"
     options:
-      - text: "Node.js secretly creates 2,000 threads, one per user"
+      - text: "Node.js secretly makes 2,000 threads, one per user"
       - text: "Most of each request is waiting, and while one request waits, the main thread works on others"
         correct: true
       - text: "The 2 cores run 1,000 requests each at exactly the same moment"
       - text: "It can't. You need one CPU core per user"
-    explanation: "This is concurrency: many requests are in progress, but only a few are using the CPU at any moment. While a request waits for the database, the main thread is free to start or finish other requests."
+    explanation: "This is concurrency: many requests are in progress, but only a few use the CPU at any moment. While a request waits for the database, the main thread is free to start or finish other requests."
 
   - question: "What is the main difference between two processes and two threads?"
     options:
@@ -23,43 +23,43 @@ quiz:
       - text: "Two processes each have their own memory. Two threads inside one process share the same memory"
         correct: true
       - text: "There is no difference, they are two names for the same thing"
-    explanation: "The operating system keeps each process's memory separate. Threads live inside one process and see the same variables. Sharing makes threads cheap to talk to each other, and also makes race conditions possible."
+    explanation: "The operating system keeps the memory of each process separate. Threads live inside one process and see the same variables. Because they share memory, threads can talk to each other cheaply. But sharing also makes race conditions possible."
 
   - question: "Your Node.js app keeps a variable let stock = 1 in memory. The /buy route checks stock > 0, then awaits a 1-second card payment, then does stock = stock - 1. Two people press Buy at the same moment. What can happen?"
     options:
       - text: "Nothing bad, because Node.js runs JavaScript on one main thread"
       - text: "The second request crashes the server"
-      - text: "Node.js automatically waits for the first purchase to finish before starting the second"
+      - text: "Node.js automatically waits for the first purchase to finish before it starts the second"
       - text: "Both requests see stock = 1 before either one subtracts, so you sell 2 items when you had 1"
         correct: true
-    explanation: "One main thread means two lines never run at the very same moment. But await lets other requests run in the gap. Both checks happen before either subtraction. Moving the check and the change into one database update fixes it."
+    explanation: "One main thread means that two lines never run at the very same moment. But await lets other requests run in the gap. Both checks happen before either subtraction. The fix is to put the check and the change into one database update."
 
-  - question: "Your app runs as 3 instances on your hosting platform. It counts each user's login attempts in a JavaScript Map in memory and blocks after 5 failures. What really happens?"
+  - question: "Your app runs as 3 instances on your hosting platform. It counts each user's login attempts in a JavaScript Map in memory, and it blocks the user after 5 failures. What really happens?"
     options:
-      - text: "Each instance has its own Map, so an attacker can get up to 15 tries by landing on different instances"
+      - text: "Each instance has its own Map, so an attacker can get up to 15 tries on different instances"
         correct: true
       - text: "The platform copies the Map between instances automatically"
       - text: "The limit becomes 5 divided by 3"
       - text: "Nothing changes, memory is shared between instances"
-    explanation: "Instances are separate processes, often on separate machines. They never see each other's memory. Anything that must be counted across all users belongs in a shared store like a database or Redis."
+    explanation: "Instances are separate processes, often on separate computers. They never see each other's memory. Anything that you must count across all users belongs in a shared store, like a database or Redis."
 
-  - question: "Your Node.js server resizes large images in JavaScript, and every resize freezes all other requests for 2 seconds. Which tool fits best?"
+  - question: "Your Node.js server resizes large images in JavaScript. Every resize freezes all other requests for 2 seconds. Which tool fits best?"
     options:
       - text: "Increase the libuv thread pool size"
       - text: "Use worker threads (or a background job) so the resize runs off the main thread"
         correct: true
       - text: "Add more async/await to the resize function"
       - text: "Nothing helps; Node.js can't do CPU-heavy work"
-    explanation: "Worker threads run JavaScript in parallel, off the main thread. The thread pool only runs Node's own built-in tasks like file reads and some crypto, not your JavaScript. async/await does not move CPU work anywhere."
+    explanation: "Worker threads run JavaScript in parallel, off the main thread. The thread pool only runs Node's own built-in tasks, like file reads and some crypto. It doesn't run your JavaScript. async/await does not move CPU work anywhere."
 
-  - question: "You use Node's cluster module to start 4 worker processes on a 4-core machine. What do you gain, and what do you NOT get?"
+  - question: "You use Node's cluster module to start 4 worker processes on a server with 4 cores. What do you gain, and what do you NOT get?"
     options:
       - text: "You gain shared memory between the 4 workers, but lose the event loop"
       - text: "You gain nothing, because Node.js can only ever use one core"
-      - text: "You gain use of all 4 cores and survive one worker crashing, but the workers do not share variables or in-memory sessions"
+      - text: "You gain all 4 cores and survive a crash of one worker, but the workers do not share variables or in-memory sessions"
         correct: true
       - text: "You gain 4 times more memory per request, and sessions are copied automatically"
-    explanation: "Each cluster worker is a full process with its own memory and its own main thread. That uses every core and isolates crashes, but in-memory data, like sessions or counters, is different in each worker."
+    explanation: "Each cluster worker is a full process with its own memory and its own main thread. That uses every core, and a crash stays inside one worker. But in-memory data, like sessions or counters, is different in each worker."
 ---
 
 # How one server handles thousands of users at once
@@ -67,31 +67,33 @@ quiz:
 > **Before you start**
 > This lesson uses a few words from earlier lessons:
 > - **Process:** a running program, with its own space in memory. *([Your app restarted and all the likes vanished](/lessons/how-a-computer-runs-your-code))*
-> - **Event loop:** the loop in Node.js that runs your JavaScript on one main thread, picking up each task when it's ready. *([One slow request froze the whole server](/lessons/event-loop))*
+> - **Event loop:** the loop in Node.js that runs your JavaScript on one main thread. It picks up each task when the task is ready. *([One slow request froze the whole server](/lessons/event-loop))*
 > - **Race condition:** a bug where the result depends on which of two requests finishes first. *([A customer got charged twice. How?](/lessons/charged-twice))*
 > - **Serverless function:** backend code that a platform starts only when a request arrives. *([From your laptop to a real website in one push](/lessons/hosting-platforms))*
 
 ## 2,000 users, 2 cores
 
-Your app gets featured in a newsletter. By lunchtime, 2,000 people have it open. About every 10 seconds, each of them clicks something, and your server answers. You open your hosting dashboard and see the machine your app runs on: **2 CPU cores** and 1 GB of memory.
+A newsletter writes about your app. By lunchtime, 2,000 people have it open. About every 10 seconds, each of them clicks something, and your server answers. You open your hosting dashboard. It shows the server (the computer) that your app runs on: **2 CPU cores** and 1 GB of memory.
 
 A **CPU core** is one part of the CPU that can follow one list of instructions at a time. A CPU with 2 cores can really do 2 things at the very same moment, and no more.
 
 So how do 2 cores serve 2,000 people? Nobody waits 1,000 turns for a page. Each click comes back in a fraction of a second.
 
-And then a stranger thing happens. Your "only 1 left in stock" item sells twice. Your login limit of 5 tries lets someone try 15 times. Nothing crashed, and every test you ran alone worked.
+Then something stranger happens. Your "only 1 left in stock" item sells twice. Your login limit of 5 tries lets someone try 15 times. Nothing crashed, and every test that you ran alone worked.
 
-Both puzzles have the same answer: how a server splits its work into **processes** and **threads**, running on **cores**, and which memory they share.
+Both problems have the same answer. A server splits its work into **processes** and **threads**, which run on **cores**. The answer is in how it does this, and which memory they share.
 
 ---
 
 ## Mental model: kitchens and cooks
 
-The Level 1 lessons compared a computer to a kitchen. Let's grow that kitchen into a restaurant.
+The Level 1 lessons compared a computer to a kitchen. Now make that kitchen into a restaurant.
 
-- A **process** is a whole kitchen. It has its own worktop (memory) and its own ingredients (data). Cooks in one kitchen cannot touch another kitchen's worktop. The operating system builds the walls between them.
-- A **thread** is one cook inside a kitchen: one line of work inside a process. The main thread from the event loop lesson is one of these. One process can have several threads, and **they all share the same memory**, like cooks sharing one worktop.
-- A **core** is a stove. Cooks can only cook while standing at a stove. With 2 stoves, at most 2 cooks are really cooking at any moment, however many cooks you hire.
+- A **process** is a whole kitchen. It has its own worktop (memory) and its own ingredients (data). Cooks in one kitchen can't touch the worktop of another kitchen. The operating system (the main program of the computer) builds the walls between them.
+- A **thread** is one cook inside a kitchen: one line of work inside a process. The main thread from the event loop lesson is one of these. One process can have several threads, and **they all share the same memory**, like cooks at one worktop.
+- A **core** is a stove. Cooks can cook only at a stove. With 2 stoves, at most 2 cooks really cook at any moment, however many cooks you have.
+
+![Process A has its own memory and three threads that share it. Process B has its own separate memory and one thread. The two processes can't see each other's memory.](/diagrams/processes-and-threads-1.svg)
 
 | | Processes | Threads (in one process) |
 |---|---|---|
@@ -100,30 +102,30 @@ The Level 1 lessons compared a computer to a kitchen. Let's grow that kitchen in
 | If one crashes | The others keep running | Often the whole process dies |
 | Cost to start | Higher | Lower |
 
-**Where the comparison stops working:** a real cook can't switch between stoves hundreds of times a second. The operating system can. It pauses one thread, saves where it was, and lets another one run on that core. This is called a **context switch**. It's fast, but not free.
+**Where the comparison stops working:** a real cook can't change stoves hundreds of times a second. The operating system can. It pauses one thread, saves its place, and lets another thread run on that core. The name for this is a **context switch**. It's fast, but not free.
 
-### Concurrency vs parallelism
+### Concurrency and parallelism
 
-Two words that sound the same, but mean different things:
+These two words sound the same, but they mean different things:
 
-- **Concurrency:** many tasks are *in progress* at the same time. They take turns. A single cook can have 30 orders in progress: one in the oven, one waiting for sauce to cool, one being chopped right now.
-- **Parallelism:** several tasks are *running at the same moment*, on different cores. Two cooks at two stoves.
+- **Concurrency:** many tasks are *in progress* at the same time. They take turns. One cook can have 30 orders in progress: one in the oven, one with sauce that cools, one that the cook chops right now.
+- **Parallelism:** several tasks *run at the same moment*, on different cores. Two cooks at two stoves.
 
 You need parallelism only when the work itself keeps the CPU busy.
 
-### Why 2 cores are enough: most requests are waiting
+### Why 2 cores are enough: most requests wait
 
-Here's the key fact for web servers. A typical request spends most of its time **waiting**: for the database, for a payment API, for an AI model, for a file. Waiting for data to come in or go out is called **I/O** (input/output).
+Here's the key fact for web servers. A typical request spends most of its time **waiting**: for the database, a payment API, an AI model or a file. The name for data that comes in or goes out is **I/O** (input/output).
 
 Say each request takes 200 ms in total: 2 ms of real CPU work, and 198 ms of waiting for the database. While it waits, it doesn't need a core at all.
 
-A useful formula from AWS's documentation:
+Here is a useful formula from the documentation of AWS (Amazon's cloud):
 
 ```text
 requests in progress = requests per second × seconds per request
 ```
 
-Your 2,000 users send about 200 requests per second, and each takes 0.2 seconds. So you have about **40 requests in progress** at any moment. But each one uses the CPU for only 2 ms. In total that's 200 × 2 ms = 0.4 seconds of CPU work every second: one core, busy about **40%** of the time. The rest of the time, those 40 requests are waiting, and waiting is cheap.
+Your 2,000 users send about 200 requests per second, and each one takes 0.2 seconds. So about **40 requests are in progress** at any moment. But each one uses the CPU for only 2 ms. In total, that's 200 × 2 ms = 0.4 seconds of CPU work every second. One core is busy about **40%** of the time. The rest of the time, those 40 requests wait, and waiting costs little.
 
 So the real question for a server is: **how do you keep track of 40 (or 4,000) waiting requests without wasting memory?** There are two main answers.
 
@@ -133,40 +135,45 @@ So the real question for a server is: **how do you keep track of 40 (or 4,000) w
 
 ### Answer 1: one thread per request
 
-Many servers give each request its own thread. When the thread waits for the database, the operating system parks it and runs another thread. The code stays simple, because waiting is invisible.
+Many servers give each request its own thread. When the thread waits for the database, the operating system pauses it and runs another thread. The code stays simple, because you can't see the waiting.
 
-For example, Apache Tomcat, a popular Java server, uses a pool of request threads and by default allows at most **200** at once. Request 201 has to wait for a free thread.
+For example, Apache Tomcat is a popular server for Java apps. It uses a pool of request threads, and by default it allows at most **200** at once. Request 201 must wait for a free thread.
 
-The cost: each thread needs its own memory for its work, and the operating system spends time switching between them. The Node.js documentation describes this trade-off directly: fewer threads means more of the machine's time and memory goes to serving clients instead of managing threads.
+The cost: each thread needs its own memory for its work. Also, the operating system spends time on switching between threads. The Node.js documentation describes this trade-off: with fewer threads, more of the server's time and memory goes to clients, and less goes to managing threads.
 
 ### Answer 2: Node.js, one main thread plus helpers
 
-Node.js takes the other route. As [One slow request froze the whole server](/lessons/event-loop) showed, your JavaScript runs on **one main thread**, the "waiter" of that lesson. When a request starts waiting, the main thread moves on to the next one. One thread can keep thousands of waiting requests in progress, because a waiting request is only a small note in memory, not a whole thread.
+Node.js uses the other answer. [One slow request froze the whole server](/lessons/event-loop) showed that your JavaScript runs on **one main thread**, the "waiter" of that lesson. When a request starts to wait, the main thread goes to the next one. One thread can keep thousands of waiting requests in progress. A waiting request is only a small note in memory, not a whole thread.
 
-That lesson also introduced two kinds of helpers: the **worker pool** (also called the thread pool: 4 threads by default, run by libuv, for file reads, `dns.lookup()`, compression and some crypto) and **worker threads** for your own CPU-heavy JavaScript. This lesson adds a third:
+That lesson also showed two kinds of helpers:
 
-- **Multiple processes.** Node's `cluster` module starts several copies of your app as separate processes that share one port. Each copy has its own main thread and its own memory, so together they use every core. If one crashes, the others keep serving.
+- The **worker pool**, also called the thread pool. It has 4 threads by default, run by libuv. They do file reads, `dns.lookup()`, compression and some crypto.
+- **Worker threads**, for your own CPU-heavy JavaScript.
+
+This lesson adds a third helper:
+
+- **Multiple processes.** Node's `cluster` module starts several copies of your app as separate processes. They share one port (the number that network connections use to reach your app). Each copy has its own main thread and its own memory, so together they use every core. If one crashes, the others continue to serve.
 
 So, which tool for which problem:
 
 | You have... | Use | Why |
 |---|---|---|
-| Many slow database or API calls | Nothing extra: async code on the main thread | Waiting is cheap; one thread can juggle it |
+| Many slow database or API calls | Nothing extra: async code on the main thread | Waiting costs little; one thread can handle many waits |
 | CPU-heavy JavaScript (image resizing, big reports) | Worker threads, or a background job | Keeps the main thread free for other requests |
 | More cores than one main thread can use | More processes: `cluster`, or more instances on your platform | One main thread uses at most one core |
 
-> **Go deeper:** [Sign-up takes 10 seconds because of one email](/lessons/background-jobs) (Level 3) shows how to move slow work out of the request entirely.
+> **Go deeper:** [Sign-up takes 10 seconds because of one email](/lessons/background-jobs) (Level 3) shows how to move slow work completely out of the request.
 
 ### How hosting platforms do it: instances
 
-In production, your hosting platform usually runs several copies of your app for you. Each copy is called an **instance**: a separate process, often on a separate machine. A **load balancer** in front of them spreads incoming requests across the instances. Render, for example, lets you set a number of instances and load-balances traffic evenly between them.
+In production (the live app that real users use), your hosting platform usually runs several copies of your app for you. Each copy is an **instance**: a separate process, often on a separate computer. A **load balancer** in front of them sends each incoming request to one of the instances. For example, Render lets you set a number of instances, and it spreads traffic evenly between them.
 
 Serverless platforms do something similar, automatically:
 
 - On standard **AWS Lambda** functions, each environment that runs your function handles **one request at a time**. (Lambda Managed Instances, a newer option, can handle several at once.) Ten requests at once means ten separate environments, each with its own memory.
-- On **Vercel** with Fluid compute (on by default for new projects since April 2025), several requests can **share one instance** at the same time, much like a normal Node.js server.
+- On **Vercel** with Fluid compute, several requests can **share one instance** at the same time, like on a normal Node.js server. Fluid compute is on by default for new projects since April 2025.
 
-> **Go deeper:** [Your app went viral. Will it survive?](/lessons/scaling) (Level 4) covers instances and load balancers in depth.
+> **Go deeper:** [Your app went viral. Will it survive?](/lessons/scaling) (Level 4) covers instances and load balancers in more detail.
 
 ---
 
@@ -174,9 +181,9 @@ Serverless platforms do something similar, automatically:
 
 ### Bug 1: Shared memory and the "await gap"
 
-When threads share memory, two of them can change the same variable at once. `count = count + 1` is really three steps: read, add 1, write back. If two threads both read 5, both write 6, and one update is lost.
+When threads share memory, two of them can change the same variable at once. `count = count + 1` is really three steps: read, add 1, write back. Two threads can both read 5. Then both write 6, and one update is lost.
 
-Node.js runs your JavaScript on one thread, so two lines never run at the very same instant. That doesn't make it safe, because of `await`:
+Node.js runs your JavaScript on one thread, so two lines never run at the very same instant. But that doesn't make it safe, because of `await`:
 
 ```js
 let stock = 1; // lives in this process's memory
@@ -189,33 +196,35 @@ app.post("/api/buy", async (req, res) => {
 });
 ```
 
-What happens when two people press Buy at the same moment:
+Here's what happens when two people press Buy at the same moment:
 
-1. Request A checks `stock`. It's 1, so it continues, and starts waiting for the card payment.
-2. While A waits, the main thread is free. Request B runs, checks `stock`, and it's **still 1**.
-3. Both payments succeed. Both subtract 1. You sold two items and had one. `stock` is now -1.
+1. Request A checks `stock`. It's 1, so A continues and starts to wait for the card payment.
+2. While A waits, the main thread is free. Request B runs and checks `stock`. It's **still 1**.
+3. Both payments succeed. Both subtract 1. You sold two items, but you had one. `stock` is now -1.
 
-Any time your code **checks something, awaits, then acts on what it checked**, another request can slip into the gap. It's the race condition from [A customer got charged twice. How?](/lessons/charged-twice), in memory instead of in the database.
+Your code can **check something, await, then act on what it checked**. Each time it does this, another request can run in the gap. It's the race condition from [A customer got charged twice. How?](/lessons/charged-twice), but in memory and not in the database.
 
 ### Bug 2: Memory that isn't shared, but you think it is
 
-Now the opposite problem. The code above has a second bug: `stock` lives in **one process's** memory. Run 3 instances and there are 3 different `stock` variables. Each one thinks it has 1 item to sell.
+Now the opposite problem. The code above has a second bug: `stock` lives in the memory of **one process**. Run 3 instances, and there are 3 different `stock` variables. Each one thinks that it has 1 item to sell.
 
-The same goes for anything an AI often puts in a variable:
+The same is true for other things that an AI often puts in a variable:
 
-- **Login attempt counters** in a `Map`: each instance counts separately, so a limit of 5 becomes up to 15.
-- **Sessions in memory:** a user logs in on instance 1, their next request lands on instance 2, and they're logged out. The Node.js cluster docs warn about exactly this: don't rely on in-memory data for things like sessions and login.
-- **In-memory caches:** clearing one instance's copy leaves the others showing old data.
+- **Login attempt counters** in a `Map` (a JavaScript lookup table): each instance counts separately, so a limit of 5 becomes up to 15.
+- **Sessions in memory:** a user logs in on instance 1. Their next request goes to instance 2, and they're logged out. The Node.js cluster docs warn about this: don't depend on in-memory data for things like sessions and login.
+- **In-memory caches** (saved copies of data): when you clear the copy in one instance, the others still show old data.
 
-This bug hides on your laptop, where there's always one process. It appears the day a second instance starts.
+You can't see this bug on your laptop, where there's always one process. It appears on the day a second instance starts.
+
+![A load balancer sends requests to three instances. Each instance keeps its own stock = 1 in memory. A database or Redis keeps one shared copy that all instances use.](/diagrams/processes-and-threads-2.svg)
 
 ---
 
 ## What good looks like
 
-**1. Make each instance stateless.** A **stateless** server keeps nothing important in its own memory between requests. Anything that must be shared goes in a shared store: your database, or **Redis** (a fast data store that keeps data in memory and is shared by all your instances). Then it doesn't matter which instance answers, or how many there are. Ask: *"If this request landed on a different instance, would it still work?"*
+**1. Make each instance stateless.** A **stateless** server keeps nothing important in its own memory between requests. Put anything that must be shared in a shared store. That can be your database, or **Redis**: a fast data store that keeps data in memory and that all your instances share. Then it doesn't matter which instance answers, or how many there are. Ask: *"If this request went to a different instance, would it still work?"*
 
-**2. Let the database do check-and-change in one step.** Instead of check, await, then change, write a single update that only succeeds if the condition is still true:
+**2. Let the database check and change in one step.** Don't check, await, then change. Write a single update that succeeds only if the condition is still true:
 
 ```sql
 UPDATE products
@@ -224,13 +233,13 @@ WHERE id = $1 AND stock > 0
 RETURNING stock;
 ```
 
-If no row comes back, the item was already sold out. The database runs this as one **atomic** step: no other request can change `stock` between the check and the subtraction. Charge the card *after* the update succeeds (and put the stock back if the payment fails), so you never charge for an item you can't deliver.
+If no row comes back, the item was already sold out. The database runs this as one **atomic** step: no other request can change `stock` between the check and the subtraction. Charge the card *after* the update succeeds. If the payment fails, put the stock back. Then you never charge for an item that you can't deliver.
 
 > **Go deeper:** [Two transactions, one wrong answer](/lessons/isolation-levels) (Level 4) explains what the database guarantees when two transactions run at once.
 
-**3. Use every core, the simple way.** On your own server, run one Node.js process per core. `os.availableParallelism()` tells you how many that is. On a hosting platform, increase the number of instances instead. Either way, you get more main threads, and the stateless rule above keeps them correct.
+**3. Use every core, the simple way.** On your own server, run one Node.js process per core. `os.availableParallelism()` tells you how many that is. On a hosting platform, increase the number of instances. Both ways give you more main threads, and the stateless rule above keeps them correct.
 
-**4. Move CPU-heavy work off the main thread.** Use a pool of worker threads, or a background job if the user doesn't need the answer right away.
+**4. Move CPU-heavy work off the main thread.** Use a pool of worker threads. If the user doesn't need the answer right away, use a background job.
 
 > **Go deeper:** [Two tasks waiting for each other forever](/lessons/locks-and-deadlocks) (Level 4) shows how locks protect shared data, and how they can get stuck.
 
@@ -238,24 +247,28 @@ If no row comes back, the item was already sold out. The database runs this as o
 
 ## Test your own app
 
-**1. Count your cores.** In a terminal, run:
+**1. Count your cores.** In a terminal (the text window where you type commands), run:
 
 ```bash
 node -e "console.log(require('os').availableParallelism())"
 ```
 
-This prints how many tasks your laptop can run in parallel. Your hosting plan may give you fewer.
+This prints how many tasks your laptop can run in parallel. Your hosting plan can give you fewer.
 
-**2. Fire two requests at the same moment.** Pick a route that checks something and then changes it: buying, redeeming a coupon, claiming a username. Open your app, log in, open the browser console (F12), and run:
+**2. Send two requests at the same moment.** Choose a route that checks something and then changes it: buying, using a coupon, claiming a username.
+
+1. Open your app and log in.
+2. Press F12 to open the browser's developer tools, and go to the **Console** tab.
+3. Run this code:
 
 ```js
 const send = () => fetch("/api/buy", { method: "POST" }).then((r) => r.status);
 console.log(await Promise.all([send(), send(), send()]));
 ```
 
-This sends three requests at once. If a test item had stock 1 and you see more than one `200`, you have the await-gap race.
+This sends three requests at once. Say a test item had stock 1. If you see more than one `200` (the status code for success), you have the await-gap race.
 
-**3. Check your instance count.** In your hosting dashboard, find how many instances your app runs, and whether autoscaling can add more. If it can ever be more than one, every in-memory counter, `Map` or cache is a bug waiting for traffic.
+**3. Check your instance count.** In your hosting dashboard, find how many instances your app runs. Also check if autoscaling (adding instances automatically when traffic grows) can add more. If there can ever be more than one, every in-memory counter, `Map` or cache is a bug. It appears as soon as traffic grows.
 
 ---
 
@@ -263,19 +276,19 @@ This sends three requests at once. If a test item had stock 1 and you see more t
 
 **Key terms**
 - **CPU core:** a part of the CPU that runs one list of instructions at a time
-- **Process:** a running program with its own memory, walled off from other processes
+- **Process:** a running program with its own memory, separate from other processes
 - **Thread:** one line of work inside a process. Threads in a process share its memory.
 - **Concurrency:** many tasks in progress at once, taking turns
 - **Parallelism:** several tasks running at the same moment on different cores
 - **Thread pool / worker threads:** Node's helper threads for built-in tasks / for your own CPU-heavy JavaScript
 - **Instance:** one running copy of your app. Platforms run several behind a load balancer.
-- **Stateless:** keeping nothing important in one instance's memory
+- **Stateless:** keeping nothing important in the memory of one instance
 
 **Red flags**
 - A variable outside any function that holds counts, stock, sessions or rate limits
 - Code that checks a value, then `await`s, then changes the value
 - "It's safe because Node.js is single-threaded"
-- An app that works with one instance but has never been tested with two
+- An app that works with one instance but that you never tested with two
 
 **Ask your AI**
 - *"List every piece of state my server keeps in memory. Which ones break if I run 3 instances?"*
@@ -287,15 +300,15 @@ This sends three requests at once. If a test item had stock 1 and you see more t
 <details>
 <summary><strong>Going deeper</strong> (optional, for readers who want more detail)</summary>
 
-**Worker threads can share memory, on purpose.** Normally, workers talk by sending messages, which copies the data. The Node.js docs explain that, unlike `cluster` processes, worker threads can share memory by transferring `ArrayBuffer`s or sharing a `SharedArrayBuffer`. Once memory is truly shared, the race conditions from thread-per-request servers come back, and you need `Atomics` operations to update it safely.
+**Worker threads can share memory, on purpose.** Usually, workers talk by sending messages, and this copies the data. The Node.js docs explain that worker threads can share memory, but `cluster` processes can't. Workers do this when they transfer `ArrayBuffer`s or share a `SharedArrayBuffer`. When memory is really shared, the race conditions of thread-per-request servers come back. Then you need `Atomics` operations to update it safely.
 
-**How cluster spreads connections.** By default on every platform except Windows, the primary process accepts new connections and hands them to the workers in turn, which is called **round-robin**. If a worker crashes, the others keep serving, and the primary can start a replacement.
+**How cluster spreads connections.** By default, on every platform except Windows, the primary process accepts new connections. It gives them to the workers in turn. The name for this is **round-robin**. If a worker crashes, the others continue to serve, and the primary can start a new worker.
 
-**Changing the thread pool size.** `UV_THREADPOOL_SIZE` must be set before Node.js starts, for example in your start command or your platform's environment variables. The Node.js docs warn that setting it from inside your code with `process.env` is not guaranteed to work, because the pool is created before your code runs.
+**Changing the thread pool size.** Set `UV_THREADPOOL_SIZE` before Node.js starts, for example in your start command or in your platform's environment variables (settings that a process reads when it starts). The Node.js docs warn about setting it from inside your code with `process.env`. That isn't guaranteed to work, because Node.js makes the pool before your code runs.
 
-**Requests per second vs requests in progress.** The formula in this lesson works for any server, not only Lambda. AWS's example: a function that averages 200 ms and gets 5,000 requests per second has a concurrency of 1,000. On Lambda, that means 1,000 environments running at once, and the default account limit is 1,000 concurrent executions per region.
+**Requests per second and requests in progress.** The formula in this lesson works for any server, not only Lambda. Here's AWS's example: a function takes 200 ms on average and gets 5,000 requests per second. Its concurrency (requests in progress) is 1,000. On Lambda, that means 1,000 environments at once. The default account limit is 1,000 concurrent executions per region (an area of the world where AWS has data centers).
 
-**Async is not free either.** A thread-per-request server spends memory on threads. An event-loop server spends memory on waiting requests and their data. Neither is "infinitely scalable". Both are limited by memory, by the database's connection limit, and by the slowest service you call.
+**Async also has costs.** A thread-per-request server spends memory on threads. An event-loop server spends memory on waiting requests and their data. Neither one can grow forever. Memory limits both, and so do the database's connection limit and the slowest service that you call.
 
 </details>
 

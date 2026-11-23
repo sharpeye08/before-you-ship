@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" role="img" aria-labelledby="t d">
+  <title id="t">How one comment reaches every visitor</title>
+  <desc id="d">Leo posts a comment with HTML in it. The server saves the comment and puts it into the page. Every visitor's browser gets the page and runs Leo's code. This is stored XSS.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="330" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Leo -->
+    <text x="90" y="112" font-size="12" fill="#a0a0a0" text-anchor="middle">ATTACKER</text>
+    <rect x="24" y="124" width="132" height="76" rx="10" fill="#e5484d"/>
+    <text x="90" y="158" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Leo</text>
+    <text x="90" y="180" font-size="12" fill="#fde8e8" text-anchor="middle">posts a comment</text>
+
+    <!-- Server -->
+    <text x="355" y="102" font-size="12" fill="#a0a0a0" text-anchor="middle">YOUR SITE</text>
+    <rect x="270" y="114" width="170" height="96" rx="10" fill="#4f6bd8"/>
+    <text x="355" y="150" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Server</text>
+    <text x="355" y="172" font-size="12" fill="#e8ecff" text-anchor="middle">saves the comment</text>
+    <text x="355" y="190" font-size="12" fill="#e8ecff" text-anchor="middle">and puts it in the page</text>
+
+    <!-- Leo to server -->
+    <line x1="160" y1="162" x2="262" y2="162" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="212" y="152" font-size="12" fill="#f2c94c" text-anchor="middle">1. Post</text>
+
+    <!-- Visitors -->
+    <rect x="548" y="34" width="150" height="64" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="623" y="62" font-size="15" fill="#f2f2f2" text-anchor="middle">Visitor 1</text>
+    <text x="623" y="82" font-size="12" fill="#e5484d" text-anchor="middle">runs Leo's code</text>
+
+    <rect x="548" y="130" width="150" height="64" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="623" y="158" font-size="15" fill="#f2f2f2" text-anchor="middle">Visitor 2</text>
+    <text x="623" y="178" font-size="12" fill="#e5484d" text-anchor="middle">runs Leo's code</text>
+
+    <rect x="548" y="226" width="150" height="64" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="623" y="254" font-size="15" fill="#f2f2f2" text-anchor="middle">You (the admin)</text>
+    <text x="623" y="274" font-size="12" fill="#e5484d" text-anchor="middle">runs Leo's code</text>
+
+    <!-- Server to visitors -->
+    <line x1="444" y1="150" x2="540" y2="70" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="444" y1="162" x2="540" y2="162" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="444" y1="174" x2="540" y2="254" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="355" y="236" font-size="12" fill="#8ea2ff" text-anchor="middle">2. Sends the page</text>
+    <text x="355" y="254" font-size="12" fill="#a0a0a0" text-anchor="middle">to everyone who opens it</text>
+
+    <text x="24" y="306" font-size="12" fill="#a0a0a0">One saved comment reaches every visitor. This is stored XSS.</text>
+  </g>
+</svg>

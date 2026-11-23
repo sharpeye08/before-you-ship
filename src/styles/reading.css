@@ -1,0 +1,216 @@
+/* Lesson page (/lessons/<slug>). Loaded after space.css, which brings Tailwind and the theme. */
+
+/* Colours the shared quiz component expects, in this page's palette (white text, one green accent). */
+.reading-page {
+  --text: #ffffff;
+  --text-soft: #ffffff;
+  --muted: #ffffff;
+  --border: rgb(255 255 255 / 0.3);
+  --row: rgb(255 255 255 / 0.04);
+  --glass-hover: rgb(255 255 255 / 0.08);
+  --good: #86dcae;
+  --good-soft: rgb(134 220 174 / 0.14);
+  --accent: #f2797b;
+  --accent-soft: rgb(242 121 123 / 0.14);
+  --radius-sm: 12px;
+  --mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  background: #08090a;
+}
+.reading-page .muted {
+  color: #ffffff;
+}
+
+/* App bar: slides up while you read, comes back when you scroll up. */
+.appbar {
+  transition: transform 0.3s ease;
+}
+.appbar.is-hidden {
+  transform: translateY(-100%);
+}
+@media (prefers-reduced-motion: reduce) {
+  .appbar {
+    transition: none;
+  }
+}
+
+/* Lesson text. */
+.prose-read {
+  font-size: 1.125rem;
+  line-height: 1.75;
+  color: #ffffff;
+}
+.prose-read > :first-child {
+  margin-top: 0;
+}
+.prose-read > h1:first-child {
+  display: none; /* the page shows the title already */
+}
+.prose-read p {
+  margin: 0 0 1.25em;
+}
+.prose-read h2 {
+  margin: 2.4em 0 0.6em;
+  font-size: 1.65rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  scroll-margin-top: 96px;
+}
+.prose-read h3 {
+  margin: 1.9em 0 0.5em;
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+  scroll-margin-top: 96px;
+}
+.prose-read a {
+  text-decoration: underline;
+  text-decoration-color: rgb(255 255 255 / 0.35);
+  text-underline-offset: 3px;
+}
+.prose-read a:hover {
+  text-decoration-color: #ffffff;
+}
+.prose-read strong {
+  font-weight: 600;
+}
+.prose-read ul,
+.prose-read ol {
+  margin: 0 0 1.25em;
+  padding-left: 1.4em;
+}
+.prose-read ul {
+  list-style: disc;
+}
+.prose-read ol {
+  list-style: decimal;
+}
+.prose-read li {
+  margin: 0.35em 0;
+  padding-left: 0.2em;
+}
+.prose-read li::marker {
+  color: #86dcae;
+}
+.prose-read :not(pre) > code {
+  padding: 0.12em 0.38em;
+  border-radius: 6px;
+  background: rgb(255 255 255 / 0.09);
+  font-family: var(--mono);
+  font-size: 0.86em;
+}
+.prose-read pre {
+  margin: 1.6em 0;
+  padding: 18px 20px;
+  overflow-x: auto;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  border-radius: 14px;
+  background: #101113 !important;
+  font-size: 0.88rem;
+  line-height: 1.65;
+}
+.prose-read pre code {
+  font-family: var(--mono);
+}
+.prose-read img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 2em auto;
+  border-radius: 14px;
+}
+.prose-read hr {
+  margin: 3em 0;
+  border: 0;
+  border-top: 1px solid rgb(255 255 255 / 0.12);
+}
+
+/* Callout boxes ("Before you start", "In short", "Go deeper"). */
+.prose-read blockquote {
+  margin: 1.8em 0;
+  padding: 18px 22px;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  border-left: 3px solid #ffffff;
+  border-radius: 14px;
+  background: rgb(255 255 255 / 0.04);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+.prose-read blockquote > :last-child {
+  margin-bottom: 0;
+}
+.prose-read blockquote.callout-short {
+  border-left-color: #86dcae;
+}
+
+/* Tables scroll sideways on small screens. */
+.prose-read .table-wrap {
+  margin: 1.8em 0;
+  overflow-x: auto;
+}
+.prose-read table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+.prose-read th,
+.prose-read td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgb(255 255 255 / 0.12);
+  text-align: left;
+  vertical-align: top;
+}
+.prose-read th {
+  font-weight: 600;
+}
+
+/* "Going deeper" sections. */
+.prose-read details {
+  margin: 2em 0;
+  padding: 0 22px;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 16px;
+}
+.prose-read summary {
+  padding: 16px 0;
+  font-weight: 500;
+  cursor: pointer;
+}
+.prose-read details[open] {
+  padding-bottom: 8px;
+}
+
+/* Table of contents, collapsed: one short line per heading. */
+.toc-mini-line {
+  height: 2px;
+  border-radius: 2px;
+  background: rgb(255 255 255 / 0.28);
+  transition: background 0.2s;
+}
+.toc-mini-row.is-current .toc-mini-line {
+  background: #ffffff;
+}
+.toc-link.is-current {
+  color: #86dcae;
+}
+
+/* Shared pieces for every page on the Reading layout. */
+.page-title {
+  font-size: clamp(2rem, 4.4vw, 2.75rem);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+.page-intro {
+  margin-top: 1rem;
+  font-size: 1.125rem;
+  line-height: 1.7;
+}
+.card {
+  border: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 16px;
+  background: rgb(255 255 255 / 0.03);
+}

@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" role="img" aria-labelledby="t d">
+  <title id="t">The detective routine</title>
+  <desc id="d">Ask four questions in order. Did DNS find the name? Did it connect? Was the status code 200? Did the page build? Each yes leads to the next question. At the first no, stop: that step broke. For step 1, check the name. For step 2, check that the app is running. For step 3, check the address for 4xx or the logs for 5xx. For step 4, check the Console.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#e5484d"/>
+    </marker>
+  </defs>
+  <rect width="720" height="300" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Questions -->
+    <rect x="40" y="40" width="140" height="72" rx="10" fill="#f2c94c"/>
+    <text x="110" y="71" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Did DNS find</text>
+    <text x="110" y="91" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">the name?</text>
+
+    <rect x="210" y="40" width="140" height="72" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="280" y="71" font-size="15" fill="#f2f2f2" text-anchor="middle">Did it</text>
+    <text x="280" y="91" font-size="15" fill="#f2f2f2" text-anchor="middle">connect?</text>
+
+    <rect x="380" y="40" width="140" height="72" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="450" y="71" font-size="15" fill="#f2f2f2" text-anchor="middle">Status code</text>
+    <text x="450" y="91" font-size="15" fill="#f2f2f2" text-anchor="middle">200?</text>
+
+    <rect x="550" y="40" width="140" height="72" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="620" y="71" font-size="15" fill="#f2f2f2" text-anchor="middle">Did the page</text>
+    <text x="620" y="91" font-size="15" fill="#f2f2f2" text-anchor="middle">build?</text>
+
+    <!-- Yes arrows -->
+    <line x1="182" y1="76" x2="206" y2="76" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="352" y1="76" x2="376" y2="76" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="522" y1="76" x2="546" y2="76" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="195" y="64" font-size="12" fill="#1f9d6b" text-anchor="middle">yes</text>
+    <text x="365" y="64" font-size="12" fill="#1f9d6b" text-anchor="middle">yes</text>
+    <text x="535" y="64" font-size="12" fill="#1f9d6b" text-anchor="middle">yes</text>
+
+    <!-- No arrows -->
+    <line x1="110" y1="114" x2="110" y2="164" stroke="#e5484d" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrowRed)"/>
+    <line x1="280" y1="114" x2="280" y2="164" stroke="#e5484d" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrowRed)"/>
+    <line x1="450" y1="114" x2="450" y2="164" stroke="#e5484d" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrowRed)"/>
+    <line x1="620" y1="114" x2="620" y2="164" stroke="#e5484d" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrowRed)"/>
+    <text x="118" y="144" font-size="12" fill="#e5484d">no</text>
+    <text x="288" y="144" font-size="12" fill="#e5484d">no</text>
+    <text x="458" y="144" font-size="12" fill="#e5484d">no</text>
+    <text x="628" y="144" font-size="12" fill="#e5484d">no</text>
+
+    <!-- Outcomes -->
+    <rect x="40" y="172" width="140" height="64" rx="10" fill="#1f1f1f" stroke="#e5484d" stroke-width="1.5"/>
+    <text x="110" y="198" font-size="15" fill="#f2f2f2" text-anchor="middle">Step 1 broke</text>
+    <text x="110" y="220" font-size="12" fill="#a0a0a0" text-anchor="middle">Check the name</text>
+
+    <rect x="210" y="172" width="140" height="64" rx="10" fill="#1f1f1f" stroke="#e5484d" stroke-width="1.5"/>
+    <text x="280" y="198" font-size="15" fill="#f2f2f2" text-anchor="middle">Step 2 broke</text>
+    <text x="280" y="220" font-size="12" fill="#a0a0a0" text-anchor="middle">Is the app running?</text>
+
+    <rect x="380" y="172" width="140" height="64" rx="10" fill="#1f1f1f" stroke="#e5484d" stroke-width="1.5"/>
+    <text x="450" y="198" font-size="15" fill="#f2f2f2" text-anchor="middle">Step 3 broke</text>
+    <text x="450" y="220" font-size="12" fill="#a0a0a0" text-anchor="middle">Address or logs</text>
+
+    <rect x="550" y="172" width="140" height="64" rx="10" fill="#1f1f1f" stroke="#e5484d" stroke-width="1.5"/>
+    <text x="620" y="198" font-size="15" fill="#f2f2f2" text-anchor="middle">Step 4 broke</text>
+    <text x="620" y="220" font-size="12" fill="#a0a0a0" text-anchor="middle">Check the Console</text>
+
+    <text x="360" y="270" font-size="12" fill="#a0a0a0" text-anchor="middle">Stop at the first "no". That is the step that broke.</text>
+  </g>
+</svg>

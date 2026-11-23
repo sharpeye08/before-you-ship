@@ -1,6 +1,6 @@
 ---
 // Prompt library: every "Ask your AI" prompt from every lesson, grouped by level, with copy buttons.
-import Base from '../layouts/Base.astro';
+import Reading from '../layouts/Reading.astro';
 import Icon from '../components/Icon.astro';
 import { getLessons } from '../lib/lessons';
 import { extract, plain } from '../lib/extract';
@@ -16,39 +16,38 @@ const groups = LEVELS.map((lv) => {
 }).filter((g) => g.lessons.length);
 ---
 
-<Base title="Prompt library" active="prompts" description="Every 'Ask your AI' prompt from every lesson, ready to copy into your AI tool.">
-  <header class="tool-head">
-    <p class="kicker"><Icon name="sparkles" size={16} /> {prompts.length} prompts</p>
-    <h1>Prompt library</h1>
-    <p class="muted">
+<Reading title="Prompt library" description="Every 'Ask your AI' prompt from every lesson, ready to copy into your AI tool." width="wide">
+  <header>
+    <h1 class="page-title">Prompt library</h1>
+    <p class="page-intro max-w-[680px]">
       Questions to paste into your AI tool to check your own app, collected from every lesson. Replace anything in
       [square brackets] with your details.
     </p>
-    <label class="search-box glass pl-search">
-      <Icon name="search" />
-      <input type="search" placeholder="Find a prompt: secrets, cache, login…" autocomplete="off" data-pl-filter aria-label="Filter prompts" />
+    <p class="mt-3 text-sm">{prompts.length} prompts</p>
+    <label class="mt-8 flex max-w-[520px] items-center gap-3 rounded-full border border-line bg-white/4 px-4 py-3 focus-within:border-white/50">
+      <Icon name="search" size={18} />
+      <input type="search" class="w-full bg-transparent outline-none placeholder:text-white" placeholder="Find a prompt: secrets, cache, login…" autocomplete="off" data-pl-filter aria-label="Filter prompts" />
     </label>
   </header>
 
-  <p class="muted center" data-pl-empty hidden>No prompts match that.</p>
+  <p class="mt-10" data-pl-empty hidden>No prompts match that.</p>
 
   {
     groups.map((g) => (
-      <section class="tool-section glass" data-pl-section>
-        <p class="kicker">Level {g.n}</p>
-        <h2>{g.name}</h2>
+      <section class="mt-16 border-t border-line pt-10" data-pl-section>
+        <h2 class="text-[1.65rem] leading-tight font-medium tracking-[-0.02em]">Level {g.n}: {g.name}</h2>
         {g.lessons.map((items) => (
-          <div class="pl-group" data-pl-group>
-            <h3>
-              <a href={`/lessons/${items[0].slug}`}>
+          <div class="mt-8" data-pl-group>
+            <h3 class="h3">
+              <a class="hover:underline" href={`/lessons/${items[0].slug}`}>
                 {items[0].order}. {items[0].title}
               </a>
             </h3>
-            <ul class="pl-list">
+            <ul class="mt-3 grid gap-2">
               {items.map((p) => (
-                <li data-pl={plain(p.text).toLowerCase()}>
-                  <p>{plain(p.text)}</p>
-                  <button type="button" class="chip-btn" data-copy={plain(p.text)}>
+                <li class="card flex items-start justify-between gap-4 px-4 py-3" data-pl={plain(p.text).toLowerCase()}>
+                  <p class="min-w-0 leading-relaxed [overflow-wrap:anywhere]">{plain(p.text)}</p>
+                  <button type="button" class="inline-flex flex-none items-center gap-1.5 rounded-full border border-line px-3 py-1.5 text-sm hover:bg-white/8" data-copy={plain(p.text)}>
                     <Icon name="copy" size={14} /> <span>Copy</span>
                   </button>
                 </li>
@@ -59,57 +58,7 @@ const groups = LEVELS.map((lv) => {
       </section>
     ))
   }
-</Base>
-
-<style>
-  .pl-search {
-    max-width: 520px;
-    margin: 0 auto;
-  }
-  .center {
-    text-align: center;
-  }
-  .pl-group + .pl-group {
-    margin-top: 18px;
-  }
-  .pl-group h3 {
-    margin: 0 0 8px;
-    font-size: 0.98rem;
-  }
-  .pl-group h3 a {
-    text-decoration: none;
-  }
-  .pl-group h3 a:hover {
-    color: var(--accent-text);
-  }
-  .pl-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: 6px;
-  }
-  .pl-list li {
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    justify-content: space-between;
-    padding: 10px 12px;
-    border-radius: 12px;
-    background: var(--row);
-  }
-  .pl-list p {
-    min-width: 0;
-    overflow-wrap: anywhere;
-    margin: 0;
-    font-size: 0.94rem;
-    line-height: 1.55;
-    color: var(--text-soft);
-  }
-  .pl-list .chip-btn {
-    flex: none;
-  }
-</style>
+</Reading>
 
 <script>
   document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) => {

@@ -1,7 +1,7 @@
 ---
 // Pre-ship checklist: every "Red flags" item from every lesson, as one checklist.
 // Ticks are saved only in this browser.
-import Base from '../layouts/Base.astro';
+import Reading from '../layouts/Reading.astro';
 import Icon from '../components/Icon.astro';
 import { getLessons } from '../lib/lessons';
 import { extract, inline, plain } from '../lib/extract';
@@ -27,42 +27,40 @@ const promptText =
   flags.map((f) => `- ${plain(f.text)}`).join('\n');
 ---
 
-<Base title="Pre-ship checklist" active="checklist" description="Every red flag from every lesson in one checklist to run before you launch.">
-  <header class="tool-head">
-    <p class="kicker"><Icon name="list-check" size={16} /> Before you launch</p>
-    <h1>Pre-ship checklist</h1>
-    <p class="muted">
+<Reading title="Pre-ship checklist" description="Every red flag from every lesson in one checklist to run before you launch." width="wide">
+  <header>
+    <h1 class="page-title">Pre-ship checklist</h1>
+    <p class="page-intro max-w-[680px]">
       Every red flag from every lesson, in one list. Go through your app (or ask your AI to), and tick each item once
       you've checked that your code doesn't have it. Each item links to the lesson that explains it.
     </p>
-    <div class="tool-progress">
-      <div class="tool-progress-label"><span>Checked</span><span data-count>0 / {total}</span></div>
-      <div class="progress-track"><div class="progress-fill" data-fill></div></div>
+    <div class="mt-8 max-w-[680px]">
+      <div class="mb-2 flex items-center justify-between text-sm"><span>Checked</span><span data-count>0 / {total}</span></div>
+      <div class="h-1.5 overflow-hidden rounded-full bg-white/10"><div class="h-full w-0 rounded-full bg-mint transition-[width] duration-300" data-fill></div></div>
     </div>
-    <div class="tool-actions">
-      <button type="button" class="btn btn-accent" data-copy-prompt><Icon name="copy" size={18} /> <span>Copy as a prompt for your AI</span></button>
-      <button type="button" class="btn" data-reset>Reset ticks</button>
+    <div class="mt-8 flex flex-wrap gap-3">
+      <button type="button" class="btn btn-light" data-copy-prompt><Icon name="copy" size={18} /> <span>Copy as a prompt for your AI</span></button>
+      <button type="button" class="btn btn-ghost" data-reset>Reset ticks</button>
     </div>
     <textarea hidden data-prompt>{promptText}</textarea>
   </header>
 
   {
     groups.map((g) => (
-      <section class="tool-section glass">
-        <p class="kicker">Level {g.n}</p>
-        <h2>{g.name}</h2>
+      <section class="mt-16 border-t border-line pt-10">
+        <h2 class="text-[1.65rem] leading-tight font-medium tracking-[-0.02em]">Level {g.n}: {g.name}</h2>
         {g.lessons.map((l) => (
-          <div class="check-group">
-            <h3>
-              <a href={`/lessons/${l.slug}`}>
+          <div class="mt-8">
+            <h3 class="h3">
+              <a class="hover:underline" href={`/lessons/${l.slug}`}>
                 {l.order}. {l.title}
               </a>
             </h3>
-            <ul class="checks">
+            <ul class="checks mt-3 grid gap-2">
               {l.items.map((f, i) => (
                 <li>
-                  <label>
-                    <input type="checkbox" data-check={`${f.slug}#${i}`} />
+                  <label class="card flex cursor-pointer items-start gap-3 px-4 py-3 leading-relaxed hover:bg-white/6">
+                    <input type="checkbox" class="mt-1 size-4 flex-none accent-mint" data-check={`${f.slug}#${i}`} />
                     <span set:html={inline(f.text)} />
                   </label>
                 </li>
@@ -73,58 +71,18 @@ const promptText =
       </section>
     ))
   }
-</Base>
+</Reading>
 
 <style>
-  .check-group + .check-group {
-    margin-top: 18px;
-  }
-  .check-group h3 {
-    margin: 0 0 8px;
-    font-size: 0.98rem;
-  }
-  .check-group h3 a {
-    text-decoration: none;
-  }
-  .check-group h3 a:hover {
-    color: var(--accent-text);
-  }
-  .checks {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: 6px;
-  }
-  .checks label {
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    padding: 10px 12px;
-    border-radius: 12px;
-    background: var(--row);
-    cursor: pointer;
-    font-size: 0.93rem;
-    line-height: 1.5;
-    color: var(--text-soft);
-  }
-  .checks input {
-    margin-top: 3px;
-    accent-color: var(--accent);
-    width: 16px;
-    height: 16px;
-    flex: none;
-  }
   .checks input:checked + span {
-    color: var(--muted);
     text-decoration: line-through;
+    text-decoration-color: #86dcae;
   }
   .checks :global(code) {
-    font-family: var(--mono);
     font-size: 0.88em;
-    background: rgba(255, 255, 255, 0.07);
+    background: rgb(255 255 255 / 0.09);
     padding: 0.1em 0.35em;
-    border-radius: 5px;
+    border-radius: 6px;
   }
 </style>
 

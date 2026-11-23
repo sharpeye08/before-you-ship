@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" role="img" aria-labelledby="t d">
+  <title id="t">localhost means this same device</title>
+  <desc id="d">Your laptop opens localhost:3000, looks on itself and finds your quiz app, because the app runs there. Your friend's phone opens the same link, looks on itself and finds nothing, so it shows "This site can't be reached". localhost always means this same device.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#e5484d"/>
+    </marker>
+  </defs>
+  <rect width="720" height="330" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Row 1: your laptop -->
+    <rect x="40" y="40" width="220" height="90" rx="10" fill="#f2c94c"/>
+    <text x="150" y="78" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Your laptop</text>
+    <text x="150" y="100" font-size="12" fill="#111111" text-anchor="middle">opens localhost:3000</text>
+
+    <line x1="266" y1="85" x2="432" y2="85" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="349" y="75" font-size="12" fill="#a0a0a0" text-anchor="middle">looks on itself</text>
+
+    <rect x="440" y="40" width="240" height="90" rx="10" fill="#1f9d6b"/>
+    <text x="560" y="78" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Quiz app found</text>
+    <text x="560" y="100" font-size="12" fill="#e6f6ef" text-anchor="middle">(the app runs on this laptop)</text>
+
+    <!-- Row 2: friend's phone -->
+    <rect x="40" y="170" width="220" height="90" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="150" y="208" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Your friend's phone</text>
+    <text x="150" y="230" font-size="12" fill="#a0a0a0" text-anchor="middle">opens localhost:3000</text>
+
+    <line x1="266" y1="215" x2="432" y2="215" stroke="#e5484d" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow-red)"/>
+    <text x="349" y="205" font-size="12" fill="#a0a0a0" text-anchor="middle">looks on itself</text>
+
+    <rect x="440" y="170" width="240" height="90" rx="10" fill="#1f1f1f" stroke="#e5484d" stroke-width="1.5"/>
+    <text x="560" y="208" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Nothing here</text>
+    <text x="560" y="230" font-size="12" fill="#a0a0a0" text-anchor="middle">"This site can't be reached"</text>
+
+    <text x="360" y="298" font-size="15" fill="#f2f2f2" text-anchor="middle">localhost always means "this same device".</text>
+  </g>
+</svg>

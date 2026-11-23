@@ -14,47 +14,47 @@ quiz:
         correct: true
       - text: "Because chat messages are too large"
       - text: "Because HTTPS blocks it"
-    explanation: "HTTP is a request-and-response conversation started by the browser. To get updates, the browser must keep asking (polling), keep a response open (Server-Sent Events), or switch to a two-way connection (WebSockets)."
-  - question: "Your page asks the server \"anything new?\" every 3 seconds. 1,000 people leave it open all day. Roughly how many requests is that per day?"
+    explanation: "HTTP is a request-and-response conversation, and the browser starts it. To get updates, the browser must keep asking (polling), keep a response open (Server-Sent Events), or switch to a two-way connection (WebSockets)."
+  - question: "Your page asks the server \"anything new?\" every 3 seconds. 1,000 people leave it open all day. About how many requests is that per day?"
     options:
       - text: "About 1,000"
       - text: "About 333"
       - text: "About 86,400"
       - text: "About 29 million"
         correct: true
-    explanation: "1,000 tabs ÷ 3 seconds ≈ 333 requests per second. A day has 86,400 seconds, so that's about 28.8 million requests, and almost all of them answer \"nothing new\"."
-  - question: "Your app streams an AI model's answer to the browser, word by word. The browser doesn't need to send anything while it streams. Which tool fits best?"
+    explanation: "1,000 tabs ÷ 3 seconds ≈ 333 requests per second. A day has 86,400 seconds, so that is about 28.8 million requests. Almost all of them answer \"nothing new\"."
+  - question: "Your app streams an AI model's answer to the browser, word by word. The browser does not need to send anything during the stream. Which tool fits best?"
     options:
       - text: "Server-Sent Events"
         correct: true
       - text: "Polling every 100 milliseconds"
       - text: "Refreshing the page"
       - text: "A WebSocket, because it is always better"
-    explanation: "Server-Sent Events are built for one-way streams from server to browser over normal HTTP. AI APIs commonly stream their answers this way. A WebSocket would work but adds complexity you don't need."
-  - question: "Your chat app uses WebSockets on serverless functions. Mia's connection is handled by one function instance and Leo's by another. The code sends each new message to all connections it keeps in memory. What happens when Mia sends a message?"
+    explanation: "Server-Sent Events are made for one-way streams from server to browser over normal HTTP. AI APIs commonly stream their answers this way. A WebSocket would work, but it adds complexity that you do not need."
+  - question: "Your chat app uses WebSockets on serverless functions. One function instance handles Mia's connection, and another instance handles Leo's. The code sends each new message to all connections that it keeps in memory. What happens when Mia sends a message?"
     options:
       - text: "Leo gets it instantly"
       - text: "Leo gets it twice"
-      - text: "Leo may never get it, because the other instance's memory doesn't know about his connection"
+      - text: "Leo may never get it, because the other instance's memory does not know about his connection"
         correct: true
-      - text: "The message is saved twice in the database"
-    explanation: "Each instance only knows its own connections. Messages must go through something all instances share, such as Redis or a managed realtime service."
-  - question: "Leo's laptop sleeps for 10 minutes. When it wakes, the WebSocket reconnects. What should your app do so he doesn't miss messages?"
+      - text: "The database saves the message twice"
+    explanation: "Each instance only knows its own connections. Messages must go through something that all instances share, such as Redis or a managed realtime service."
+  - question: "Leo's laptop sleeps for 10 minutes. When it wakes, the WebSocket reconnects. What should your app do so that he does not miss messages?"
     options:
-      - text: "Nothing, WebSockets never lose messages"
+      - text: "Nothing. WebSockets never lose messages"
       - text: "Ask the user to refresh the page"
       - text: "Send the whole chat history again to every user"
-      - text: "After reconnecting, load the messages saved in the database since the last one Leo saw"
+      - text: "After the reconnect, load the messages saved in the database since the last one Leo saw"
         correct: true
-    explanation: "Messages sent while a connection is down are not delivered to it. The database is the source of truth: on reconnect, catch up from it, then keep listening."
+    explanation: "A connection that is down does not receive the messages sent during that time. The database is the source of truth. On reconnect, catch up from the database, then continue to listen."
   - question: "Your page shows the status of a video conversion that takes about two minutes. What is the simplest good option?"
     options:
       - text: "Build a WebSocket server"
-      - text: "Poll the status every few seconds, and stop when it's done"
+      - text: "Poll the status every few seconds, and stop when it is done"
         correct: true
       - text: "Ask the user to refresh every few seconds"
       - text: "Keep the upload request open for two minutes"
-    explanation: "For one slow-changing value that only matters for a short time, polling every few seconds is simple and cheap. Realtime connections are worth it when updates are frequent or must be instant."
+    explanation: "For one slow-changing value that matters only for a short time, polling every few seconds is simple and cheap. Realtime connections are worth it when updates are frequent or must be instant."
 ---
 
 # How chat apps update without you refreshing
@@ -62,47 +62,51 @@ quiz:
 > **Before you start**
 > This lesson uses a few words from earlier lessons:
 > - **Request and response:** the browser asks a server for something, and the server answers. *([Every website is a conversation. Here's how it goes](/lessons/http-requests-and-responses))*
-> - **Serverless function:** backend code the hosting platform starts when a request arrives. Each one has a maximum duration. *([Sign-up takes 10 seconds because of one email](/lessons/background-jobs))*
+> - **Serverless function:** backend code that the hosting platform starts when a request arrives. Each one has a maximum duration. *([Sign-up takes 10 seconds because of one email](/lessons/background-jobs))*
 > - **Background job:** slow work done outside the user's request, with a status like `processing` or `done`. *([Sign-up takes 10 seconds because of one email](/lessons/background-jobs))*
-> - **Authorization:** checking that the logged-in user is allowed to see or change this data. *([Change one number in the URL, see everyone's invoices](/lessons/logged-in-doesnt-mean-allowed))*
+> - **Authorization:** a check that the logged-in user is allowed to see or change this data. *([Change one number in the URL, see everyone's invoices](/lessons/logged-in-doesnt-mean-allowed))*
 
 ## The message that only appears after a refresh
 
-You build a group chat for your study group with AI. It works. Messages are saved in the database, and the page shows them.
+You build a group chat for your study group with AI. It works. The database saves the messages, and the page shows them.
 
-Then you try it with a friend. Mia types "Who has the notes?" and presses Enter. On Leo's screen, nothing happens. He waits. Still nothing. He refreshes the page, and there it is.
+Then you try it with a friend. Mia types "Who has the notes?" and presses Enter. On Leo's screen, nothing happens. He waits. Still nothing. He refreshes the page, and the message is there.
 
-Real chat apps don't work like that. A message appears on your friend's screen within a second, without anyone refreshing. How?
+Real chat apps do not work like that. A message appears on your friend's screen within a second, and nobody refreshes. How?
 
-The problem is the way the web talks. In HTTP, **the browser always speaks first**. It sends a request, and the server answers. The server can't start a conversation. It has no way to call Leo's browser and say "Mia just wrote something".
+The problem is the way the web talks. In HTTP, **the browser always speaks first**. It sends a request, and the server answers. The server cannot start a conversation. It has no way to call Leo's browser and say "Mia just wrote something".
 
-This lesson shows the four ways around that rule, what each one costs, and why "add WebSockets" is harder on serverless platforms than the AI makes it sound.
+![The browser sends a request and the server answers. The server cannot start the conversation to tell Leo's browser about a new message.](/diagrams/realtime-updates-1.svg)
+
+This lesson shows four ways around that rule and what each one costs. It also explains why "add WebSockets" is harder on serverless platforms than the AI makes it sound.
 
 ---
 
 ## The mental model: four ways to hear about something new
 
-Imagine you're waiting for a parcel.
+Imagine that you wait for a parcel.
 
-1. **Polling:** you walk to the front door every 5 minutes to check. Most trips, there's nothing there.
+1. **Polling:** you walk to the front door every 5 minutes to check. On most trips, there is nothing there.
 2. **Long polling:** you go to the door and wait there until the parcel comes, or until you get tired. Then you go back to the door and wait again.
-3. **Server-Sent Events (SSE):** you turn on the radio. The station talks whenever it has news. You can listen, but you can't talk back through the radio.
-4. **WebSockets:** you're on a phone call. Either side can talk at any time.
+3. **Server-Sent Events (SSE):** you turn on the radio. The station talks when it has news. You can listen, but you cannot talk back through the radio.
+4. **WebSockets:** you are on a phone call. Either side can talk at any time.
 
-**Where this comparison stops working:** waiting by a door or staying on a call costs you nothing. On a server, every open connection uses memory and sometimes money, and with thousands of users, that adds up.
+**Where this comparison stops working:** it costs you nothing to wait by a door or stay on a call. On a server, every open connection uses memory and sometimes money. With thousands of users, that cost adds up.
 
-Here's what each one looks like on the web.
+Here is what each one looks like on the web.
 
 | | How it works | Direction | Delay |
 |---|---|---|---|
 | **Polling** | The browser asks "anything new?" every few seconds | Browser asks | Up to one interval |
-| **Long polling** | The browser asks, and the server holds the request open until something happens, then the browser asks again | Browser asks | Short |
+| **Long polling** | The browser asks. The server holds the request open until something happens. Then the browser asks again | Browser asks | Short |
 | **Server-Sent Events** | One response that never ends: the server keeps writing events into it | Server → browser | Very short |
 | **WebSockets** | The connection switches from HTTP to a two-way channel | Both ways | Very short |
 
+![Four rows show the messages between the browser and the server for polling, long polling, Server-Sent Events and WebSockets.](/diagrams/realtime-updates-2.svg)
+
 ### Polling
 
-Polling is the simplest. Here's what the AI often writes:
+Polling is the simplest. Here is what the AI often writes:
 
 ```js
 setInterval(async () => {
@@ -115,22 +119,24 @@ setInterval(async () => {
 In plain English:
 
 1. **Line 1 and line 5:** run this code every 3,000 milliseconds (3 seconds).
-2. **Line 2:** ask the server for messages newer than the last one we have.
-3. **Lines 3–4:** if any came back, show them.
+2. **Line 2:** ask the server for messages newer than the last one that the page has.
+3. **Lines 3–4:** if any messages came back, show them.
 
-It works everywhere, needs nothing special on the server, and it's easy to understand. But look at the numbers. If 1,000 people leave the chat open, that's about 333 requests every second, or about **28.8 million requests a day**. Almost every answer is "nothing new". On a serverless platform, each one starts a function and runs a database query, and you pay for both. And a message can still take up to 3 seconds to appear.
+Polling works everywhere. It needs nothing special on the server, and it is easy to understand. But look at the numbers. If 1,000 people leave the chat open, that is about 333 requests every second. That is about **28.8 million requests a day**. Almost every answer is "nothing new".
 
-Polling is a good choice for slow, short-lived things: checking whether a background job is finished, or refreshing a dashboard once a minute.
+On a serverless platform, each request starts a function and runs a database query, and you pay for both. And a message can still take up to 3 seconds to appear.
+
+Polling is a good choice for slow, short-lived things. One example is a check if a background job is finished. Another example is a dashboard that refreshes once a minute.
 
 ### Long polling
 
-Long polling is a smarter version. The browser asks "anything new?", and if there's nothing yet, the server **doesn't answer straight away**. It holds the request open for a while. As soon as a message arrives, it answers. The browser shows it and asks again immediately.
+Long polling is a smarter version. The browser asks "anything new?". If there is nothing yet, the server **does not answer straight away**. It holds the request open for a while. When a message arrives, the server answers. The browser shows the message and immediately asks again.
 
-Messages arrive fast, and there are far fewer empty answers. But each waiting browser keeps a request open on your server, and on a serverless platform, a function that sits waiting is a function you may pay for. Today, long polling is mostly used as a fallback. Socket.IO, a popular realtime library, starts with long polling by default.
+Messages arrive fast, and there are far fewer empty answers. But each waiting browser keeps a request open on your server. On a serverless platform, you can pay for a function while it sits and waits. Today, apps use long polling mostly as a fallback (a backup method). Socket.IO, a popular realtime **library** (ready-made code that you add to your app), starts with long polling by default.
 
 ### Server-Sent Events
 
-With **Server-Sent Events** (SSE), the browser makes one normal request, and the server answers with a special content type, `text/event-stream`. Then it simply never finishes the response. Whenever there's news, it writes another event into it:
+With **Server-Sent Events** (SSE), the browser makes one normal request. The server answers with a special **content type** (the label that says what kind of data a response holds): `text/event-stream`. Then the server never finishes the response. When there is news, it writes another event into it:
 
 ```text
 data: {"author":"Mia","text":"Who has the notes?"}
@@ -138,7 +144,7 @@ data: {"author":"Mia","text":"Who has the notes?"}
 data: {"author":"Sam","text":"Page 42"}
 ```
 
-Each event is a line starting with `data:`, followed by an empty line. The browser has a built-in tool to read this stream, called `EventSource`:
+Each event is a line that starts with `data:`, followed by an empty line. The browser has a built-in tool to read this stream, called `EventSource`:
 
 ```js
 const events = new EventSource("/api/rooms/study/stream");
@@ -150,13 +156,13 @@ events.onmessage = (event) => {
 In plain English:
 
 1. **Line 1:** open the stream.
-2. **Lines 2–4:** every time an event arrives, turn its text into data and show it.
+2. **Lines 2–4:** each time an event arrives, turn its text into data and show it.
 
-If the connection drops, `EventSource` **reconnects automatically**. SSE is one-way: to send a message, the browser still makes a normal `POST` request. That's fine for many features. In fact, when an AI chat app shows an answer appearing word by word, it's often SSE: AI APIs, such as Anthropic's, stream their responses as server-sent events.
+If the connection drops, `EventSource` **reconnects automatically**. SSE is one-way. To send a message, the browser still makes a normal `POST` request. That is fine for many features. For example, an AI chat app often uses SSE to show an answer word by word. AI APIs, such as Anthropic's, stream their responses as server-sent events.
 
 ### WebSockets
 
-A **WebSocket** starts as a normal HTTP request with a header that says `Upgrade: websocket`. If the server agrees, it answers with status `101 Switching Protocols`. From then on, the connection is no longer HTTP. It's an open, two-way channel, and either side can send a message at any moment.
+A **WebSocket** starts as a normal HTTP request with the header `Upgrade: websocket`. If the server agrees, it answers with status `101 Switching Protocols`. After that, the connection is no longer HTTP. It is an open, two-way channel, and either side can send a message at any time.
 
 ```js
 const socket = new WebSocket("wss://example.com/chat");
@@ -169,10 +175,10 @@ socket.onmessage = (event) => showMessages([JSON.parse(event.data)]);
 In plain English:
 
 1. **Line 1:** open a WebSocket. `wss://` means a WebSocket over an encrypted connection, like `https://`.
-2. **Lines 2–4:** once it's open, send a message.
-3. **Line 5:** whenever the server sends something, show it.
+2. **Lines 2–4:** when the connection is open, send a message.
+3. **Line 5:** when the server sends something, show it.
 
-WebSockets are the right tool for things that go both ways, often and fast: chat with "Leo is typing…", multiplayer games, live cursors in a shared document.
+WebSockets are the right tool for things that go both ways, often and fast. Examples are chat with "Leo is typing…", multiplayer games, and live cursors in a shared document.
 
 ---
 
@@ -180,42 +186,44 @@ WebSockets are the right tool for things that go both ways, often and fast: chat
 
 ### Problem 1: Polling that never rests
 
-The AI sets polling to every second "so it feels instant". Each poll returns **all** messages, not only new ones. And it keeps polling in tabs that nobody is looking at.
+The AI sets polling to every second "so it feels instant". Each poll returns **all** messages, not only new ones. And it continues to poll in tabs that nobody looks at.
 
-Each of those multiplies your costs. Fixes that keep polling cheap:
+Each of those things multiplies your costs. These fixes keep polling cheap:
 
-- Ask only for what's new (`?after=lastId`), so most answers are tiny.
+- Ask only for what is new (`?after=lastId`), so most answers are tiny.
 - Poll as slowly as the feature allows: every few seconds for a job status, once a minute for a dashboard.
 - Pause when the tab is hidden. The browser tells you with the `visibilitychange` event and `document.hidden`.
 - Stop polling when the job is `done` or `failed`.
 
 ### Problem 2: The WebSocket server that only works on your laptop
 
-You ask the AI for realtime chat. It writes a small WebSocket server: `node server.js`, which keeps every connection in a list in memory, and sends each new message to everyone in the list. On your laptop, it's perfect.
+You ask the AI for realtime chat. It writes a small WebSocket server, `node server.js`. The server keeps every connection in a list in memory. It sends each new message to everyone in the list. On your laptop, it is perfect.
 
-Then you deploy to a serverless platform, and it falls apart. A traditional server runs all the time, so it can hold connections for hours. Serverless functions were built to answer one request and stop.
+Then you deploy to a serverless platform, and it fails. A traditional server runs all the time, so it can hold connections for hours. Serverless functions were built to answer one request and stop.
 
-Vercel now supports WebSockets in its functions (it became generally available in October 2026), but its documentation lists exactly the limits you'd expect:
+Vercel now supports WebSockets in its functions. This support became generally available in October 2026. But its documentation lists the limits that you would expect:
 
-- **Connections end when the function reaches its maximum duration**, which is 5 minutes by default at the time of writing. Every client needs code to reconnect.
+- **Connections end when the function reaches its maximum duration.** This is 5 minutes by default at the time of writing. Every client needs code to reconnect.
 - **Each connection is pinned to one instance**: one running copy of your function on one machine. Busy apps run many instances at once.
-- **Instances don't share memory.** If Mia is connected to instance A and Leo to instance B, the list of connections in A's memory doesn't include Leo. Mia's message never reaches him.
+- **Instances do not share memory.** Mia is connected to instance A, and Leo is connected to instance B. The list of connections in A's memory does not include Leo. So Mia's message never reaches him.
 
-Vercel's advice is to keep rooms, who's online and messages in a shared store such as Redis (the fast shared data store from [Fast, but showing yesterday's data](/lessons/caching)), so every instance can pass messages to the others. Other platforms have their own rules and limits for long connections. Check your platform's docs before choosing.
+![Mia is connected to instance A and Leo to instance B. A's memory does not know Leo, so the message does not reach him. A shared store between the instances fixes this.](/diagrams/realtime-updates-3.svg)
+
+Vercel's advice is to keep rooms, the list of who is online, and messages in a shared store such as **Redis**. (Redis is the fast shared data store from [Fast, but showing yesterday's data](/lessons/caching).) Then every instance can pass messages to the others. Other platforms have their own rules and limits for long connections. Check your platform's docs before you choose.
 
 > **Go deeper:** [Your app went viral. Will it survive?](/lessons/scaling) (Level 4) explains why "keep it in memory" breaks as soon as you have more than one server.
 
 ### Problem 3: Forgetting that connections drop
 
-Connections drop all the time. A phone moves from Wi-Fi to mobile data. A laptop sleeps. You deploy a new version. The function hits its time limit.
+Connections drop all the time. A phone moves from Wi-Fi to mobile data. A laptop sleeps. You deploy a new version. The function reaches its time limit.
 
-Messages sent while Leo was disconnected are **not** waiting for him somewhere. If your app only listens to the live connection, he silently misses them. Nobody notices until someone says "I never saw your message".
+Messages that were sent while Leo was disconnected are **not** waiting for him somewhere. If your app only listens to the live connection, he silently misses them. Nobody notices until someone says "I never saw your message".
 
 ### Problem 4: Anyone can listen to any room
 
-The AI adds a WebSocket that lets the browser say "subscribe me to room 42". It never checks whether the user is a member of room 42. Anyone who changes the number can read someone else's private chat as it happens.
+The AI adds a WebSocket that lets the browser say "subscribe me to room 42". **Subscribe** means "send me every new message in this room". The code never checks if the user is a member of room 42. Anyone who changes the number can read someone else's private chat as it happens.
 
-This is the same bug as changing an ID in a web address, just over a different kind of connection. Realtime connections need the same authorization checks as every other route.
+This is the same bug as a changed ID in a web address, but over a different kind of connection. Realtime connections need the same authorization checks as every other route.
 
 ---
 
@@ -233,11 +241,15 @@ Most apps need fewer WebSockets than the AI suggests.
 
 ### Let a managed service hold the connections
 
-Holding thousands of open connections, passing messages between servers, reconnecting and tracking who's online is a whole product. Companies sell it as a **managed realtime service**. Examples include **Supabase Realtime**, **Pusher** and **Ably**. Vercel's own guide also lists others, such as Liveblocks, PubNub and Firebase Realtime Database.
+A realtime system must hold thousands of open connections and pass messages between servers. It must also reconnect users and track who is online. That is a whole product. Companies sell it as a **managed realtime service**. Examples include **Supabase Realtime**, **Pusher** and **Ably**. Vercel's own guide also lists others, such as Liveblocks, PubNub and Firebase Realtime Database.
 
-Supabase Realtime, for example, offers three features: **Broadcast** (send messages between connected users), **Presence** (track who's online) and **Postgres Changes** (get told when rows in your database change).
+Supabase Realtime, for example, offers three features:
 
-The usual shape: your server saves the message, then asks the service to deliver it.
+- **Broadcast:** send messages between connected users.
+- **Presence:** track who is online.
+- **Postgres Changes:** get a message when rows in your database change.
+
+The usual shape is this: your server saves the message, then asks the service to deliver it.
 
 ```js
 app.post("/api/rooms/:id/messages", requireLogin, async (req, res) => {
@@ -252,9 +264,9 @@ app.post("/api/rooms/:id/messages", requireLogin, async (req, res) => {
 
 In plain English:
 
-1. **Line 2:** authorization first. Only members may post.
+1. **Line 2:** authorization first. Only members can post.
 2. **Lines 3–5:** save the message in the database.
-3. **Line 6:** tell the realtime service to send it to everyone listening to this room. `realtime.publish` is a placeholder name; each service has its own.
+3. **Line 6:** tell the realtime service to send the message to everyone who listens to this room. `realtime.publish` is a placeholder name. Each service has its own name for it.
 4. **Line 7:** reply to the sender.
 
 The service holds the connections, so your functions stay short and simple.
@@ -262,19 +274,19 @@ The service holds the connections, so your functions stay short and simple.
 ### Rules that keep realtime correct
 
 - **The database is the truth. The live connection is a doorbell.** Save first, then announce. Never keep messages only in the realtime channel.
-- **On every (re)connect, catch up.** Load the messages after the last one the user saw, then keep listening.
-- **Reconnect with growing pauses:** wait 1 second, then 2, then 4, up to a limit like 30 seconds, so thousands of users don't all reconnect in the same instant after an outage.
-- **Check permissions when a user subscribes**, not only when they post. Managed services have their own way to do this: use it.
+- **On every connect and reconnect, catch up.** Load the messages after the last one that the user saw. Then continue to listen.
+- **Reconnect with longer and longer pauses.** Wait 1 second, then 2, then 4, up to a limit like 30 seconds. Then thousands of users do not all reconnect at the same moment after an **outage** (a time when the service is down).
+- **Check permissions when a user subscribes**, not only when they post. Managed services have their own way to do this. Use it.
 
 ---
 
 ## Test your own app
 
-1. **Two windows.** Open your app in a normal window and a private window, logged in as two users. Send a message in one. How long until it appears in the other?
-2. **Find out what the AI built.** Open developer tools, then the **Network** tab. If the same request repeats every few seconds, it's polling: count how many per minute. If you see a connection under the **WS** filter, it's a WebSocket. Click it to see the messages.
+1. **Two windows.** Open your app in a normal window and in a private window. Log in as a different user in each. Send a message in one window. How long does it take to appear in the other?
+2. **Find out what the AI built.** Open developer tools, then the **Network** tab. If the same request repeats every few seconds, it is polling. Count how many requests it makes per minute. If you see a connection under the **WS** filter, it is a WebSocket. Click it to see the messages.
 3. **Break the connection.** In one window, turn off your Wi-Fi for 30 seconds. Send a message from the other window. Turn the Wi-Fi back on. Does the missed message appear without a refresh?
-4. **Leave it running.** Open the app in a background tab for 10 minutes. Check your hosting platform's logs or usage page: how many requests did one idle tab make?
-5. **Listen where you shouldn't.** Ask your AI: *"Show me where a user's permission to join a room is checked for realtime subscriptions."* Then try joining another user's room from the second window.
+4. **Leave it running.** Open the app in a background tab for 10 minutes. Check your hosting platform's logs or usage page. How many requests did one idle tab make?
+5. **Listen where you should not.** From the second window, try to join another user's room. Did it work? Then ask your AI: *"Show me where a user's permission to join a room is checked for realtime subscriptions."*
 
 ---
 
@@ -285,16 +297,16 @@ The service holds the connections, so your functions stay short and simple.
 - **Long polling:** the server holds each request open until there is news
 - **Server-Sent Events (SSE):** one long response that the server keeps writing events into. Server to browser only
 - **WebSocket:** a connection that switches from HTTP to a two-way channel
-- **Instance:** one running copy of your function or server. Instances don't share memory
+- **Instance:** one running copy of your function or server. Instances do not share memory
 - **Managed realtime service:** a company that holds the open connections and delivers messages for you
 
 **Red flags in AI-written code**
-- `setInterval` polling every second, returning everything instead of only what's new
+- `setInterval` polling every second that returns everything, not only what is new
 - Polling that never stops, even in hidden tabs or after the job is done
-- A WebSocket server that keeps connections in a list in memory, deployed to serverless or more than one server
-- No reconnect code, or reconnecting without loading missed messages
+- A WebSocket server that keeps connections in a list in memory, deployed to serverless or to more than one server
+- No reconnect code, or a reconnect that does not load missed messages
 - Messages that are only sent live and never saved to the database
-- Subscribing to a room or channel without any permission check
+- A subscription to a room or channel without any permission check
 
 **Ask your AI**
 - *"How does my app get new data without a refresh: polling, SSE or WebSockets? Where does it run, and what happens on my hosting platform when there are many instances?"*
@@ -307,19 +319,19 @@ The service holds the connections, so your functions stay short and simple.
 <details>
 <summary><strong>Going deeper</strong> (optional, for readers who want more detail)</summary>
 
-**The SSE connection limit.** Over older HTTP/1.1 connections, browsers allow only 6 open connections per website, across all tabs. Each SSE stream uses one, so a user with 7 tabs open can block their own app. Over HTTP/2, which many hosting platforms support, the limit is negotiated and usually much higher (100 by default).
+**The SSE connection limit.** Over older HTTP/1.1 connections, browsers allow only 6 open connections per website, across all tabs. Each SSE stream uses one. So a user with 7 open tabs can block their own app. Many hosting platforms support HTTP/2. Over HTTP/2, the two sides agree on the limit, and it is usually much higher. Many servers allow 100 or more.
 
-**Catching up with SSE.** Each SSE event can carry an `id:` line. When `EventSource` reconnects, the browser sends the last ID it saw in a `Last-Event-ID` header, so the server knows where to continue. The `retry:` line tells the browser how long to wait before reconnecting.
+**Catching up with SSE.** Each SSE event can carry an `id:` line. When `EventSource` reconnects, the browser sends the last ID that it saw in a `Last-Event-ID` header. So the server knows where to continue. The `retry:` line tells the browser how long to wait before it reconnects.
 
-**Keeping connections alive.** Some network equipment closes connections that stay silent for too long. The WebSocket protocol has small **ping** and **pong** messages for this: one side pings, the other answers, and both know the connection is still alive. SSE servers often send a comment line (starting with `:`) every so often for the same reason.
+**Keeping connections alive.** Some network equipment closes connections that stay silent for too long. The WebSocket **protocol** (its set of rules) has small **ping** and **pong** messages for this. One side sends a ping, and the other side answers with a pong. Then both sides know that the connection is still alive. SSE servers often send a comment line (a line that starts with `:`) from time to time for the same reason.
 
-**Fan-out.** When a room has 10,000 listeners, one message means 10,000 sends. Vercel's guide points out that a self-built relay must make one send per connection, and recommends a managed provider when this "fan-out" gets large. This is a big part of what managed services are paid for.
+**Fan-out.** When a room has 10,000 listeners, one message means 10,000 sends. This is called **fan-out**. Vercel's guide says that a relay you build yourself must make one send per connection. It recommends a managed provider when the fan-out gets large. This is a big part of what people pay managed services for.
 
-**Paying for open connections.** On Vercel, CPU time for a WebSocket is billed only while your code processes messages, but the function instance's memory is billed for as long as the connection stays open. An idle connection is not free. Check how your platform bills long connections before you build on them.
+**Paying for open connections.** On Vercel, you pay for CPU time (the time the processor works) for a WebSocket only while your code processes messages. But you pay for the function instance's memory for as long as the connection stays open. An idle connection is not free. Check how your platform bills long connections before you build on them.
 
-**Socket.IO is not plain WebSockets.** Socket.IO adds its own protocol on top: rooms, automatic reconnects, and the long-polling fallback. A Socket.IO client can only talk to a Socket.IO server. Vercel's docs show it configured to use only the WebSocket transport.
+**Socket.IO is not plain WebSockets.** Socket.IO adds its own protocol on top: rooms, automatic reconnects, and the long-polling fallback. A Socket.IO client can only talk to a Socket.IO server. Vercel's docs show Socket.IO set up to use only the WebSocket transport.
 
-**Collaborative editing is harder still.** Live cursors are easy. Two people typing in the same paragraph at the same time is a different problem: whose change wins? [Two people typed in the same document at once. Who wins?](/lessons/collaborative-editing) covers it.
+**Collaborative editing is harder still.** Live cursors are easy, but two people can type in the same paragraph at the same time. Whose change wins? That is a different problem. [Two people typed in the same document at once. Who wins?](/lessons/collaborative-editing) covers it.
 
 </details>
 

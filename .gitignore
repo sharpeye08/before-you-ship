@@ -20,3 +20,6 @@ Thumbs.db
 
 # Local editor/preview config
 .claude/
+
+# Extra checkouts of other branches
+.worktrees/

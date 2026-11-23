@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 380" role="img" aria-labelledby="t d">
+  <title id="t">Full table scan and index lookup</title>
+  <desc id="d">Left, without an index: the database reads every row of the check_ins table, one by one, to find the rows for user 4821. It reads 1.8 million rows to keep 180. Right, with an index: the database searches a sorted list of user IDs, finds user 4821, and goes directly to the three matching rows.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="380" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <text x="187" y="40" font-size="12" fill="#a0a0a0" text-anchor="middle">WITHOUT AN INDEX</text>
+    <text x="540" y="40" font-size="12" fill="#a0a0a0" text-anchor="middle">WITH AN INDEX</text>
+    <line x1="360" y1="56" x2="360" y2="360" stroke="#3a3a3a" stroke-width="1"/>
+
+    <!-- Left: full table scan -->
+    <rect x="64" y="56" width="246" height="262" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="187" y="80" font-size="15" fill="#f2f2f2" text-anchor="middle">check_ins</text>
+    <g font-size="12">
+      <rect x="74" y="92" width="226" height="18" rx="4" fill="#2a2a2a"/><text x="86" y="105" fill="#f2f2f2">user 17</text>
+      <rect x="74" y="114" width="226" height="18" rx="4" fill="#f2c94c"/><text x="86" y="127" fill="#111111">user 4821</text>
+      <rect x="74" y="136" width="226" height="18" rx="4" fill="#2a2a2a"/><text x="86" y="149" fill="#f2f2f2">user 302</text>
+      <rect x="74" y="158" width="226" height="18" rx="4" fill="#2a2a2a"/><text x="86" y="171" fill="#f2f2f2">user 9</text>
+      <rect x="74" y="180" width="226" height="18" rx="4" fill="#f2c94c"/><text x="86" y="193" fill="#111111">user 4821</text>
+      <rect x="74" y="202" width="226" height="18" rx="4" fill="#2a2a2a"/><text x="86" y="215" fill="#f2f2f2">user 7730</text>
+      <rect x="74" y="224" width="226" height="18" rx="4" fill="#2a2a2a"/><text x="86" y="237" fill="#f2f2f2">user 51</text>
+      <rect x="74" y="246" width="226" height="18" rx="4" fill="#f2c94c"/><text x="86" y="259" fill="#111111">user 4821</text>
+      <rect x="74" y="268" width="226" height="18" rx="4" fill="#2a2a2a"/><text x="86" y="281" fill="#f2f2f2">user 260</text>
+      <rect x="74" y="290" width="226" height="18" rx="4" fill="#2a2a2a"/><text x="86" y="303" fill="#f2f2f2">user 1188</text>
+    </g>
+    <line x1="46" y1="94" x2="46" y2="306" stroke="#e5484d" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="187" y="342" font-size="12" fill="#a0a0a0" text-anchor="middle">Reads every row: 1.8 million</text>
+    <text x="187" y="360" font-size="12" fill="#a0a0a0" text-anchor="middle">to keep 180</text>
+
+    <!-- Right: index lookup -->
+    <rect x="384" y="56" width="134" height="262" rx="10" fill="#4f6bd8"/>
+    <text x="451" y="80" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Index</text>
+    <text x="451" y="98" font-size="12" fill="#e8ecff" text-anchor="middle">sorted user IDs</text>
+    <g font-size="12" fill="#e8ecff">
+      <text x="398" y="130">user 1</text>
+      <text x="398" y="154">user 2</text>
+      <text x="398" y="178">...</text>
+      <rect x="392" y="188" width="118" height="20" rx="4" fill="#f2c94c"/>
+      <text x="398" y="202" fill="#111111">user 4821</text>
+      <text x="398" y="226">user 4822</text>
+      <text x="398" y="250">...</text>
+      <text x="398" y="274">user 10000</text>
+    </g>
+
+    <rect x="560" y="56" width="130" height="262" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="625" y="80" font-size="15" fill="#f2f2f2" text-anchor="middle">check_ins</text>
+    <g font-size="12">
+      <rect x="568" y="92" width="114" height="18" rx="4" fill="#2a2a2a"/>
+      <rect x="568" y="114" width="114" height="18" rx="4" fill="#f2c94c"/><text x="578" y="127" fill="#111111">user 4821</text>
+      <rect x="568" y="136" width="114" height="18" rx="4" fill="#2a2a2a"/>
+      <rect x="568" y="158" width="114" height="18" rx="4" fill="#2a2a2a"/>
+      <rect x="568" y="180" width="114" height="18" rx="4" fill="#f2c94c"/><text x="578" y="193" fill="#111111">user 4821</text>
+      <rect x="568" y="202" width="114" height="18" rx="4" fill="#2a2a2a"/>
+      <rect x="568" y="224" width="114" height="18" rx="4" fill="#2a2a2a"/>
+      <rect x="568" y="246" width="114" height="18" rx="4" fill="#f2c94c"/><text x="578" y="259" fill="#111111">user 4821</text>
+      <rect x="568" y="268" width="114" height="18" rx="4" fill="#2a2a2a"/>
+      <rect x="568" y="290" width="114" height="18" rx="4" fill="#2a2a2a"/>
+    </g>
+    <line x1="514" y1="198" x2="562" y2="125" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="514" y1="198" x2="562" y2="189" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="514" y1="198" x2="562" y2="253" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="540" y="342" font-size="12" fill="#a0a0a0" text-anchor="middle">Searches the sorted list,</text>
+    <text x="540" y="360" font-size="12" fill="#a0a0a0" text-anchor="middle">then goes directly to the rows</text>
+  </g>
+</svg>

@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" role="img" aria-labelledby="t d">
+  <title id="t">Five safe steps for an uploaded file</title>
+  <desc id="d">A careful mailroom weighs a parcel, looks inside, puts its own label on it, stores it in a separate warehouse and hands it out only with a pickup slip. For uploads, these steps are: a size limit, a check of the first bytes, a random name, object storage on a separate domain, and a signed URL that expires.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="300" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <text x="360" y="40" font-size="12" fill="#a0a0a0" text-anchor="middle">AN UPLOADED FILE IS USER INPUT. TREAT IT LIKE A PARCEL FROM A STRANGER.</text>
+
+    <!-- Mailroom labels -->
+    <text x="80" y="88" font-size="12" fill="#a0a0a0" text-anchor="middle">1. Weigh it</text>
+    <text x="218" y="88" font-size="12" fill="#a0a0a0" text-anchor="middle">2. Look inside</text>
+    <text x="356" y="88" font-size="12" fill="#a0a0a0" text-anchor="middle">3. Own label</text>
+    <text x="494" y="88" font-size="12" fill="#a0a0a0" text-anchor="middle">4. Warehouse</text>
+    <text x="632" y="88" font-size="12" fill="#a0a0a0" text-anchor="middle">5. Pickup slip</text>
+
+    <!-- Boxes -->
+    <rect x="20" y="100" width="120" height="100" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="80" y="144" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Size limit</text>
+    <text x="80" y="166" font-size="12" fill="#a0a0a0" text-anchor="middle">on the server</text>
+
+    <rect x="158" y="100" width="120" height="100" rx="10" fill="#f2c94c"/>
+    <text x="218" y="144" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Check bytes</text>
+    <text x="218" y="166" font-size="12" fill="#111111" text-anchor="middle">magic bytes</text>
+
+    <rect x="296" y="100" width="120" height="100" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="356" y="144" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">New name</text>
+    <text x="356" y="166" font-size="12" fill="#a0a0a0" text-anchor="middle">random ID</text>
+
+    <rect x="434" y="100" width="120" height="100" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="494" y="134" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Object</text>
+    <text x="494" y="154" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">storage</text>
+    <text x="494" y="176" font-size="12" fill="#a0a0a0" text-anchor="middle">other domain</text>
+
+    <rect x="572" y="100" width="120" height="100" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="632" y="144" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Signed URL</text>
+    <text x="632" y="166" font-size="12" fill="#a0a0a0" text-anchor="middle">expires soon</text>
+
+    <!-- Arrows -->
+    <line x1="141" y1="150" x2="155" y2="150" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="279" y1="150" x2="293" y2="150" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="417" y1="150" x2="431" y2="150" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="555" y1="150" x2="569" y2="150" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <!-- What each step stops -->
+    <text x="80" y="226" font-size="12" fill="#a0a0a0" text-anchor="middle">stops a 3 GB</text>
+    <text x="80" y="242" font-size="12" fill="#a0a0a0" text-anchor="middle">"picture"</text>
+    <text x="218" y="226" font-size="12" fill="#a0a0a0" text-anchor="middle">stops a text file</text>
+    <text x="218" y="242" font-size="12" fill="#a0a0a0" text-anchor="middle">named .png</text>
+    <text x="356" y="226" font-size="12" fill="#a0a0a0" text-anchor="middle">stops ../ tricks</text>
+    <text x="356" y="242" font-size="12" fill="#a0a0a0" text-anchor="middle">and overwrites</text>
+    <text x="494" y="226" font-size="12" fill="#a0a0a0" text-anchor="middle">files survive and</text>
+    <text x="494" y="242" font-size="12" fill="#a0a0a0" text-anchor="middle">scripts stay apart</text>
+    <text x="632" y="226" font-size="12" fill="#a0a0a0" text-anchor="middle">private files stay</text>
+    <text x="632" y="242" font-size="12" fill="#a0a0a0" text-anchor="middle">private</text>
+  </g>
+</svg>

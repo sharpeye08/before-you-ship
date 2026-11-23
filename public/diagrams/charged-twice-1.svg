@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" role="img" aria-labelledby="t d">
+  <title id="t">The race window</title>
+  <desc id="d">Two requests for the same cart run at the same time. Request A checks the cart, charges the card, then marks the cart as paid. Request B checks the cart 40 milliseconds later, before A marks it as paid. So B also sees "not paid" and charges the card a second time. The time between A's check and A's update is the race window.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="320" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Race window -->
+    <rect x="122" y="56" width="400" height="182" rx="10" fill="none" stroke="#e98da4" stroke-width="1.5" stroke-dasharray="6 5"/>
+    <text x="322" y="46" font-size="12" fill="#e98da4" text-anchor="middle">race window</text>
+
+    <!-- Lane labels -->
+    <text x="30" y="101" font-size="15" fill="#f2f2f2">Request A</text>
+    <text x="30" y="191" font-size="15" fill="#f2f2f2">Request B</text>
+
+    <!-- Request A -->
+    <rect x="130" y="72" width="130" height="50" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="195" y="102" font-size="15" fill="#f2f2f2" text-anchor="middle">Check: not paid</text>
+    <rect x="270" y="72" width="130" height="50" rx="10" fill="#4f6bd8"/>
+    <text x="335" y="102" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Charge card</text>
+    <rect x="530" y="72" width="130" height="50" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="595" y="102" font-size="15" fill="#f2f2f2" text-anchor="middle">Mark as paid</text>
+
+    <!-- Request B -->
+    <rect x="170" y="162" width="130" height="50" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="235" y="192" font-size="15" fill="#f2f2f2" text-anchor="middle">Check: not paid</text>
+    <rect x="310" y="162" width="130" height="50" rx="10" fill="#e5484d"/>
+    <text x="375" y="192" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Charge again</text>
+    <rect x="570" y="162" width="130" height="50" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="635" y="192" font-size="15" fill="#f2f2f2" text-anchor="middle">Mark as paid</text>
+
+    <!-- Time axis -->
+    <line x1="130" y1="262" x2="690" y2="262" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="690" y="282" font-size="12" fill="#a0a0a0" text-anchor="end">time</text>
+    <text x="130" y="282" font-size="12" fill="#a0a0a0">0 ms</text>
+    <text x="170" y="300" font-size="12" fill="#a0a0a0">40 ms</text>
+    <text x="360" y="300" font-size="12" fill="#a0a0a0" text-anchor="middle">Both checks run before A marks the cart as paid.</text>
+  </g>
+</svg>

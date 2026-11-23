@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" role="img" aria-labelledby="t d">
+  <title id="t">Glued text versus a parameterized query</title>
+  <desc id="d">When the code glues text, the command and the user's text go to the database as one piece of text, so the attack becomes part of the command and the database returns every order. With a parameterized query, the command with placeholders and the values go separately. The database treats the values only as data, so the attack text is a strange code that matches nothing.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="360" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Glued -->
+    <text x="30" y="40" font-size="12" fill="#a0a0a0">GLUED TEXT</text>
+    <rect x="30" y="54" width="250" height="80" rx="10" fill="#1f1f1f" stroke="#e5484d" stroke-width="1.5"/>
+    <text x="155" y="90" font-size="15" fill="#f2f2f2" text-anchor="middle">Command + user text</text>
+    <text x="155" y="112" font-size="12" fill="#a0a0a0" text-anchor="middle">one piece of text</text>
+    <line x1="284" y1="94" x2="332" y2="94" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="340" y="54" width="150" height="80" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="415" y="90" font-size="15" fill="#f2f2f2" text-anchor="middle">Database</text>
+    <text x="415" y="112" font-size="12" fill="#a0a0a0" text-anchor="middle">runs all of it</text>
+    <line x1="494" y1="94" x2="532" y2="94" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="540" y="54" width="150" height="80" rx="10" fill="#e5484d"/>
+    <text x="615" y="99" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Every order</text>
+
+    <line x1="30" y1="166" x2="690" y2="166" stroke="#3a3a3a" stroke-width="1.5"/>
+
+    <!-- Parameterized -->
+    <text x="30" y="200" font-size="12" fill="#a0a0a0">PARAMETERIZED QUERY</text>
+    <rect x="30" y="214" width="250" height="52" rx="10" fill="#4f6bd8"/>
+    <text x="155" y="245" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Command with $1, $2</text>
+    <rect x="30" y="276" width="250" height="52" rx="10" fill="#f2c94c"/>
+    <text x="155" y="307" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Values, sent separately</text>
+    <line x1="284" y1="240" x2="332" y2="262" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="284" y1="302" x2="332" y2="282" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="340" y="232" width="150" height="80" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="415" y="268" font-size="15" fill="#f2f2f2" text-anchor="middle">Database</text>
+    <text x="415" y="290" font-size="12" fill="#a0a0a0" text-anchor="middle">values are only data</text>
+    <line x1="494" y1="272" x2="532" y2="272" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="540" y="232" width="150" height="80" rx="10" fill="#1f9d6b"/>
+    <text x="615" y="268" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">No match</text>
+    <text x="615" y="290" font-size="12" fill="#e6f6ee" text-anchor="middle">a strange code</text>
+  </g>
+</svg>

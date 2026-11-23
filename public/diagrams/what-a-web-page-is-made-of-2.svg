@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 380" role="img" aria-labelledby="t d">
+  <title id="t">One page, many requests</title>
+  <desc id="d">Step 1: the browser requests the page and the server sends the HTML. Step 2: the browser reads the HTML and finds styles.css, app.js and sleepy-cat.jpg. Step 3: the browser requests each file and gets the CSS, JavaScript and picture. Step 4: the browser builds the page and runs the JavaScript.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="380" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Lifelines -->
+    <line x1="120" y1="68" x2="120" y2="300" stroke="#3a3a3a" stroke-width="1.5" stroke-dasharray="4 5"/>
+    <line x1="600" y1="68" x2="600" y2="290" stroke="#3a3a3a" stroke-width="1.5" stroke-dasharray="4 5"/>
+
+    <!-- Headers -->
+    <rect x="40" y="24" width="160" height="44" rx="10" fill="#f2c94c"/>
+    <text x="120" y="51" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Browser</text>
+    <rect x="520" y="24" width="160" height="44" rx="10" fill="#4f6bd8"/>
+    <text x="600" y="51" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Server</text>
+
+    <!-- Step 1 -->
+    <line x1="126" y1="104" x2="592" y2="104" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="140" y="96" font-size="12" fill="#f2c94c">1. Request the page</text>
+    <line x1="594" y1="130" x2="128" y2="130" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="580" y="148" font-size="12" fill="#a0a0a0" text-anchor="end">the HTML</text>
+
+    <!-- Step 2 -->
+    <rect x="40" y="162" width="340" height="56" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="56" y="184" font-size="15" fill="#f2f2f2">2. Read the HTML</text>
+    <text x="56" y="205" font-size="12" fill="#a0a0a0">Finds styles.css, app.js, sleepy-cat.jpg</text>
+
+    <!-- Step 3 -->
+    <line x1="126" y1="248" x2="592" y2="248" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="140" y="240" font-size="12" fill="#f2c94c">3. Request each file</text>
+    <line x1="594" y1="274" x2="128" y2="274" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="580" y="292" font-size="12" fill="#a0a0a0" text-anchor="end">the CSS, JavaScript and picture</text>
+
+    <!-- Step 4 -->
+    <rect x="40" y="304" width="340" height="56" rx="10" fill="#1f9d6b"/>
+    <text x="56" y="327" font-size="15" font-weight="600" fill="#f2f2f2">4. Build the page</text>
+    <text x="56" y="347" font-size="12" fill="#e6f7ef">and run the JavaScript</text>
+
+    <text x="680" y="340" font-size="12" fill="#a0a0a0" text-anchor="end">Each file is its own request,</text>
+    <text x="680" y="358" font-size="12" fill="#a0a0a0" text-anchor="end">with its own status code.</text>
+  </g>
+</svg>

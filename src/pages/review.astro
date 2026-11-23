@@ -2,107 +2,110 @@
 // Review mode: spaced repetition over quiz questions from lessons you've completed.
 // Each question sits in a "box" 1–5. Right answers move it up a box and push it further
 // into the future; wrong answers send it back to box 1. Stored only in this browser.
-import Base from '../layouts/Base.astro';
-import Icon from '../components/Icon.astro';
+import Reading from '../layouts/Reading.astro';
 ---
 
-<Base title="Review mode" active="review" description="A short daily review of quiz questions from lessons you've completed, spaced out so you remember them.">
-  <header class="tool-head">
-    <p class="kicker"><Icon name="brain" size={16} /> Remember what you read</p>
-    <h1>Review mode</h1>
-    <p class="muted">
+<Reading title="Review mode" description="A short daily review of quiz questions from lessons you've completed, spaced out so you remember them.">
+  <header>
+    <h1 class="page-title">Review mode</h1>
+    <p class="page-intro">
       A few questions a day from lessons you've completed. Questions you get right come back later and later. Questions
       you miss come back sooner. It takes about five minutes.
     </p>
-    <p class="stats muted" data-stats>Loading…</p>
+    <p class="mt-4 text-sm" data-stats>Loading…</p>
   </header>
 
-  <section class="tool-section glass review" data-review aria-live="polite">
-    <p class="muted">Loading questions…</p>
+  <section class="review card mt-10 p-6 sm:p-8" data-review aria-live="polite">
+    <p>Loading questions…</p>
   </section>
 
-  <noscript><p class="muted center">Review mode needs JavaScript.</p></noscript>
-</Base>
+  <noscript><p class="mt-6 text-center">Review mode needs JavaScript.</p></noscript>
+</Reading>
 
 <style>
-  .review {
-    max-width: 760px;
-  }
-  .stats {
-    margin: 0;
-    font-size: 0.9rem;
-  }
-  .center {
-    text-align: center;
-  }
   .review :global(.r-meta) {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
-    gap: 12px;
-    font-size: 0.82rem;
-    color: var(--muted);
-    margin-bottom: 12px;
+    gap: 8px 16px;
+    margin-bottom: 18px;
+    font-size: 0.875rem;
   }
   .review :global(.r-meta a) {
-    color: var(--text-soft);
+    text-decoration: underline;
+    text-decoration-color: rgb(255 255 255 / 0.35);
+    text-underline-offset: 3px;
+  }
+  .review :global(.r-meta a:hover) {
+    text-decoration-color: #ffffff;
   }
   .review :global(.r-q) {
-    font-size: 1.12rem;
-    font-weight: 600;
-    line-height: 1.5;
-    margin: 0 0 14px;
+    margin: 0 0 20px;
+    font-size: 1.25rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.45;
   }
   .review :global(.r-options) {
     display: grid;
-    gap: 8px;
+    gap: 10px;
   }
   .review :global(.r-option) {
-    text-align: left;
-    padding: 12px 14px;
-    border-radius: var(--radius-sm);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    background: var(--row);
-    color: var(--text-soft);
+    padding: 14px 16px;
+    border: 1px solid rgb(255 255 255 / 0.14);
+    border-radius: 12px;
+    background: rgb(255 255 255 / 0.03);
+    color: #ffffff;
     font: inherit;
-    font-size: 0.97rem;
     line-height: 1.5;
+    text-align: left;
     cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
   }
   .review :global(.r-option:hover:not(:disabled)) {
-    background: var(--glass-hover);
+    border-color: rgb(255 255 255 / 0.4);
+    background: rgb(255 255 255 / 0.08);
   }
   .review :global(.r-option:disabled) {
     cursor: default;
   }
   .review :global(.r-option.ok) {
-    border-color: rgba(61, 214, 140, 0.45);
-    background: var(--good-soft);
-    color: var(--text);
+    border-color: rgb(134 220 174 / 0.6);
+    background: rgb(134 220 174 / 0.15);
   }
   .review :global(.r-option.bad) {
-    border-color: rgba(229, 72, 77, 0.5);
-    background: var(--accent-soft);
-    color: var(--text);
+    border-color: rgb(242 121 123 / 0.6);
+    background: rgb(242 121 123 / 0.15);
   }
   .review :global(.r-explain) {
-    margin: 14px 0 0;
-    padding: 12px 14px;
-    border-radius: var(--radius-sm);
-    background: rgba(255, 255, 255, 0.04);
-    line-height: 1.6;
+    margin: 20px 0 0;
+    padding: 16px 18px;
+    border-left: 3px solid #ffffff;
+    border-radius: 12px;
+    background: rgb(255 255 255 / 0.04);
+    line-height: 1.7;
+  }
+  .review :global(.r-done) {
+    font-size: 1.65rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+  }
+  .review :global(.r-note) {
+    margin-top: 10px;
+    line-height: 1.7;
   }
   .review :global(.r-actions) {
     display: flex;
-    gap: 10px;
     flex-wrap: wrap;
-    margin-top: 16px;
+    gap: 12px;
+    margin-top: 24px;
   }
   .review :global(code) {
-    font-family: var(--mono);
+    padding: 0.12em 0.38em;
+    border-radius: 6px;
+    background: rgb(255 255 255 / 0.09);
     font-size: 0.88em;
-    background: rgba(255, 255, 255, 0.07);
-    padding: 0.1em 0.35em;
-    border-radius: 5px;
   }
 </style>
 
@@ -212,7 +215,7 @@ import Icon from '../components/Icon.astro';
       actions.className = 'r-actions';
       const next = document.createElement('button');
       next.type = 'button';
-      next.className = 'btn btn-accent';
+      next.className = 'btn btn-light';
       next.textContent = i + 1 < session.length ? 'Next question' : 'Finish';
       next.addEventListener('click', () => {
         i++;
@@ -236,11 +239,11 @@ import Icon from '../components/Icon.astro';
       .sort((a, b) => a - b)[0];
     const when = nextDue ? new Date(nextDue).toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' }) : null;
     root.innerHTML = `
-      <h2>${nothingDue ? 'Nothing to review right now' : `Done: ${right} of ${total} correct`}</h2>
-      <p class="muted">${when ? `Your next questions are due on ${when}.` : 'Complete more lessons to add questions.'}</p>
+      <h2 class="r-done">${nothingDue ? 'Nothing to review right now' : `Done: ${right} of ${total} correct`}</h2>
+      <p class="r-note">${when ? `Your next questions are due on ${when}.` : 'Complete more lessons to add questions.'}</p>
       <div class="r-actions">
-        <a class="btn btn-accent" href="/lessons">Continue the lessons</a>
-        ${pool.length ? '<button type="button" class="btn" data-extra>Practice 10 more anyway</button>' : ''}
+        <a class="btn btn-light" href="/lessons">Continue the lessons</a>
+        ${pool.length ? '<button type="button" class="btn btn-ghost" data-extra>Practice 10 more anyway</button>' : ''}
       </div>`;
     root.querySelector('[data-extra]')?.addEventListener('click', () => {
       // Extra practice: questions that aren't due yet, weakest first. Still updates their boxes.
@@ -257,11 +260,11 @@ import Icon from '../components/Icon.astro';
     if (pool.length) return start(pool);
     renderStats(pool);
     root.innerHTML = `
-      <h2>No questions yet</h2>
-      <p class="muted">Review mode uses questions from lessons you've marked as completed. Finish a lesson, then come back.</p>
+      <h2 class="r-done">No questions yet</h2>
+      <p class="r-note">Review mode uses questions from lessons you've marked as completed. Finish a lesson, then come back.</p>
       <div class="r-actions">
-        <a class="btn btn-accent" href="/lessons/what-happens-when-you-open-a-website">Start lesson 1</a>
-        <button type="button" class="btn" data-all>Try it with every lesson</button>
+        <a class="btn btn-light" href="/lessons/what-happens-when-you-open-a-website">Start lesson 1</a>
+        <button type="button" class="btn btn-ghost" data-all>Try it with every lesson</button>
       </div>`;
     root.querySelector('[data-all]')!.addEventListener('click', () => start(all));
   }
@@ -273,7 +276,7 @@ import Icon from '../components/Icon.astro';
       init();
     })
     .catch(() => {
-      root.innerHTML = '<p class="muted">Couldn\'t load the questions. Check your connection and reload.</p>';
+      root.innerHTML = '<p>Couldn\'t load the questions. Check your connection and reload.</p>';
       stats.textContent = '';
     });
 </script>

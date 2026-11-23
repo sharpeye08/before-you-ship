@@ -14,52 +14,52 @@ quiz:
       - text: "The code still holds references to data it will never use again, so the collector must keep that data"
         correct: true
       - text: "The garbage collector deletes data that is still needed"
-    explanation: "The garbage collector frees only what your code can no longer reach. A Map, array or listener that keeps growing is still reachable, so everything in it stays in memory forever."
+    explanation: "The garbage collector frees only what your code can no longer reach. A Map, array or listener that keeps growing can still be reached, so everything in it stays in memory forever."
 
-  - question: "Your hosting dashboard shows memory climbing slowly for about two days, then dropping sharply, then climbing again. What does this pattern most likely mean?"
+  - question: "Your hosting dashboard shows memory that climbs slowly for about two days, then drops sharply, then climbs again. What does this pattern most likely mean?"
     options:
       - text: "A memory leak: memory grows until the process crashes or restarts, then starts again from the bottom"
         correct: true
       - text: "Normal behaviour: memory always grows for two days"
       - text: "The database is slow every two days"
-      - text: "The garbage collector is working perfectly"
-    explanation: "A healthy server's memory goes up and down around a steady level. A line that only goes up, then drops at each crash or deploy, is the classic shape of a leak."
+      - text: "The garbage collector works perfectly"
+    explanation: "The memory of a healthy server goes up and down around a steady level. A line that only goes up, then drops at each crash or deploy, is the usual shape of a leak."
 
   - question: "Your live-updates route adds a listener to a shared EventEmitter for each visitor, but never removes it. What happens over time?"
     options:
-      - text: "Nothing, because listeners are deleted when the browser tab closes"
-      - text: "Every closed tab leaves a listener behind, along with everything it references, so memory grows with each visitor"
+      - text: "Nothing, because the browser deletes listeners when the tab closes"
+      - text: "Every closed tab leaves a listener behind, with everything it refers to, so memory grows with each visitor"
         correct: true
       - text: "The EventEmitter refuses new listeners after 10"
       - text: "The server sends each update only to the first visitor"
-    explanation: "Closing the tab does not remove your listener. The shared emitter keeps a reference to it, and it keeps the response object alive. Node prints a MaxListenersExceededWarning after 10 listeners for one event, but it still lets you add more."
+    explanation: "When the visitor closes the tab, your listener stays. The shared emitter keeps a reference to it, and the listener keeps the response object alive. Node prints a MaxListenersExceededWarning after 10 listeners for one event, but it still lets you add more."
 
-  - question: "Your logs show \"FATAL ERROR: Reached heap limit Allocation failed - JavaScript heap out of memory\". A teammate suggests raising --max-old-space-size from 1 GB to 4 GB. What is the problem with that as the only fix?"
+  - question: "Your logs show \"FATAL ERROR: Reached heap limit Allocation failed - JavaScript heap out of memory\". A teammate suggests that you raise --max-old-space-size from 1 GB to 4 GB. What is the problem with that as the only fix?"
     options:
       - text: "The flag does not exist"
       - text: "It makes the garbage collector stop working"
       - text: "If there is a leak, memory keeps growing and the crash comes back later. And if the machine has less than 4 GB, the platform may kill the process first"
         correct: true
       - text: "Nothing, 4 GB is always enough"
-    explanation: "A bigger limit only moves the finish line. A leak still grows without end. Find what is growing, and fix it. Only raise the limit if the app really needs more memory and the machine has it."
+    explanation: "A bigger limit only moves the crash further away. A leak still grows without end. Find what grows, and fix it. Only raise the limit if the app really needs more memory and the machine has it."
 
-  - question: "You want to find what is leaking. What is the most useful way to use heap snapshots?"
+  - question: "You want to find what leaks. What is the most useful way to use heap snapshots?"
     options:
       - text: "Take one snapshot right after the server starts"
       - text: "Take one snapshot after the crash"
       - text: "Take a snapshot every second in production"
       - text: "Take one snapshot, use the app for a while, take a second one, and compare them to see which objects grew"
         correct: true
-    explanation: "Comparing two snapshots shows what was added between them and what keeps it alive. Be careful in production: a snapshot pauses the main thread and needs extra memory."
+    explanation: "A comparison of two snapshots shows what was added between them and what keeps it alive. Be careful in production: a snapshot pauses the main thread and needs extra memory."
 
-  - question: "Your app runs on serverless functions and has never crashed. You move it to a long-running server, and it starts crashing every 3 days. Why?"
+  - question: "Your app runs on serverless functions and has never crashed. You move it to a long-running server, and it starts to crash every 3 days. Why?"
     options:
       - text: "Serverless functions have no memory limit"
       - text: "Long-running servers have a smaller garbage collector"
-      - text: "The leak was always there. Serverless environments are thrown away and replaced every few hours, which hid it"
+      - text: "The leak was always there. The platform replaces serverless environments every few hours, and that hid the leak"
         correct: true
       - text: "Serverless functions automatically fix memory leaks"
-    explanation: "A leak needs time to grow. Serverless platforms replace environments often, so memory rarely has time to pile up. A server that runs for days gives the leak all the time it needs."
+    explanation: "A leak needs time to grow. Serverless platforms replace environments often, so memory rarely has time to grow. A server that runs for days gives the leak all the time it needs."
 ---
 
 # Your server crashes every few days, like clockwork
@@ -73,21 +73,23 @@ quiz:
 
 ## Tuesday, Thursday, Saturday
 
-Your app runs on one server instance with 1 GB of memory. Since launch, it has crashed on Tuesday morning, Thursday afternoon and late on Saturday. Each time, your hosting platform restarted it within a minute. Each time, a few users saw errors, and then everything was fine again.
+Your app runs on one server instance with 1 GB of memory. Since launch, it crashed on Tuesday morning, Thursday afternoon and late on Saturday. Each time, your hosting platform restarted it within a minute. Each time, a few users saw errors, and then everything was fine again.
 
-You look at the logs right before each crash. It's the same line every time:
+You look at the logs (the messages your app writes as it runs) right before each crash. Each time, you see the same line:
 
 ```text
 FATAL ERROR: Reached heap limit Allocation failed - JavaScript heap out of memory
 ```
 
-It's normal if this means nothing to you yet. By the end of this lesson, you'll be able to read every word of it.
+If this means nothing to you yet, that is normal. Soon you will understand every word.
 
-Then you open the memory graph on your hosting dashboard. It looks like a saw: a slow, steady climb for about two days, a sudden drop to the bottom, then the same slow climb again. Every drop is a crash.
+Then you open the memory graph on your hosting dashboard. It looks like a saw. Memory climbs slowly and steadily for about two days. Then it drops suddenly to the bottom, and the same slow climb starts again. Every drop is a crash.
 
-No single request is to blame. Something in your server keeps a little more memory with every request and never gives it back. When the pile reaches the limit, the process dies. The crash happens "like clockwork" because it's arithmetic: the same traffic fills the same memory in about the same time.
+![A memory graph shaped like a saw: memory climbs slowly for about two days to the 1 GB limit, the process crashes and memory drops, then the climb starts again.](/diagrams/memory-leaks-1.svg)
 
-This is a **memory leak**. This lesson explains how JavaScript can leak even though it cleans up memory for you, and how to find and fix the leaks AI-written servers most often contain.
+The problem is not one request. Something in your server keeps a little more memory with every request and never gives it back. When the total reaches the limit, the process (the running program) stops. The crash comes at regular times because of simple arithmetic: the same traffic fills the same memory in about the same time.
+
+This is a **memory leak**. JavaScript cleans up memory for you, but it can still leak. This lesson explains how, and how to find and fix the most common leaks in AI-written servers.
 
 ---
 
@@ -95,52 +97,56 @@ This is a **memory leak**. This lesson explains how JavaScript can leak even tho
 
 ### Where your objects live: the heap
 
-Every object, array, string and function your JavaScript creates is stored in a part of your process's memory called the **heap**. When people say "JavaScript memory", they usually mean the heap.
+Your JavaScript creates objects, arrays, strings and functions. It stores all of them in a part of the process memory called the **heap**. When people say "JavaScript memory", they usually mean the heap.
 
 ### Garbage collection
 
-In JavaScript, you never say "I'm done with this, free it". A part of the JavaScript engine called the **garbage collector** does that for you. Every so often, it:
+In JavaScript, you never say "I'm done with this, free it". A part of the JavaScript engine (the program inside Node.js that runs your code) does that for you. It is called the **garbage collector**. From time to time, it does these steps:
 
-1. Starts from the **roots**: things your program can always reach, like global variables, variables at the top of your files (module-level variables), and the functions running right now.
-2. Follows every reference from those roots: this object points to that array, which holds those objects, and so on. Everything it can reach is marked as "in use".
-3. Frees everything it couldn't reach.
+1. It starts from the **roots**: things that your program can always reach. Examples are global variables, variables at the top of your files (module-level variables) and the functions that run now.
+2. It follows every **reference** (a link from one piece of data to another) from those roots. This object points to that array, which holds those objects, and so on. It marks everything it can reach as "in use".
+3. It frees everything it could not reach.
 
 MDN describes the rule simply: "an object is no longer needed" means "an object is unreachable".
 
-Think of an office cleaner who throws away every paper that isn't in a folder on someone's desk. Papers in a folder stay, always, even if nobody will ever read them again.
+Think of an office cleaner who throws away every paper that is not in a folder on a desk. Papers in a folder always stay, even if nobody will ever read them again.
 
-**Where the comparison stops working:** a real cleaner might notice that a folder has grown to 10,000 pages and ask about it. The garbage collector never asks. If your code can reach it, it stays.
+**Where the comparison stops working:** a real cleaner can see that a folder has 10,000 pages and ask about it. The garbage collector never asks. If your code can reach something, it stays.
 
 ### So what is a leak in JavaScript?
 
-A **memory leak** is memory that your program no longer needs but can still reach, so it's never freed. In JavaScript, a leak almost always looks the same: **something that lives as long as the process keeps collecting things, and nothing ever removes them.**
+A **memory leak** is memory that your program no longer needs but can still reach. So the garbage collector never frees it. In JavaScript, a leak almost always looks the same: **something that lives as long as the process collects things, and nothing ever removes them.**
 
-Usually it's a module-level `Map` or array, or a long-lived object holding listeners or timers. Data that belongs to one request, and is only referenced inside that request's function, is freed automatically after the request ends. That's why most code doesn't leak.
+![Top: the roots point to a cache Map that never removes entries, so old profiles stay forever. Bottom: request data with no path from a root goes to the garbage collector and is freed.](/diagrams/memory-leaks-2.svg)
+
+Usually it is a module-level `Map` or array, or a long-lived object that holds listeners or timers. Some data belongs to one request, and only that request's function refers to it. JavaScript frees that data automatically after the request ends. That's why most code does not leak.
 
 ### Limits: when memory runs out
 
-There are two ceilings, and a leak hits one of them:
+There are two limits, and a leak reaches one of them:
 
 - **The heap limit.** Node.js limits how big the heap can grow. You can change it with the `--max-old-space-size` option, in megabytes.
-- **The instance's memory.** Your hosting plan gives you a fixed amount, like 512 MB or 1 GB, for everything in the process: the heap, plus the rest of Node.js and your libraries.
+- **The instance's memory.** Your hosting plan gives you a fixed amount, like 512 MB or 1 GB. This is for everything in the process: the heap, plus the rest of Node.js and your libraries (ready-made code that you install).
 
-Now the error from the hook makes sense, word by word:
+Now the error from the start of this lesson makes sense, word by word:
 
-- **heap limit:** the heap has reached its ceiling
+- **heap limit:** the heap has reached its maximum size
 - **Allocation failed:** your code asked for more memory, and there was none to give
 - **FATAL ERROR:** the process can't continue, so it exits
 
-Other Node.js versions may word the start of the message differently; the ending, "JavaScript heap out of memory", is the part to search for. If the instance's memory runs out first, your platform kills the process instead, and its own logs say something like "out of memory".
+Other Node.js versions can use different words at the start of the message. Search for the end of the message, "JavaScript heap out of memory". If the instance runs out of memory first, your platform stops the process instead. The platform's own logs then show a message like "out of memory".
 
 ### The numbers behind "clockwork"
 
-Say your server caches each user profile it loads, and never removes any (you'll see this code in a moment). Each profile takes about 10 KB. Your app sees 2,000 new users per hour.
+Imagine that your server caches each user profile it loads, and never removes any. (You will see this code soon.) Each profile takes about 10 KB. Your app sees 2,000 new users per hour.
 
 - Per hour: 2,000 × 10 KB = 20 MB
 - Per day: about 480 MB
 - Your instance has 1 GB, and your app uses about 200 MB right after it starts
 
-So you have about 800 MB of room, filled at 480 MB per day. The crash comes after **about 40 hours**. Busy week? It comes sooner. Quiet weekend? Later. And the last hours before it are the worst: as the heap gets close to the limit, the garbage collector runs again and again, freeing almost nothing each time. The Node.js docs warn that this extra work raises CPU use and slows responses, so users feel the leak before the crash.
+So you have about 800 MB of free space, and the leak fills 480 MB per day. The crash comes after **about 40 hours**. In a busy week, it comes sooner. On a quiet weekend, it comes later.
+
+The last hours before the crash are the worst. When the heap gets close to the limit, the garbage collector runs again and again, but it frees almost nothing each time. The Node.js docs warn that this extra work increases CPU use and makes responses slower. So users feel the leak before the crash.
 
 ---
 
@@ -148,7 +154,7 @@ So you have about 800 MB of room, filled at 480 MB per day. The crash comes afte
 
 ### Leak 1: A cache with no limit
 
-A **cache** is a saved copy of data, kept so you don't have to fetch it again. It's one of the first things an AI adds when you ask for "faster":
+A **cache** is a saved copy of data. You keep it so that you don't have to get the data again. When you ask an AI for "faster", a cache is often one of the first things it adds:
 
 ```js
 const profileCache = new Map(); // lives as long as the process
@@ -160,9 +166,9 @@ app.get("/api/profile/:id", async (req, res) => {
 });
 ```
 
-The `Map` is created once, at the top of the file, so it's a root. Every new profile ID adds an entry. Nothing ever removes one. A cache with no size limit and no expiry is not a cache. It's a slow copy of your whole database, building up in memory.
+The code creates the `Map` once, at the top of the file, so a root holds it. Every new profile ID adds an entry. Nothing ever removes an entry. A cache with no size limit and no expiry is not really a cache. It is a slow copy of your whole database that grows in memory.
 
-> **Go deeper:** [Fast, but showing yesterday's data](/lessons/caching) (Level 4) covers caching properly, including where cached data should live.
+> **Go deeper:** [Fast, but showing yesterday's data](/lessons/caching) (Level 4) covers caching properly, including where to keep cached data.
 
 ### Leak 2: An array that only grows
 
@@ -175,11 +181,11 @@ app.use((err, req, res, next) => {
 });
 ```
 
-This error handler keeps every error, with its full error object and the request's data, "so we can show recent errors". "Recent" was the plan, but nothing removes old entries. Watch for the same pattern in "recent searches" or "online users" lists.
+This error handler (the function that runs when a request fails) keeps every error. It keeps the full error object and the request's data, "so we can show recent errors". The plan was "recent", but nothing removes old entries. Look for the same pattern in lists of "recent searches" or "online users".
 
 ### Leaks 3 and 4: Listeners never removed, timers never cleared
 
-Imagine a live page where a shop owner sees new orders appear without refreshing. The browser keeps a request open, and your server writes to it whenever an order arrives:
+Imagine a live page where a shop owner sees new orders appear with no page refresh. The browser keeps a request open, and your server writes to it each time an order arrives:
 
 ```js
 app.get("/api/orders/live", (req, res) => {
@@ -190,11 +196,13 @@ app.get("/api/orders/live", (req, res) => {
 });
 ```
 
-`orderEvents` is a shared **EventEmitter**: one object for the whole app that calls every registered **listener** function when an event happens. Here, each visitor adds a listener, and starts an **interval**, a timer that runs a function every 15 seconds.
+`orderEvents` is a shared **EventEmitter**. It is one object for the whole app. When an event happens, it calls every registered **listener** function. Here, each visitor adds a listener. Each visitor also starts an **interval**, a timer that runs a function every 15 seconds.
 
-When the visitor closes the tab, nothing removes the listener or stops the timer. The emitter still holds `send`. `send` still refers to `res`, the response object for a visitor who left. The timer still holds it too. Each visit leaves a little more behind, forever.
+When the visitor closes the tab, nothing removes the listener or stops the timer. The emitter still holds `send`. `send` still refers to `res`, the response object for a visitor who left. The timer also still holds `res`. Each visit leaves a little more memory behind, forever.
 
-Node.js gives you one hint: after more than 10 listeners for the same event on one emitter, it prints a **`MaxListenersExceededWarning`** about a "possible EventEmitter memory leak". It's only a warning, and AI tools sometimes "fix" it by raising or removing the limit with `setMaxListeners()`. That hides the leak instead of fixing it.
+![The shared orderEvents emitter holds the send listener, which refers to res for a visitor who left. The interval timer also refers to res, so each visit leaves one more chain in memory.](/diagrams/memory-leaks-3.svg)
+
+Node.js gives you one hint. When one emitter has more than 10 listeners for the same event, it prints a **`MaxListenersExceededWarning`** about a "possible EventEmitter memory leak". It is only a warning. AI tools sometimes "fix" it: they raise or remove the limit with `setMaxListeners()`. That hides the leak but does not fix it.
 
 ---
 
@@ -202,15 +210,15 @@ Node.js gives you one hint: after more than 10 listeners for the same event on o
 
 ### Fix the code
 
-**Give every cache a limit.** A size limit (`max`), an expiry time (`ttl`, "time to live"), or both. The popular `lru-cache` package removes the least recently used entries when it's full:
+**Give every cache a limit.** Use a size limit (`max`), an expiry time (`ttl`, "time to live"), or both. When the popular `lru-cache` package is full, it removes the least recently used entries:
 
 ```js
 const profileCache = new LRUCache({ max: 5000, ttl: 5 * 60 * 1000 }); // lru-cache
 ```
 
-At most 5,000 profiles, each kept for 5 minutes. Memory now has a ceiling you chose. If several instances need the same cached data, a shared store like Redis is often better than each instance's memory.
+This cache keeps at most 5,000 profiles, each for 5 minutes. Now memory has a limit that you chose. Sometimes several instances need the same cached data. Then a shared store like Redis (a fast data store that keeps data in memory) is often better than the memory of each instance.
 
-**Give every list an end.** Keep only the last 100 errors (`if (recentErrors.length > 100) recentErrors.shift();`), or better, send errors to your logging or error-tracking tool, which is built for this.
+**Give every list an end.** Keep only the last 100 errors (`if (recentErrors.length > 100) recentErrors.shift();`). A better choice: send errors to your logging or error-tracking tool, which is made for this.
 
 **Clean up when a connection closes.** Pair every `on` with an `off`, and every `setInterval` with a `clearInterval`:
 
@@ -221,32 +229,34 @@ req.on("close", () => {
 });
 ```
 
-When the visitor's connection closes, the listener and timer are removed. Nothing refers to `res` any more, so the garbage collector can free it.
+When the visitor's connection closes, this code removes the listener and stops the timer. Nothing refers to `res` any more, so the garbage collector can free it.
 
 ### Watch the right graph
 
-- **Know the healthy shape.** A healthy server's memory rises and falls around a steady level. A leak is a line that only goes up between restarts.
-- **Look over days, not minutes.** A leak of 20 MB per hour is invisible in a one-hour view. Set your dashboard to 7 days.
-- **Alert before the crash.** Add an alert when memory stays above, say, 80% of your limit. You'll hear about the leak before your users do.
-- **Don't let deploys hide it.** Every deploy restarts the process and resets memory. If you deploy daily, a 40-hour leak never crashes, until the week you go on holiday.
+- **Know the healthy shape.** The memory of a healthy server goes up and down around a steady level. A leak is a line that only goes up between restarts.
+- **Look over days, not minutes.** You can't see a leak of 20 MB per hour in a one-hour view. Set your dashboard to 7 days.
+- **Alert before the crash.** Add an alert for when memory stays above a level, for example 80% of your limit. Then you learn about the leak before your users do.
+- **Don't let deploys hide it.** Every deploy (each time you put a new version live) restarts the process and resets memory. If you deploy every day, a 40-hour leak never crashes. Then you go on holiday for a week, and it crashes.
 
 ### Find the leak with heap snapshots
 
-A **heap snapshot** is a file that records every object in the heap, how big it is, and what is keeping it alive. One snapshot is hard to read. Two snapshots, compared, point at the leak:
+A **heap snapshot** is a file that records every object in the heap. It shows how big each object is and what keeps it alive. One snapshot is hard to read. A comparison of two snapshots points to the leak:
 
-1. Start your app locally and let it settle.
+1. Start your app on your own computer and wait until memory is steady.
 2. Take a first snapshot.
-3. Send it a lot of traffic, the kind you suspect.
+3. Send it a lot of traffic, of the kind you suspect.
 4. Take a second snapshot.
-5. Open both in Chrome DevTools (the **Memory** tab), and switch the view to **Comparison**. Look at what grew the most, and follow its **retainers**: the chain of references that keeps it alive. That chain usually ends at your `Map`, array or emitter.
+5. Open both in Chrome DevTools (the developer tools in the Chrome browser), in the **Memory** tab.
+6. Change the view to **Comparison**, and find what grew the most.
+7. Follow its **retainers**: the chain of references that keeps it alive. That chain usually ends at your `Map`, array or emitter.
 
-To connect Chrome DevTools to Node.js, start your app with `node --inspect`. The Node.js docs list other ways too, such as the `--heapsnapshot-near-heap-limit` option, which writes a snapshot automatically when the heap gets close to its limit.
+To connect Chrome DevTools to Node.js, start your app with `node --inspect`. The Node.js docs list other ways too. For example, the `--heapsnapshot-near-heap-limit` option writes a snapshot automatically when the heap gets close to its limit.
 
-Be careful in production. The Node.js docs warn that taking a snapshot stops all other work on the main thread, possibly for more than a minute, and can need as much memory again as the heap already uses. Only take one on an instance that can crash without hurting users.
+Be careful in production (the live app that real users use). The Node.js docs warn that a snapshot stops all other work on the main thread, possibly for more than a minute. A snapshot can also need as much memory again as the heap already uses. Only take one on an instance that can crash without harm to users.
 
 ### Raise the limit only for real needs
 
-Raising `--max-old-space-size` helps when your app really needs more memory. The Node.js docs suggest leaving room for everything else: on a machine with 2 GB, about 1.5 GB for the heap. For a leak, it only moves the crash further away.
+A higher `--max-old-space-size` helps when your app really needs more memory. The Node.js docs suggest that you leave space for everything else: on a machine with 2 GB, use about 1.5 GB for the heap. For a leak, a higher limit only moves the crash further away.
 
 ### Serverless vs long-running servers
 
@@ -256,7 +266,9 @@ Raising `--max-old-space-size` helps when your app really needs more memory. The
 | What a leak looks like | Crashes "like clockwork" | Rare, random out-of-memory errors, or none |
 | Module-level variables | Shared by every request, for days | Kept between requests in a reused environment |
 
-Serverless platforms such as AWS Lambda run your function in an **execution environment**: a small, isolated space with its own memory. They reuse each environment for many requests, one after another. AWS notes that objects created outside your handler stay in memory between requests, and that environments are replaced every few hours. So a leak still grows, but usually gets thrown away before it hits the limit. **Serverless hides leaks. It doesn't fix them.** The day you move to a long-running server, or a platform where many requests share an instance, the leak shows up.
+Serverless platforms such as AWS Lambda run your function in an **execution environment**: a small, separate space with its own memory. The platform uses each environment again for many requests, one after another. AWS says that objects created outside your handler (the function that receives each request) stay in memory between requests. AWS also says that it replaces environments every few hours.
+
+So a leak still grows, but the platform usually removes the environment before the leak reaches the limit. **Serverless hides leaks. It doesn't fix them.** You will see the leak when you move to a long-running server, or to a platform where many requests share an instance.
 
 ---
 
@@ -271,19 +283,23 @@ setInterval(() => {
 }, 60_000);
 ```
 
-Every minute, this prints two numbers. `heapUsed` is the memory your JavaScript objects use. `rss` is everything the process holds in RAM. This one interval is fine, because it's created once, not once per request.
+Every minute, this prints two numbers. `heapUsed` is the memory that your JavaScript objects use. `rss` is all the RAM that the process holds. This one interval is safe, because the code creates it once, not once per request.
 
-**2. Push traffic at it, then stop.** Run your app locally and hit a route many times with different IDs:
+**2. Send a lot of traffic, then stop.** Run your app on your own computer. Then send many requests to one route, each with a different ID. This command uses `curl`, a command-line tool that sends requests:
 
 ```bash
 for i in $(seq 1 5000); do curl -s "http://localhost:3000/api/profile/$i" > /dev/null; done
 ```
 
-Then stop and wait a few minutes. A healthy server's `heapUsed` drops back near where it started. If it stays high, and goes even higher after each round, something is keeping data alive.
+Then stop and wait a few minutes. On a healthy server, `heapUsed` goes back down near its start value. If it stays high, and goes higher after each round, something keeps data alive.
 
-**3. Search your code.** Look for module-level `new Map()`, `new Set()` and `[]` that grow, `.on(` without a matching `.off(`, `setInterval(` without `clearInterval(`, and `setMaxListeners`.
+**3. Search your code.** Look for these patterns:
+- module-level `new Map()`, `new Set()` and `[]` that grow
+- `.on(` without a matching `.off(`
+- `setInterval(` without `clearInterval(`
+- `setMaxListeners`
 
-**4. Check your dashboard.** Open your hosting platform's memory graph for the last 7 or 30 days. Saw teeth mean a leak.
+**4. Check your dashboard.** Open the memory graph of your hosting platform for the last 7 or 30 days. A saw shape means a leak.
 
 ---
 
@@ -292,15 +308,15 @@ Then stop and wait a few minutes. A healthy server's `heapUsed` drops back near 
 **Key terms**
 - **Heap:** the part of memory where your JavaScript objects live
 - **Garbage collector:** the part of the engine that frees objects your code can no longer reach
-- **Memory leak:** memory your code still references but will never use again, so it's never freed
-- **Heap limit:** the maximum size of the heap; reaching it crashes the process
+- **Memory leak:** memory that your code still refers to but will never use again, so it's never freed
+- **Heap limit:** the maximum size of the heap; when the heap reaches it, the process crashes
 - **Heap snapshot:** a record of every object in the heap and what keeps it alive
 
 **Red flags**
 - A `Map`, `Set` or array at the top of a file that grows with every request
 - A cache with no `max` size and no expiry
 - `.on(...)` or `setInterval(...)` inside a request handler, with no clean-up on close
-- `setMaxListeners(0)` or a bigger limit added to silence a warning
+- `setMaxListeners(0)` or a bigger limit, added to stop a warning
 - A memory graph shaped like a saw, or regular crashes that "fix themselves"
 - "We raised the memory limit and it stopped crashing" (for now)
 
@@ -315,15 +331,15 @@ Then stop and wait a few minutes. A healthy server's `heapUsed` drops back near 
 <details>
 <summary><strong>Going deeper</strong> (optional, for readers who want more detail)</summary>
 
-**Closures keep things alive.** A function remembers the variables around it where it was created. That's called a **closure**. The `send` function in this lesson keeps `res` alive because it uses it. A listener that refers to a huge object keeps that huge object alive, too, even if it only uses one small field of it.
+**Closures keep things alive.** A function remembers the variables around the place where it was created. This is called a **closure**. The `send` function in this lesson keeps `res` alive because it uses `res`. A listener that refers to a very large object keeps that object alive too, even if it only uses one small field of it.
 
-**`WeakMap` and `WeakSet`.** These hold their keys "weakly": if nothing else refers to a key object, the garbage collector may free it, and its entry disappears. They're useful for attaching extra data to objects you don't own, without keeping those objects alive. They can't replace a cache with string keys, because their keys must be objects.
+**`WeakMap` and `WeakSet`.** These hold their keys "weakly". If nothing else refers to a key object, the garbage collector can free it, and its entry disappears. Use them to attach extra data to objects that you don't own, without keeping those objects alive. They can't replace a cache with string keys, because their keys must be objects.
 
-**Memory outside the heap.** `Buffer`s and some library data live outside the V8 heap. They show up in `rss` and `external` from `process.memoryUsage()`, but not in `heapUsed`. If `rss` grows while `heapUsed` stays flat, look at Buffers, native libraries or file handling, not at your JavaScript objects.
+**Memory outside the heap.** `Buffer`s and some library data live outside the V8 heap (V8 is the JavaScript engine in Node.js). They show in `rss` and `external` from `process.memoryUsage()`, but not in `heapUsed`. Sometimes `rss` grows while `heapUsed` stays flat. Then look at Buffers, native libraries or file handling, not at your JavaScript objects.
 
-**Generations.** V8's garbage collector splits the heap into a young generation and an old generation. Most objects die young, so new objects are collected quickly and cheaply. Objects that survive a few collections move to the old generation, which is what `--max-old-space-size` limits. A leak fills the old generation.
+**Generations.** The V8 garbage collector divides the heap into a young generation and an old generation. Most objects die young, so V8 collects new objects quickly and cheaply. Objects that stay alive after a few collections move to the old generation. `--max-old-space-size` limits the old generation. A leak fills the old generation.
 
-**Restarting as a safety net.** Some teams restart long-running processes on a schedule, or let the platform restart them when memory passes a threshold. That's a reasonable safety net, but it is not a fix: it hides the leak, and requests that are in progress at the moment of the restart can fail.
+**Restarts as a backup measure.** Some teams restart long-running processes on a schedule. Others let the platform restart them when memory goes above a set level. This is a reasonable backup measure, but it is not a fix. It hides the leak, and requests that are in progress at the moment of the restart can fail.
 
 </details>
 

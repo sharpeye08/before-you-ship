@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" role="img" aria-labelledby="t d">
+  <title id="t">Six round trips in a row, near and far</title>
+  <desc id="d">A page needs six round trips in a row: connection, handshake, page, CSS and JavaScript, API and images. For a user in New York, each trip takes about 20 ms, so the total is about 0.1 seconds. For a user in India, each trip takes about 200 ms, so the total is 1.2 seconds.</desc>
+  <rect width="720" height="320" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <text x="40" y="40" font-size="12" fill="#a0a0a0">SIX ROUND TRIPS IN A ROW. EACH ONE WAITS FOR THE ONE BEFORE.</text>
+
+    <!-- New York row -->
+    <text x="40" y="88" font-size="15" fill="#f2f2f2">New York user</text>
+    <text x="40" y="106" font-size="12" fill="#a0a0a0">≈ 20 ms per trip</text>
+    <rect x="180" y="70" width="7" height="40" rx="2" fill="#1f9d6b"/>
+    <rect x="188.3" y="70" width="7" height="40" rx="2" fill="#1f9d6b"/>
+    <rect x="196.7" y="70" width="7" height="40" rx="2" fill="#1f9d6b"/>
+    <rect x="205" y="70" width="7" height="40" rx="2" fill="#1f9d6b"/>
+    <rect x="213.3" y="70" width="7" height="40" rx="2" fill="#1f9d6b"/>
+    <rect x="221.7" y="70" width="7" height="40" rx="2" fill="#1f9d6b"/>
+    <text x="244" y="95" font-size="15" fill="#f2f2f2">about 0.1 seconds</text>
+
+    <!-- India row -->
+    <text x="40" y="168" font-size="15" fill="#f2f2f2">India user</text>
+    <text x="40" y="186" font-size="12" fill="#a0a0a0">≈ 200 ms per trip</text>
+    <rect x="180" y="150" width="80" height="40" rx="6" fill="#f08a4b"/>
+    <text x="220" y="175" font-size="12" fill="#111111" text-anchor="middle">TCP</text>
+    <rect x="263.3" y="150" width="80" height="40" rx="6" fill="#f08a4b"/>
+    <text x="303.3" y="175" font-size="12" fill="#111111" text-anchor="middle">Handshake</text>
+    <rect x="346.7" y="150" width="80" height="40" rx="6" fill="#f08a4b"/>
+    <text x="386.7" y="175" font-size="12" fill="#111111" text-anchor="middle">Page</text>
+    <rect x="430" y="150" width="80" height="40" rx="6" fill="#f08a4b"/>
+    <text x="470" y="175" font-size="12" fill="#111111" text-anchor="middle">CSS, JS</text>
+    <rect x="513.3" y="150" width="80" height="40" rx="6" fill="#f08a4b"/>
+    <text x="553.3" y="175" font-size="12" fill="#111111" text-anchor="middle">API</text>
+    <rect x="596.7" y="150" width="80" height="40" rx="6" fill="#f08a4b"/>
+    <text x="636.7" y="175" font-size="12" fill="#111111" text-anchor="middle">Images</text>
+
+    <!-- Time axis -->
+    <line x1="180" y1="214" x2="680" y2="214" stroke="#3a3a3a" stroke-width="1.5"/>
+    <line x1="180" y1="208" x2="180" y2="220" stroke="#3a3a3a" stroke-width="1.5"/>
+    <line x1="346.7" y1="208" x2="346.7" y2="220" stroke="#3a3a3a" stroke-width="1.5"/>
+    <line x1="513.3" y1="208" x2="513.3" y2="220" stroke="#3a3a3a" stroke-width="1.5"/>
+    <line x1="680" y1="208" x2="680" y2="220" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="180" y="236" font-size="12" fill="#a0a0a0" text-anchor="middle">0 s</text>
+    <text x="346.7" y="236" font-size="12" fill="#a0a0a0" text-anchor="middle">0.4 s</text>
+    <text x="513.3" y="236" font-size="12" fill="#a0a0a0" text-anchor="middle">0.8 s</text>
+    <text x="672" y="236" font-size="12" fill="#a0a0a0" text-anchor="middle">1.2 s</text>
+
+    <text x="360" y="274" font-size="15" fill="#f2f2f2" text-anchor="middle">Waiting time ≈ round-trip time × round trips in a row</text>
+    <text x="360" y="298" font-size="12" fill="#a0a0a0" text-anchor="middle">Same app, same server. Only the distance changed.</text>
+  </g>
+</svg>

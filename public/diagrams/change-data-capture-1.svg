@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" role="img" aria-labelledby="t d">
+  <title id="t">An hourly copy falls behind</title>
+  <desc id="d">A timeline from 10:00 to after 11:00. The shoe sells out at 10:05, and the database shows sold out at once. The search index still says in stock until the next hourly copy at 11:00. For almost an hour, customers see the wrong answer.</desc>
+  <rect width="720" height="300" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Lane labels -->
+    <text x="30" y="108" font-size="15" fill="#f2f2f2">Database</text>
+    <text x="30" y="188" font-size="15" fill="#f2f2f2">Search index</text>
+
+    <!-- 10:05 marker -->
+    <line x1="186" y1="62" x2="186" y2="215" stroke="#a0a0a0" stroke-width="1.5" stroke-dasharray="4 4"/>
+    <text x="186" y="52" font-size="12" fill="#f2c94c" text-anchor="middle">10:05: the shoe sells out</text>
+
+    <!-- Database lane -->
+    <rect x="150" y="85" width="36" height="36" rx="6" fill="#1f9d6b"/>
+    <rect x="186" y="85" width="504" height="36" rx="6" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="438" y="108" font-size="15" fill="#f2f2f2" text-anchor="middle">Sold out (stock 0)</text>
+
+    <!-- Search lane -->
+    <rect x="150" y="165" width="430" height="36" rx="6" fill="#1f1f1f" stroke="#e5484d" stroke-width="1.5"/>
+    <text x="383" y="188" font-size="15" fill="#f2f2f2" text-anchor="middle">Still says: in stock</text>
+    <rect x="580" y="165" width="110" height="36" rx="6" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="635" y="188" font-size="15" fill="#f2f2f2" text-anchor="middle">Sold out</text>
+    <text x="383" y="222" font-size="12" fill="#e5484d" text-anchor="middle">customers see the wrong answer</text>
+
+    <!-- Time axis -->
+    <line x1="150" y1="250" x2="690" y2="250" stroke="#3a3a3a" stroke-width="1.5"/>
+    <line x1="150" y1="244" x2="150" y2="256" stroke="#cfcfcf" stroke-width="2"/>
+    <line x1="580" y1="244" x2="580" y2="256" stroke="#cfcfcf" stroke-width="2"/>
+    <text x="150" y="274" font-size="12" fill="#a0a0a0" text-anchor="middle">10:00 copy</text>
+    <text x="580" y="274" font-size="12" fill="#a0a0a0" text-anchor="middle">11:00 copy</text>
+  </g>
+</svg>

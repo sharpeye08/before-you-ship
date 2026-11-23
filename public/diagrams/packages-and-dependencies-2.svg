@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 370" role="img" aria-labelledby="t d">
+  <title id="t">One package brings a whole chain</title>
+  <desc id="d">Your project asks for one package, express. Express needs other packages, and those packages need more packages. npm installs the whole chain into node_modules. The packages that you didn't ask for are called indirect dependencies.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="370" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Project -->
+    <rect x="270" y="28" width="180" height="50" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="360" y="58" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Your project</text>
+
+    <!-- express -->
+    <line x1="360" y1="78" x2="360" y2="104" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="270" y="110" width="180" height="50" rx="10" fill="#f2c94c"/>
+    <text x="360" y="140" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">express</text>
+    <text x="466" y="140" font-size="12" fill="#a0a0a0">you asked for this one</text>
+
+    <!-- Indirect level 1 -->
+    <line x1="330" y1="160" x2="190" y2="186" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="360" y1="160" x2="360" y2="186" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="390" y1="160" x2="530" y2="186" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="90" y="192" width="180" height="46" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="180" y="220" font-size="15" fill="#f2f2f2" text-anchor="middle">another package</text>
+    <rect x="270" y="192" width="180" height="46" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="360" y="220" font-size="15" fill="#f2f2f2" text-anchor="middle">another package</text>
+    <rect x="450" y="192" width="180" height="46" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="540" y="220" font-size="15" fill="#f2f2f2" text-anchor="middle">another package</text>
+
+    <!-- Indirect level 2 -->
+    <line x1="180" y1="238" x2="180" y2="262" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="360" y1="238" x2="360" y2="262" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="540" y1="238" x2="540" y2="262" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="90" y="268" width="540" height="46" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="360" y="296" font-size="15" fill="#f2f2f2" text-anchor="middle">more packages, and more</text>
+
+    <text x="360" y="344" font-size="12" fill="#a0a0a0" text-anchor="middle">The gray boxes are indirect dependencies. npm installs the whole chain into node_modules.</text>
+  </g>
+</svg>

@@ -1,450 +1,194 @@
 ---
+// Lesson reading page, modelled on a Hashnode article (see READING-PAGE-PLAN.md).
+// Uses the Reading layout (app bar that hides on scroll, one centred column, footer). This page adds a
+// table of contents that stays collapsed until you point at it. Nothing else.
 import { render } from 'astro:content';
-import Base from '../../layouts/Base.astro';
-import Icon from '../../components/Icon.astro';
+import Reading from '../../layouts/Reading.astro';
 import Quiz from '../../components/Quiz.astro';
-import { getLessons, summarize, issueUrl } from '../../lib/lessons';
-import { extract, glossary, plain } from '../../lib/extract';
+import { getLessons, summarize } from '../../lib/lessons';
 import { SITE } from '../../config';
 
 export async function getStaticPaths() {
   const lessons = await getLessons();
-  const entries = glossary(extract(lessons).terms).filter(
-    (e) => e.term.length >= 3 && !/ vs |\/|\(/i.test(e.term),
-  );
   return lessons.map((lesson, i) => ({
     params: { slug: lesson.id },
     props: {
       lesson,
-      prev: lessons[i - 1] ? summarize(lessons[i - 1]) : null,
       next: lessons[i + 1] ? summarize(lessons[i + 1]) : null,
       total: lessons.length,
-      // Hover definitions: only terms taught in earlier lessons.
-      terms: entries
-        .filter((e) => e.order < lesson.data.order)
-        .map((e) => ({ t: e.term, d: `${plain(e.def)} (from lesson ${e.order})` })),
     },
   }));
 }
 
-const { lesson, prev, next, total, terms } = Astro.props;
+const { lesson, next, total } = Astro.props;
 const { Content, headings } = await render(lesson);
 const info = summarize(lesson);
-const toc = headings.filter((h) => h.depth === 2);
-const firstPara = (lesson.body ?? '')
-  .split('\n')
-  .find((l) => l.trim() && !/^[#>|`<-]/.test(l.trim()));
+const toc = [
+  ...headings.filter((h) => h.depth === 2 || h.depth === 3).map((h) => ({ id: h.slug, text: h.text, depth: h.depth })),
+  { id: 'quiz-title', text: 'Check yourself', depth: 2 },
+];
+// Collapsed contents: a short line per heading, its length following the title's length.
+const lineWidth = (text: string) => Math.round(Math.min(40, Math.max(12, text.length * 0.9)));
+const firstPara = (lesson.body ?? '').split('\n').find((l) => l.trim() && !/^[#>|`<-]/.test(l.trim()));
 const description = firstPara ? firstPara.replace(/[*_`]/g, '').slice(0, 155) : SITE.description;
 ---
 
-<Base title={info.title} description={description} active="lessons">
-  <div class="read-progress" aria-hidden="true"><div class="read-progress-fill" data-read-progress></div></div>
+<Reading title={info.title} description={description} reportTitle={info.title}>
+      <!-- Contents, wide screens: collapsed lines; the full list appears on hover or keyboard focus. -->
+      <aside slot="rail" class="absolute top-0 right-0 hidden h-full w-52 xl:block" aria-label="Contents">
+        <div class="group/toc sticky top-24 mt-16">
+          <div class="grid">
+            <div class="max-h-[calc(100vh-8rem)] overflow-y-auto opacity-0 transition-opacity duration-200 [grid-area:1/1] group-focus-within/toc:opacity-100 group-hover/toc:opacity-100">
+              <p class="mb-3 text-sm font-semibold">On this page</p>
+              <nav aria-label="On this page">
+                {
+                  toc.map((h) => (
+                    <a href={`#${h.id}`} data-toc-link={h.id} class={`toc-link block py-1 text-sm leading-snug hover:underline ${h.depth === 3 ? 'pl-3' : ''}`}>
+                      {h.text}
+                    </a>
+                  ))
+                }
+              </nav>
+            </div>
+            <div aria-hidden="true" class="pointer-events-none flex flex-col gap-px self-start pl-3 transition-opacity duration-200 [grid-area:1/1] group-focus-within/toc:opacity-0 group-hover/toc:opacity-0">
+              {
+                toc.map((h) => (
+                  <div class="toc-mini-row flex h-3 items-center" data-toc-mini={h.id} style={`padding-left:${h.depth === 3 ? 8 : 0}px`}>
+                    <div class="toc-mini-line" style={`width:${lineWidth(h.text)}px`} />
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+      </aside>
 
-  <div class="lesson-layout">
-    <article class="lesson">
-      <header class="lesson-header">
-        <a class="chip-btn" href={`/lessons#level-${info.level}`}>
-          <Icon name="arrow-left" size={14} /> Level {info.level} · {info.levelName}
-        </a>
-        <p class="lesson-kicker">Lesson {info.order}</p>
-        <h1>{info.title}</h1>
-        <p class="lesson-meta">
-          <span><Icon name="clock" size={16} /> {info.minutes} min read</span>
-          <span class="done-badge" data-done-badge hidden><Icon name="check" size={16} /> Completed</span>
-        </p>
+        <p class="text-sm">Level {info.level} · {info.levelName} · Lesson {info.order} of {total}</p>
+        <h1 class="mt-4 text-[clamp(2rem,4.4vw,2.75rem)] leading-[1.15] font-medium tracking-[-0.03em] text-balance">{info.title}</h1>
+        <p class="mt-4 text-sm">{info.minutes} min read</p>
         {
           info.concepts.length > 0 && (
-            <ul class="concepts" aria-label="Concepts covered">
+            <ul class="mt-5 flex flex-wrap gap-2" aria-label="Concepts in this lesson">
               {info.concepts.map((c) => (
-                <li>{c}</li>
+                <li>
+                  <a href={`/lessons?q=${encodeURIComponent(c)}`} class="block rounded-full border border-line px-3 py-1 text-sm hover:border-white/40 hover:bg-white/8" title={`Lessons about ${c}`}>{c}</a>
+                </li>
               ))}
             </ul>
           )
         }
-      </header>
+        <hr class="my-10 border-line" />
 
-      <div class="lesson-body glass">
-        <div class="prose" data-prose>
+        <article class="prose-read" data-prose>
           <Content />
+        </article>
+
+        <Quiz questions={lesson.data.quiz} />
+
+        <div class="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-8">
+          <button type="button" class="btn btn-light" data-complete data-slug={info.slug}><span data-complete-label>Mark as completed</span></button>
+          {
+            next && (
+              <a href={`/lessons/${next.slug}`} class="max-w-sm text-right">
+                <span class="block text-sm">Next lesson</span>
+                <span class="mt-1 block font-medium underline decoration-white/30 underline-offset-4 hover:decoration-white">{next.title}</span>
+              </a>
+            )
+          }
         </div>
-        <script type="application/json" data-terms set:html={JSON.stringify(terms)} />
+
+    <!-- Contents, small screens: a floating button that opens the list. -->
+    <Fragment slot="overlay">
+    <button type="button" data-toc-open class="glass fixed right-4 bottom-4 z-40 flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium xl:hidden" aria-haspopup="dialog">
+      <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M4 6h16M4 12h10M4 18h13" /></svg>
+      Contents
+    </button>
+    <dialog data-toc-sheet class="m-0 mt-auto max-h-[70vh] w-full max-w-none rounded-t-3xl border border-line bg-[#0e0f11] p-0 text-white backdrop:bg-black/60 sm:mx-auto sm:max-w-lg">
+      <div class="flex items-center justify-between border-b border-line px-6 py-4">
+        <p class="font-semibold">On this page</p>
+        <button type="button" data-toc-close class="rounded-full px-3 py-1 text-sm hover:bg-white/8">Close</button>
       </div>
-
-      <Quiz questions={lesson.data.quiz} />
-
-      <section class="finish glass" aria-label="Finish this lesson">
-        <div>
-          <h2>Finished reading?</h2>
-          <p class="muted">Mark it as completed to track your progress. It's saved only in this browser.</p>
-        </div>
-        <div class="finish-actions">
-          <button type="button" class="btn btn-accent" data-complete data-slug={info.slug}>
-            <Icon name="check-circle" size={18} /> <span data-complete-label>Mark as completed</span>
-          </button>
-          <a class="chip-btn" href={issueUrl(SITE.githubRepo, info.title)} target="_blank" rel="noopener noreferrer">
-            <Icon name="flag" size={14} /> Report a mistake
-          </a>
-        </div>
-      </section>
-
-      <nav class="pager" aria-label="Other lessons">
+      <nav aria-label="On this page" class="max-h-[56vh] overflow-y-auto px-6 py-3">
         {
-          prev ? (
-            <a class="pager-link glass" href={`/lessons/${prev.slug}`}>
-              <span class="muted"><Icon name="arrow-left" size={14} /> Previous</span>
-              <span class="pager-title">{prev.title}</span>
+          toc.map((h) => (
+            <a href={`#${h.id}`} data-toc-link={h.id} data-toc-sheet-link class={`toc-link block py-2 ${h.depth === 3 ? 'pl-4 text-[0.95rem]' : ''}`}>
+              {h.text}
             </a>
-          ) : (
-            <span />
-          )
-        }
-        {
-          next && (
-            <a class="pager-link glass next" href={`/lessons/${next.slug}`}>
-              <span class="muted">Next <Icon name="arrow-right" size={14} /></span>
-              <span class="pager-title">{next.title}</span>
-            </a>
-          )
+          ))
         }
       </nav>
-    </article>
+    </dialog>
+    </Fragment>
+    <script>
+      import { isCompleted, setCompleted, recordVisit } from '../../lib/progress';
 
-    {
-      toc.length > 0 && (
-        <aside class="toc" aria-label="On this page">
-          <div class="toc-inner glass">
-            <p class="toc-title">On this page</p>
-            <ol>
-              {toc.map((h) => (
-                <li>
-                  <a href={`#${h.slug}`} data-toc-link={h.slug}>
-                    {h.text}
-                  </a>
-                </li>
-              ))}
-              <li>
-                <a href="#quiz-title">Check yourself</a>
-              </li>
-            </ol>
-          </div>
-        </aside>
-      )
-    }
-  </div>
-</Base>
-
-<style>
-  .read-progress {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    z-index: 50;
-  }
-  .read-progress-fill {
-    height: 100%;
-    width: 0;
-    background: var(--accent);
-    box-shadow: 0 0 10px rgba(229, 72, 77, 0.6);
-  }
-  .lesson-layout {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 240px;
-    gap: 28px;
-    align-items: start;
-  }
-  .lesson {
-    min-width: 0;
-    width: 100%;
-    max-width: 800px;
-  }
-  .lesson-header {
-    padding: 8px 4px 24px;
-  }
-  .lesson-kicker {
-    margin: 22px 0 6px;
-    color: var(--accent-text);
-    font-size: 0.85rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
-  .lesson-header h1 {
-    margin: 0 0 14px;
-    font-size: clamp(2rem, 4.5vw, 3rem);
-    line-height: 1.12;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-  }
-  .lesson-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    margin: 0 0 14px;
-    color: var(--muted);
-    font-size: 0.9rem;
-  }
-  .lesson-meta span {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .done-badge {
-    color: var(--good);
-  }
-  .done-badge[hidden] {
-    display: none !important;
-  }
-  .concepts {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  .concepts li {
-    font-size: 0.78rem;
-    padding: 4px 10px;
-    border-radius: 99px;
-    border: 1px solid var(--border);
-    color: var(--text-soft);
-    background: rgba(255, 255, 255, 0.04);
-  }
-  .lesson-body {
-    padding: 36px 40px;
-    background: var(--glass-strong);
-  }
-  .finish {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    flex-wrap: wrap;
-    padding: 24px 28px;
-    margin-top: 28px;
-  }
-  .finish h2 {
-    margin: 0 0 4px;
-    font-size: 1.2rem;
-  }
-  .finish p {
-    margin: 0;
-  }
-  .finish-actions {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-  .pager {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-top: 28px;
-  }
-  .pager-link {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding: 18px 20px;
-    text-decoration: none;
-    transition: border-color 0.15s;
-  }
-  .pager-link:hover {
-    border-color: var(--border-strong);
-  }
-  .pager-link .muted {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.85rem;
-  }
-  .pager-link.next {
-    text-align: right;
-    align-items: flex-end;
-  }
-  .pager-title {
-    font-weight: 600;
-  }
-  .toc {
-    position: sticky;
-    top: 28px;
-  }
-  .toc-inner {
-    padding: 18px;
-  }
-  .toc-title {
-    margin: 0 0 10px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  .toc ol {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-  .toc a {
-    display: block;
-    padding: 6px 10px;
-    border-radius: 9px;
-    font-size: 0.86rem;
-    line-height: 1.35;
-    color: var(--muted);
-    text-decoration: none;
-    border-left: 2px solid transparent;
-  }
-  .toc a:hover {
-    color: var(--text);
-    background: var(--glass-hover);
-  }
-  .toc a.is-current {
-    color: var(--text);
-    border-left-color: var(--accent);
-    border-radius: 0 9px 9px 0;
-  }
-  @media (max-width: 1100px) {
-    .lesson-layout {
-      grid-template-columns: minmax(0, 1fr);
-    }
-    .toc {
-      display: none;
-    }
-    .lesson {
-      margin: 0 auto;
-    }
-  }
-  @media (max-width: 760px) {
-    .lesson-body {
-      padding: 22px 18px;
-      border-radius: 18px;
-    }
-    .finish {
-      padding: 20px;
-    }
-    .pager {
-      grid-template-columns: 1fr;
-    }
-    .pager-link.next {
-      text-align: left;
-      align-items: flex-start;
-    }
-  }
-</style>
-
-<script>
-  // Hover definitions for terms taught in earlier lessons: first mention of each term only,
-  // in normal paragraphs and list items (not in code, links, headings or callout boxes).
-  {
-    const MAX_TERMS = 30;
-    const terms: { t: string; d: string }[] = JSON.parse(document.querySelector('[data-terms]')?.textContent || '[]');
-    const prose = document.querySelector<HTMLElement>('[data-prose]');
-    if (prose && terms.length) {
-      const sorted = [...terms].sort((a, b) => b.t.length - a.t.length);
-      const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      const patterns = sorted.map((x) => ({ ...x, re: new RegExp(`\\b${escapeRe(x.t)}\\b`, 'i') }));
-      const used = new Set<string>();
-      const SKIP = 'code, pre, a, h1, h2, h3, h4, strong, summary, .callout-start, .term, details, table';
-      const walker = document.createTreeWalker(prose, NodeFilter.SHOW_TEXT, {
-        acceptNode: (n) => {
-          const el = n.parentElement;
-          if (!el || el.closest(SKIP) || !el.closest('p, li')) return NodeFilter.FILTER_REJECT;
-          return NodeFilter.FILTER_ACCEPT;
+      // Keep the current section marked while reading (the layout handles the app bar).
+      let ticking = false;
+      addEventListener(
+        'scroll',
+        () => {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(() => {
+            ticking = false;
+            markCurrent();
+          });
         },
+        { passive: true },
+      );
+
+      // Current section: the last heading above 30% of the screen. Positions are measured once, not per frame.
+      const ids = [...new Set([...document.querySelectorAll<HTMLElement>('[data-toc-link]')].map((a) => a.dataset.tocLink!))];
+      let tops: number[] = [];
+      const measure = () => {
+        tops = ids.map((id) => {
+          const el = document.getElementById(id);
+          return el ? el.getBoundingClientRect().top + scrollY : Infinity;
+        });
+      };
+      let current = '';
+      const markCurrent = () => {
+        const line = scrollY + innerHeight * 0.3;
+        let id = '';
+        tops.forEach((t, i) => {
+          if (t <= line) id = ids[i];
+        });
+        if (id === current) return;
+        current = id;
+        document.querySelectorAll('[data-toc-link]').forEach((a) => a.classList.toggle('is-current', (a as HTMLElement).dataset.tocLink === id));
+        document.querySelectorAll('[data-toc-mini]').forEach((r) => r.classList.toggle('is-current', (r as HTMLElement).dataset.tocMini === id));
+      };
+      measure();
+      markCurrent();
+      new ResizeObserver(() => {
+        measure();
+        markCurrent();
+      }).observe(document.body);
+
+      // Small screens: the contents sheet.
+      const sheet = document.querySelector<HTMLDialogElement>('[data-toc-sheet]')!;
+      document.querySelector('[data-toc-open]')!.addEventListener('click', () => sheet.showModal());
+      document.querySelector('[data-toc-close]')!.addEventListener('click', () => sheet.close());
+      sheet.addEventListener('click', (e) => {
+        if (e.target === sheet) sheet.close();
       });
-      const nodes: Text[] = [];
-      while (walker.nextNode()) nodes.push(walker.currentNode as Text);
-      for (const node of nodes) {
-        if (used.size >= MAX_TERMS) break;
-        let current: Text | null = node;
-        for (const p of patterns) {
-          if (!current || used.has(p.t.toLowerCase())) continue;
-          const m = current.data.match(p.re);
-          if (!m || m.index === undefined) continue;
-          used.add(p.t.toLowerCase());
-          const hit = current.splitText(m.index);
-          const after = hit.splitText(m[0].length);
-          const span = document.createElement('span');
-          span.className = 'term';
-          span.tabIndex = 0;
-          span.dataset.def = p.d;
-          span.textContent = hit.data;
-          hit.replaceWith(span);
-          current = after;
-          if (used.size >= MAX_TERMS) break;
-        }
-      }
-    }
-  }
-</script>
+      document.querySelectorAll('[data-toc-sheet-link]').forEach((a) => a.addEventListener('click', () => sheet.close()));
 
-<script>
-  import { isCompleted, setCompleted, recordVisit } from '../../lib/progress';
-
-  const button = document.querySelector<HTMLButtonElement>('[data-complete]')!;
-  const label = button.querySelector<HTMLElement>('[data-complete-label]')!;
-  const badge = document.querySelector<HTMLElement>('[data-done-badge]')!;
-  const slug = button.dataset.slug!;
-
-  recordVisit(slug);
-
-  const paint = () => {
-    const done = isCompleted(slug);
-    button.classList.toggle('btn-accent', !done);
-    button.classList.toggle('btn-done', done);
-    label.textContent = done ? 'Completed · click to undo' : 'Mark as completed';
-    badge.hidden = !done;
-  };
-  paint();
-
-  button.addEventListener('click', () => {
-    if (isCompleted(slug)) {
-      // Un-marking doesn't open the "complete" page, so completion counts stay honest.
-      setCompleted(slug, false);
+      // Mark as completed (saved only in this browser).
+      const button = document.querySelector<HTMLButtonElement>('[data-complete]')!;
+      const label = button.querySelector<HTMLElement>('[data-complete-label]')!;
+      const slug = button.dataset.slug!;
+      recordVisit(slug);
+      const paint = () => {
+        const done = isCompleted(slug);
+        label.textContent = done ? 'Completed' : 'Mark as completed';
+        button.classList.toggle('btn-light', !done);
+        button.classList.toggle('btn-ghost', done);
+      };
       paint();
-      return;
-    }
-    setCompleted(slug, true);
-    location.href = `/lessons/${slug}/complete`;
-  });
-
-  // Reading progress bar.
-  const bar = document.querySelector<HTMLElement>('[data-read-progress]')!;
-  const article = document.querySelector<HTMLElement>('.lesson-body')!;
-  const onScroll = () => {
-    const rect = article.getBoundingClientRect();
-    const total = rect.height - window.innerHeight * 0.6;
-    const pct = Math.min(1, Math.max(0, -rect.top / Math.max(total, 1)));
-    bar.style.width = `${pct * 100}%`;
-  };
-  document.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
-
-  // Highlight the current section in the table of contents.
-  const links = new Map(
-    [...document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]')].map((a) => [a.dataset.tocLink!, a]),
-  );
-  if (links.size && 'IntersectionObserver' in window) {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          if (!e.isIntersecting) continue;
-          links.forEach((a) => a.classList.remove('is-current'));
-          links.get(e.target.id)?.classList.add('is-current');
-        }
-      },
-      { rootMargin: '0px 0px -70% 0px' },
-    );
-    links.forEach((_, id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-  }
-</script>
+      button.addEventListener('click', () => {
+        setCompleted(slug, !isCompleted(slug));
+        paint();
+      });
+    </script>
+</Reading>

@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" role="img" aria-labelledby="t d">
+  <title id="t">CI checks every push on a fresh computer</title>
+  <desc id="d">You push code to GitHub. A fresh computer starts empty, gets your repository and runs the checks in order: 1, npm ci to install packages; 2, lint; 3, type check; 4, tests. If all checks pass, the result is a green check mark. If one check fails, the result is a red X.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="300" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Push -->
+    <rect x="24" y="110" width="124" height="70" rx="10" fill="#f2c94c"/>
+    <text x="86" y="141" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">You push</text>
+    <text x="86" y="161" font-size="12" fill="#111111" text-anchor="middle">code to GitHub</text>
+    <line x1="152" y1="145" x2="176" y2="145" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <!-- Fresh computer -->
+    <rect x="182" y="40" width="340" height="200" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="352" y="70" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Fresh computer</text>
+    <text x="352" y="90" font-size="12" fill="#a0a0a0" text-anchor="middle">starts empty, gets your repository</text>
+    <rect x="198" y="110" width="150" height="44" rx="8" fill="#141414" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="273" y="137" font-size="15" fill="#f2f2f2" text-anchor="middle">1. npm ci</text>
+    <rect x="356" y="110" width="150" height="44" rx="8" fill="#141414" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="431" y="137" font-size="15" fill="#f2f2f2" text-anchor="middle">2. Lint</text>
+    <rect x="198" y="170" width="150" height="44" rx="8" fill="#141414" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="273" y="197" font-size="15" fill="#f2f2f2" text-anchor="middle">3. Type check</text>
+    <rect x="356" y="170" width="150" height="44" rx="8" fill="#141414" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="431" y="197" font-size="15" fill="#f2f2f2" text-anchor="middle">4. Tests</text>
+
+    <!-- Results -->
+    <line x1="526" y1="120" x2="554" y2="98" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="526" y1="170" x2="554" y2="194" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="560" y="56" width="136" height="70" rx="10" fill="#1f9d6b"/>
+    <text x="628" y="87" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">All passed</text>
+    <text x="628" y="107" font-size="12" fill="#e6f6ef" text-anchor="middle">green check mark</text>
+    <rect x="560" y="166" width="136" height="70" rx="10" fill="#e5484d"/>
+    <text x="628" y="197" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">One failed</text>
+    <text x="628" y="217" font-size="12" fill="#fde8e9" text-anchor="middle">red X</text>
+
+    <text x="360" y="276" font-size="12" fill="#a0a0a0" text-anchor="middle">The result appears next to your commit and on your pull request.</text>
+  </g>
+</svg>

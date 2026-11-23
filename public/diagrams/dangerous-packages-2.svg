@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 280" role="img" aria-labelledby="t d">
+  <title id="t">How slopsquatting works</title>
+  <desc id="d">Step 1: an AI invents the same package name again and again. Step 2: an attacker publishes a real package with that name. Step 3: an AI suggests the name to the next user. Step 4: that user installs it, and the attacker's code runs.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="280" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <text x="360" y="40" font-size="12" fill="#a0a0a0" text-anchor="middle">SLOPSQUATTING, STEP BY STEP</text>
+
+    <rect x="20" y="64" width="156" height="120" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="34" y="86" font-size="12" fill="#f2c94c">1</text>
+    <text x="98" y="112" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">AI invents</text>
+    <text x="98" y="132" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">a name</text>
+    <text x="98" y="156" font-size="12" fill="#a0a0a0" text-anchor="middle">the same name</text>
+    <text x="98" y="172" font-size="12" fill="#a0a0a0" text-anchor="middle">again and again</text>
+
+    <rect x="196" y="64" width="156" height="120" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="210" y="86" font-size="12" fill="#f2c94c">2</text>
+    <text x="274" y="112" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Attacker</text>
+    <text x="274" y="132" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">publishes it</text>
+    <text x="274" y="156" font-size="12" fill="#a0a0a0" text-anchor="middle">a real package</text>
+    <text x="274" y="172" font-size="12" fill="#a0a0a0" text-anchor="middle">with that name</text>
+
+    <rect x="372" y="64" width="156" height="120" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="386" y="86" font-size="12" fill="#f2c94c">3</text>
+    <text x="450" y="112" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">AI suggests</text>
+    <text x="450" y="132" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">it again</text>
+    <text x="450" y="156" font-size="12" fill="#a0a0a0" text-anchor="middle">to the next</text>
+    <text x="450" y="172" font-size="12" fill="#a0a0a0" text-anchor="middle">user</text>
+
+    <rect x="548" y="64" width="156" height="120" rx="10" fill="#e5484d"/>
+    <text x="562" y="86" font-size="12" fill="#fde8e8">4</text>
+    <text x="626" y="112" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">User</text>
+    <text x="626" y="132" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">installs it</text>
+    <text x="626" y="156" font-size="12" fill="#fde8e8" text-anchor="middle">the attacker's</text>
+    <text x="626" y="172" font-size="12" fill="#fde8e8" text-anchor="middle">code runs</text>
+
+    <line x1="177" y1="124" x2="192" y2="124" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="353" y1="124" x2="368" y2="124" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="529" y1="124" x2="544" y2="124" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <text x="360" y="226" font-size="12" fill="#a0a0a0" text-anchor="middle">In one real test, a harmless package with an invented name</text>
+    <text x="360" y="244" font-size="12" fill="#a0a0a0" text-anchor="middle">got about 15,000 downloads in three months.</text>
+  </g>
+</svg>

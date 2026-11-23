@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" role="img" aria-labelledby="t d">
+  <title id="t">Lock ordering: lowest ID first</title>
+  <desc id="d">Both transfer requests try to lock wallet 1 first. Request A gets the lock first. Request B waits its turn. Request A then locks wallet 2, moves the money and releases both locks. Because both requests use the same order, no circle of waiting can form.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="300" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Requests -->
+    <rect x="24" y="50" width="150" height="70" rx="10" fill="#f2c94c"/>
+    <text x="99" y="80" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Request A</text>
+    <text x="99" y="101" font-size="12" fill="#111111" text-anchor="middle">Maya sends Leo $20</text>
+    <rect x="24" y="180" width="150" height="70" rx="10" fill="#4f6bd8"/>
+    <text x="99" y="210" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Request B</text>
+    <text x="99" y="231" font-size="12" fill="#e8ecff" text-anchor="middle">Leo sends Maya $5</text>
+
+    <!-- Steps -->
+    <rect x="230" y="105" width="145" height="90" rx="10" fill="#1f9d6b"/>
+    <text x="302" y="146" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">1. Lock wallet 1</text>
+    <text x="302" y="168" font-size="12" fill="#e6f5ee" text-anchor="middle">(lowest ID first)</text>
+    <rect x="405" y="105" width="145" height="90" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="477" y="155" font-size="15" fill="#f2f2f2" text-anchor="middle">2. Lock wallet 2</text>
+    <rect x="580" y="105" width="120" height="90" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="640" y="146" font-size="15" fill="#f2f2f2" text-anchor="middle">3. Move money</text>
+    <text x="640" y="168" font-size="12" fill="#a0a0a0" text-anchor="middle">release both</text>
+
+    <!-- Arrows -->
+    <line x1="174" y1="88" x2="226" y2="128" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="196" y="68" font-size="12" fill="#a0a0a0">gets it first</text>
+    <line x1="174" y1="212" x2="226" y2="172" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="196" y="242" font-size="12" fill="#a0a0a0">waits its turn</text>
+    <line x1="375" y1="150" x2="401" y2="150" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="550" y1="150" x2="576" y2="150" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <text x="360" y="280" font-size="12" fill="#a0a0a0" text-anchor="middle">Both requests lock wallet 1 first, so no circle of waiting can form.</text>
+  </g>
+</svg>

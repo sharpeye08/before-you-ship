@@ -14,7 +14,7 @@ quiz:
         correct: true
       - text: "They see your app, but only if you are on the same street"
       - text: "Their phone downloads your app from your laptop"
-    explanation: "localhost always means \"this same device\". On your friend's phone, it means their phone, not your laptop. Nothing is running on port 3000 there, so they get an error."
+    explanation: "localhost always means \"this same device\". On your friend's phone, it means their phone, not your laptop. Nothing runs on port 3000 there, so they get an error."
 
   - question: "What does the 3000 in localhost:3000 tell the computer?"
     options:
@@ -23,7 +23,7 @@ quiz:
       - text: "Which program on the computer should get the request"
         correct: true
       - text: "How fast the app loads"
-    explanation: "One computer can run many server programs. The port number says which one the request is for, like a flat number in a big building."
+    explanation: "One computer can run many server programs. The port number says which program the request is for, like a flat number in a big building."
 
   - question: "You press Ctrl+C in the terminal where your app is running. Then you reload localhost:3000 in your browser. What do you see?"
     options:
@@ -32,7 +32,7 @@ quiz:
       - text: "Your app, as normal"
       - text: "The app, but with no styling"
       - text: "Your app's code, as text"
-    explanation: "Ctrl+C stops the program running in the terminal. With the process stopped, nothing is listening on port 3000, so the browser can't connect. Run the start command again to bring it back."
+    explanation: "Ctrl+C stops the program that runs in the terminal. The process stopped, so nothing listens on port 3000, and the browser can't connect. Run the start command again to start the app."
 
   - question: "You deploy your app. Now it is at your-quiz.vercel.app. What did deploying do?"
     options:
@@ -41,7 +41,7 @@ quiz:
       - text: "It bought a domain name for you"
       - text: "It copied your app to a server that is always on and set up to accept visitors"
         correct: true
-    explanation: "Deploying means putting your app on a server that is always on, always connected and open to visitors. Your laptop is no longer involved. The vercel.app address is a free name the hosting platform gives you."
+    explanation: "Deploying puts your app on a server that is always on, always connected and open to visitors. Your laptop is no longer part of it. The vercel.app address is a free name that the hosting platform gives you."
 
   - question: "The deployed app loads, but the scores list is empty. The page's code asks for data from http://localhost:3000/api/scores. Why does it fail?"
     options:
@@ -50,7 +50,7 @@ quiz:
         correct: true
       - text: "The database was deleted when you deployed"
       - text: "Port 3000 is blocked in production"
-    explanation: "Code that runs in the browser runs on the visitor's device. To them, localhost means their own device. Use a relative address like /api/scores, so the browser asks the same server the page came from."
+    explanation: "Code that runs in the browser runs on the visitor's device. To them, localhost means their own device. Use a relative address like /api/scores. Then the browser asks the same server that the page came from."
 
   - question: "What is \"production\"?"
     options:
@@ -65,15 +65,15 @@ quiz:
 # It works on my laptop. Why can't my friend open it?
 
 > **Before you start**
-> This lesson uses a few words from earlier lessons:
+> This lesson uses words from earlier lessons.
 > - **Server:** a computer that waits for requests and answers them. *([You pressed Enter. What happened in the next second?](/lessons/what-happens-when-you-open-a-website))*
 > - **Domain name:** a human-friendly name for a server, like `example.com`. *([How does your browser find one computer out of billions?](/lessons/ip-addresses-and-dns))*
-> - **API:** the addresses your app's pages use to ask your server for data, like `/api/scores`. *([The hidden conversation behind every button you tap](/lessons/what-is-an-api))*
-> - **Process:** a program that is running right now. *([Your app restarted and all the likes vanished](/lessons/how-a-computer-runs-your-code))*
+> - **API:** the menu of requests your server answers, like `/api/scores`. *([The hidden conversation behind every button you tap](/lessons/what-is-an-api))*
+> - **Process:** a program that runs now. *([Your app restarted and all the likes vanished](/lessons/how-a-computer-runs-your-code))*
 
 ## "This site can't be reached"
 
-You built a quiz app with your AI. You can answer questions, see your score, and try again. It works.
+You built a quiz app with your AI. You can answer questions, see your score and try again. It works.
 
 Your browser shows the app at this address:
 
@@ -85,9 +85,9 @@ You're proud of it, so you paste the link in your group chat.
 
 A minute later, your friend replies: *"This site can't be reached."*
 
-But it works for you! You open it again. Still works.
+But it works for you! You open it again. It still works.
 
-If `localhost:3000` means nothing to you yet, that's normal. This lesson explains what it means, why only you can see your app, and how apps get onto the internet for everyone.
+If `localhost:3000` means nothing to you yet, that's normal. This lesson explains what it means and why only you can see your app. It also explains how apps get onto the internet for everyone.
 
 > **In short:** an app that works on your laptop isn't on the internet yet. This lesson explains why, and what to do about it.
 
@@ -95,21 +95,21 @@ If `localhost:3000` means nothing to you yet, that's normal. This lesson explain
 
 ## The terminal: talking to your computer in text
 
-Before we look at the address, we need one tool. Many apps are started from a **terminal**.
+Before we look at the address, you need one tool. People often start apps from a **terminal**.
 
-A terminal is a window where you type text commands instead of clicking. A **command** is one instruction for the computer, like *"show me the files in this folder"*. You type it, press Enter, and the computer answers in text.
+A terminal is a window where you type text commands, instead of clicking. A **command** is one instruction for the computer, like *"show me the files in this folder"*. You type it and press Enter. Then the computer answers in text.
 
-Your AI tool uses it too. When an AI coding tool says it is "running a command", it's typing into a terminal for you.
+Your AI tool uses a terminal too. When an AI coding tool says that it "runs a command", it types into a terminal for you.
 
 **How to open one:**
 
-- **Mac:** open the **Terminal** app. It's in **Applications → Utilities**, or search for "Terminal" with Spotlight (Cmd+Space).
+- **Mac:** open the **Terminal** app. It's in **Applications → Utilities**. You can also search for "Terminal" with Spotlight, the Mac's search tool (Cmd+Space).
 - **Windows:** search for **Terminal** in the Start menu.
-- **VS Code** (a popular code editor): choose **View → Terminal** from the menu.
+- **VS Code** (a popular code editor, an app for writing code): choose **View → Terminal** from the menu.
 
 The line where you type usually ends in a symbol like `$`, `%` or `>`. It means "ready for a command".
 
-Two safe commands to try. They work on Mac, and in PowerShell, which Windows Terminal opens by default:
+Here are two safe commands to try. They work on Mac. They also work in PowerShell, the program that Windows Terminal opens by default:
 
 ```bash
 pwd
@@ -127,15 +127,15 @@ In plain English:
 
 ## Starting your app on your laptop
 
-Many apps made with JavaScript tools start with this command, typed in the project's folder:
+Many apps made with JavaScript tools start with this command. You type it in the project's folder:
 
 ```bash
 npm run dev
 ```
 
-It means *"start my app in development mode"*. You'll learn what `npm` is in [It works on my machine, but not on yours. Blame the packages](/lessons/packages-and-dependencies).
+It means *"start my app in development mode"*, the mode that you use while you build. You'll learn what `npm` is in [It works on my machine, but not on yours. Blame the packages](/lessons/packages-and-dependencies).
 
-This command starts a process: a server, running on your own laptop. A server you run while you build and test is called a **development server**. The terminal then shows a message like this:
+This command starts a process: a server that runs on your own laptop. A server that you run while you build and test is called a **development server**. The terminal then shows a message like this:
 
 ```text
 Local: http://localhost:3000
@@ -143,9 +143,9 @@ Local: http://localhost:3000
 
 That's the address to open in your browser.
 
-The development server is a process, so it keeps running only while that terminal is open. To stop it, click in the terminal and press **Ctrl+C** (on a Mac keyboard, the key is called Control). Closing the terminal window stops it too.
+The development server is a process, so it runs only while that terminal is open. To stop it, click in the terminal and press **Ctrl+C**. On a Mac keyboard, the Ctrl key is called Control. If you close the terminal window, the server stops too.
 
-When it stops, reload the page. You'll get an error like *"localhost refused to connect"*. Nothing is running to answer.
+When the server stops, reload the page. You get an error like *"localhost refused to connect"*. Nothing runs to answer the request.
 
 > **In short:** a command like `npm run dev` starts a development server on your laptop. Ctrl+C stops it.
 
@@ -155,13 +155,15 @@ When it stops, reload the page. You'll get an error like *"localhost refused to 
 
 Now let's read the address. First, `localhost`.
 
-**localhost** is a special name. It always means *"this same computer"*. Computers, phones and tablets all understand it, and on each one it points to itself.
+**localhost** is a special name. It always means *"this same computer"*. Computers, phones and tablets all understand it. On each device, it points to that device itself.
 
-Think about the word "home". If you tell a taxi driver "take me home", you go to your home. If your friend says the exact same words, they go to *their* home. Same word, different place, depending on who says it.
+Think about the word "home". If you tell a taxi driver "take me home", you go to your home. If your friend says the same words, they go to *their* home. It's the same word, but a different place. The place depends on who says it.
 
-`localhost` works the same way. On your laptop, it means your laptop. On your friend's phone, it means your friend's phone.
+`localhost` works in the same way. On your laptop, it means your laptop. On your friend's phone, it means your friend's phone.
 
-So when your friend opened `localhost:3000`, their phone looked for your quiz app **on their own phone**. Of course it wasn't there.
+So when your friend opened `localhost:3000`, their phone looked for your quiz app **on their own phone**. Your app wasn't there.
+
+![Your laptop opens localhost:3000 and finds your quiz app on itself. Your friend's phone opens the same link, looks on itself, finds nothing and shows "This site can't be reached".](/diagrams/localhost-vs-production-1.svg)
 
 > **In short:** localhost always means "this device". The same link points to a different device for every person who opens it.
 
@@ -171,26 +173,26 @@ So when your friend opened `localhost:3000`, their phone looked for your quiz ap
 
 Now the `:3000` part.
 
-One computer can run many server programs at the same time. When a request arrives, the computer needs to know which program it's for.
+One computer can run many server programs at the same time. When a request arrives, the computer must know which program it's for.
 
-That's the job of a **port**: a number that picks one program on a computer. Think of a big apartment building. The street address gets you to the building. The flat number gets you to the right door. The computer is the building. The port is the flat number.
+A **port** does this job. A port is a number that picks one program on a computer. Think of a big apartment building. The street address gets you to the building. The flat number gets you to the right door. The computer is the building, and the port is the flat number.
 
-So `localhost:3000` means: *"this computer, the program waiting at port 3000."*
+So `localhost:3000` means: *"this computer, the program that waits at port 3000."*
 
-A few facts about ports:
+Here are some facts about ports:
 
 - Port numbers go from 0 to 65535.
-- Normal websites use port **443** (for `https://`) or **80** (for `http://`). Browsers add these for you, so you almost never see them.
+- Normal websites use port **443** (for `https://`) or **80** (for `http://`). Browsers add these numbers for you, so you almost never see them.
 - Development servers pick other numbers, like **3000** (Next.js) or **5173** (Vite). Next.js and Vite are popular tools for building web apps.
 - Only one program can use a port at a time.
 
-That last rule explains a common error. If you start your app twice, the second one may fail with a message like this:
+That last rule explains a common error. If you start your app twice, the second one can fail with a message like this:
 
 ```text
 Error: listen EADDRINUSE: address already in use :::3000
 ```
 
-It means *"port 3000 is already taken"*. Usually, an older copy of your app is still running in another terminal. Stop it with Ctrl+C, then try again.
+It means *"port 3000 is already taken"*. Usually, an older copy of your app still runs in another terminal. Stop it with Ctrl+C. Then try again.
 
 > **In short:** a port is a number that picks which program gets a request. Only one program can use each port.
 
@@ -198,7 +200,7 @@ It means *"port 3000 is already taken"*. Usually, an older copy of your app is s
 
 ## Why nobody else can reach your laptop
 
-Let's say your friend used your laptop's real internet address instead of `localhost`. It still wouldn't work, for three reasons.
+Now say that your friend used your laptop's real internet address instead of `localhost`. It still wouldn't work, for three reasons.
 
 1. **Your router blocks it.** Your laptop connects to the internet through your home's router (the Wi-Fi box). By default, routers don't let strangers from the internet start a connection to the devices inside. That protects you.
 2. **Your laptop isn't always on.** When you close the lid, it sleeps. When you close the terminal, the app stops. Visitors would find nothing.
@@ -212,37 +214,39 @@ Your laptop is a great place to build, but a bad place to serve visitors.
 
 ## Hosting: a computer that's always awake
 
-Your app needs a server that is:
+Your app needs a server with these three things:
 
-- Always on
-- Always connected to the internet
-- Set up to accept visitors
+- It is always on.
+- It is always connected to the internet.
+- It is set up to accept visitors.
 
-Companies run huge numbers of computers like this in data centers. They let you put your app on them, often free for small apps. This service is called **hosting**. A company that offers it is a **hosting provider** or **hosting platform**.
+Some companies run huge numbers of computers like this in buildings called data centers. They let you put your app on these computers, often free for small apps. This service is called **hosting**. A company that offers it is a **hosting provider** or **hosting platform**.
 
 Vercel and Netlify are two popular hosting platforms for web apps.
 
 > **Go deeper:** [There is no cloud. It's someone else's computer](/lessons/what-is-the-cloud) (Level 1) explains where these computers come from.
 
-> **In short:** hosting means your app runs on someone else's always-on server, so everyone can reach it.
+> **In short:** with hosting, your app runs on someone else's always-on server, so everyone can reach it.
 
 ---
 
 ## Deploying to production
 
-Copying your app onto a hosting server, and starting it there, is called **deploying**. People also say "shipping" or "going live".
+To copy your app onto a hosting server and start it there is called **deploying**. People also say "shipping" or "going live".
 
 After you deploy, the hosting platform gives your app a real web address, with a domain name. On Vercel, for example, it looks like `your-quiz.vercel.app`. Your friend can open that link from anywhere.
 
 The live version that real users visit is called **production**. Your laptop is where you build and test. Production is where real people use your app.
 
-This matters because the two are separate copies. If you change code on your laptop, production doesn't change until you deploy again.
+![You build and test on your laptop. When you deploy, a copy of your app goes to a hosting server that is always on. Your friend and other visitors open the production address, like your-quiz.vercel.app.](/diagrams/localhost-vs-production-2.svg)
 
-**What about a domain name of your own?** The free address from your hosting platform works well to start. Later, you can buy a domain name of your own, ending in something like `.com`, from a company that sells them. Then you connect it to your app using DNS, the internet's address book from [How does your browser find one computer out of billions?](/lessons/ip-addresses-and-dns).
+This matters, because the two are separate copies. If you change code on your laptop, production doesn't change until you deploy again.
 
-> **Go deeper:** [From your laptop to a real website in one push](/lessons/hosting-platforms) (Level 1) walks you through a real deploy.
+**What about a domain name of your own?** The free address from your hosting platform is good for a start. Later, you can buy a domain name of your own, ending in something like `.com`, from a company that sells them. Then you connect it to your app with DNS. DNS is the internet's address book from [How does your browser find one computer out of billions?](/lessons/ip-addresses-and-dns).
 
-> **In short:** deploying copies your app to a hosting server. The live copy is production. It only changes when you deploy again.
+> **Go deeper:** [From your laptop to a real website in one push](/lessons/hosting-platforms) (Level 1) shows you a real deploy, step by step.
+
+> **In short:** deploying copies your app to a hosting server. The live copy is production. It changes only when you deploy again.
 
 ---
 
@@ -266,32 +270,32 @@ In plain English:
 
 - `fetch` asks a server for data. Here, it asks for the list of scores.
 - **The first version** asks `localhost:3000`. Frontend code runs on each visitor's device. So for your friend, `localhost` means their phone again. The scores never load.
-- **The second version** gives only the path, `/api/scores`. The browser then asks the same server the page came from. On your laptop, that's your laptop. In production, that's the production server.
+- **The second version** gives only the path, `/api/scores`. Then the browser asks the same server that the page came from. On your laptop, that's your laptop. In production, that's the production server.
 
-### Mistake 2: Settings that only exist on your laptop
+### Mistake 2: Settings that exist only on your laptop
 
-Your app may need settings, like a secret key for a service. If they are only on your laptop, production doesn't have them, and the app breaks.
+Your app can need settings, like a secret key for a service. If the settings are only on your laptop, production doesn't have them, and the app breaks.
 
 > **Go deeper:** [Your app's secrets don't belong in your code. Here's where they go](/lessons/environment-variables) (Level 1) explains how to give production its own settings.
 
-### Mistake 3: Forgetting to deploy
+### Mistake 3: You forgot to deploy
 
 You fix a bug on your laptop. You tell your friend to try again. It's still broken. Production still has the old copy, because you never deployed the fix.
 
-> **Go deeper:** [Why you should never test on your real users](/lessons/dev-staging-production) (Level 3) shows how teams test changes safely before they reach production.
+> **Go deeper:** [Why you should never test on your real users](/lessons/dev-staging-production) (Level 3) shows how teams test changes safely before the changes reach production.
 
-> **In short:** watch for `localhost` in your code, settings missing in production, and changes you haven't deployed yet.
+> **In short:** look for `localhost` in your code, settings that production doesn't have, and changes that you haven't deployed yet.
 
 ---
 
 ## What good looks like
 
-- **Use relative paths** like `/api/scores` in frontend code, not `http://localhost:3000/...`.
+- **Use relative paths** like `/api/scores` in frontend code, not `http://localhost:3000/...`. A relative path has no server name in it.
 - **Deploy early.** Put a tiny version of your app online on day one. Small problems are easier to fix than big ones.
 - **Test the real link.** After each deploy, open the production address yourself.
-- **Test from another device.** Open the link on your phone, with Wi-Fi turned off. If it works on mobile data, it really is on the internet.
+- **Test from another device.** Turn off Wi-Fi on your phone. Then open the link. If it works on mobile data, it really is on the internet.
 
-> **In short:** avoid localhost in code, deploy early, and test the live link from another device.
+> **In short:** keep localhost out of your code, deploy early, and test the live link from another device.
 
 ---
 
@@ -301,55 +305,61 @@ You fix a bug on your laptop. You tell your friend to try again. It's still brok
 
 1. Open a terminal (see the steps above).
 2. Type `pwd` and press Enter. Read the folder name.
-3. Type `ls` and press Enter. Compare the list with the same folder in your file explorer (Finder on Mac). It's the same folder, shown in text.
+3. Type `ls` and press Enter.
+4. Compare the list with the same folder in your file explorer (Finder on Mac). It's the same folder, shown in text.
 
 ### Experiment 2: Start and stop an app
 
-If you have an app project from your AI tool:
+Do this if you have an app project from your AI tool.
 
-1. In the terminal, go to your project's folder. Ask your AI for the exact command, or type `cd` followed by a space and the folder's path. `cd` means "change folder".
-2. Start the app (often `npm run dev`). Find the `localhost` address in the output and open it.
-3. Open the same address on your phone. It fails, because `localhost` there means your phone.
-4. Back in the terminal, press **Ctrl+C**. Reload the page on your laptop. It fails too, because the process stopped.
+1. In the terminal, go to your project's folder. Ask your AI for the exact command. You can also type `cd`, a space and the folder's path. `cd` means "change folder".
+2. Start the app (often with `npm run dev`).
+3. Find the `localhost` address in the terminal's text, and open it.
+4. Open the same address on your phone. It fails, because `localhost` there means your phone.
+5. In the terminal, press **Ctrl+C**.
+6. Reload the page on your laptop. It fails too, because the process stopped.
 
 ---
 
 ## Takeaways
 
 **Key terms**
-- **Terminal:** a window where you type text commands
-- **Development server:** a server running on your laptop while you build and test
-- **localhost:** a name that always means "this same device"
-- **Port:** a number that picks which program on a computer gets a request
-- **Hosting:** running your app on someone else's always-on server
-- **Deploying:** copying your app to a hosting server and starting it there
-- **Production:** the live version of your app that real users visit
+
+- **Terminal:** a window where you type text commands.
+- **Development server:** a server that runs on your laptop while you build and test.
+- **localhost:** a name that always means "this same device".
+- **Port:** a number that picks which program on a computer gets a request.
+- **Hosting:** your app runs on someone else's always-on server.
+- **Deploying:** you copy your app to a hosting server and start it there.
+- **Production:** the live version of your app that real users visit.
 
 **Which step broke?**
-- Friend can't open your `localhost` link → it points to their own device. **Deploy** your app.
+
+- Your friend can't open your `localhost` link → it points to their own device. **Deploy** your app.
 - `localhost` works, then suddenly refuses to connect → your app's **process** stopped. Start it again.
-- "Address already in use" → another program is using that **port**. Stop the old one.
-- Works on your laptop, broken in production → look for `localhost` in the code, missing settings, or a fix you haven't deployed.
+- "Address already in use" → another program uses that **port**. Stop the old one.
+- It works on your laptop, but production is broken → look for `localhost` in the code, missing settings, or a fix that you haven't deployed.
 
 **Ask your AI**
+
 - *"Search my code for 'localhost'. Which of these will break when the app is deployed?"*
 - *"What command starts my app, and what port does it use?"*
-- *"Walk me through deploying this app for the first time, step by step."*
+- *"Explain, step by step, how to deploy this app for the first time."*
 
 ---
 
 <details>
 <summary><strong>Going deeper</strong> (optional, for readers who want more detail)</summary>
 
-**localhost is an IP address too.** The name `localhost` is reserved by an internet standard (RFC 6761). It points to a special address called the **loopback address**: `127.0.0.1` in IPv4 and `::1` in IPv6. Requests to it never leave your computer.
+**localhost is an IP address too.** An internet standard (RFC 6761) reserves the name `localhost`. It points to a special address called the **loopback address**. In IPv4 and IPv6, the two kinds of IP address, it is `127.0.0.1` and `::1`. Requests to it never leave your computer.
 
-**Testing on your phone over Wi-Fi.** A development server can listen only on localhost, or on all of the computer's network addresses. Vite's development server listens only on localhost by default; you can change this with its `--host` option. Next.js's development server listens on all addresses by default. If it does, a phone on the same Wi-Fi can open the app using your laptop's local network address, for example `http://192.168.1.20:3000` (your number will differ). This still doesn't make the app reachable from the wider internet.
+**Testing on your phone over Wi-Fi.** A development server can listen only on localhost, or on all of the computer's network addresses. By default, Vite's development server listens only on localhost. You can change this with its `--host` option. By default, Next.js's development server listens on all addresses. Then a phone on the same Wi-Fi can open the app with your laptop's local network address. An example is `http://192.168.1.20:3000` (your number will be different). This still doesn't make the app reachable from the rest of the internet.
 
-**Port ranges.** IANA, the organization that keeps track of internet numbers, splits ports into three ranges: system ports (0–1023), user ports (1024–49151) and dynamic or private ports (49152–65535). On Linux, a program normally needs special permission to use a port below 1024, so development servers use higher numbers.
+**Port ranges.** IANA, the organization that keeps a record of internet numbers, splits ports into three ranges. These are system ports (0–1023), user ports (1024–49151) and dynamic or private ports (49152–65535). Linux is an operating system that many servers use. On Linux, a program normally needs special permission to use a port below 1024. So development servers use higher numbers.
 
-**Why your router blocks visitors.** Most home routers use **NAT** (Network Address Translation). All your home devices share one public internet address. When your laptop starts a connection, the router remembers it and passes the reply back. When a stranger starts a connection, the router doesn't know which device it's for, so it drops it. **Port forwarding** is a router setting that makes an exception. Running a public app from home this way is possible, but it's risky and unreliable, which is why people use hosting.
+**Why your router blocks visitors.** Most home routers use **NAT** (Network Address Translation). All your home devices share one public internet address. When your laptop starts a connection, the router remembers it and passes the reply back. When a stranger starts a connection, the router doesn't know which device it's for, so it ignores it. **Port forwarding** is a router setting that makes an exception. You can run a public app from home in this way. But it's risky and unreliable, so people use hosting.
 
-**Tunnels.** Some tools create a temporary public link to a server running on your laptop, through a service on the internet. They're useful for quick demos and for testing webhooks, but your app is still offline when your laptop is.
+**Tunnels.** Some tools make a temporary public link to a server on your laptop, through a service on the internet. They're useful for quick demos. They're also useful to test webhooks, the messages that other services send to your app. But when your laptop is offline, your app is offline too.
 
 **Changing the port.** Next.js accepts `-p`: `next dev -p 4000` starts on port 4000. If its port is busy, Vite tries the next free port automatically.
 

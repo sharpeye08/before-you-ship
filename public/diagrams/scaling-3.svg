@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" role="img" aria-labelledby="t d">
+  <title id="t">A connection pooler between instances and the database</title>
+  <desc id="d">Hundreds of serverless instances open thousands of connections to the pooler on port 6543. The pooler uses only a few real connections to the database. It lends a real connection for each transaction, then takes it back.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="330" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Instances -->
+    <rect x="40" y="60" width="150" height="46" rx="10" fill="#4f6bd8"/>
+    <text x="115" y="88" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Instance</text>
+    <rect x="40" y="124" width="150" height="46" rx="10" fill="#4f6bd8"/>
+    <text x="115" y="152" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Instance</text>
+    <rect x="40" y="188" width="150" height="46" rx="10" fill="#4f6bd8"/>
+    <text x="115" y="216" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Instance</text>
+    <text x="115" y="258" font-size="12" fill="#a0a0a0" text-anchor="middle">hundreds of instances</text>
+
+    <!-- Pooler -->
+    <rect x="290" y="110" width="150" height="90" rx="10" fill="#1f9d6b"/>
+    <text x="365" y="150" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Pooler</text>
+    <text x="365" y="172" font-size="12" fill="#e6fff4" text-anchor="middle">port 6543</text>
+
+    <!-- Database -->
+    <rect x="540" y="110" width="140" height="90" rx="10" fill="#f2c94c"/>
+    <text x="610" y="160" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Database</text>
+
+    <!-- Many connections in -->
+    <text x="240" y="46" font-size="12" fill="#a0a0a0" text-anchor="middle">thousands of connections</text>
+    <line x1="196" y1="83" x2="284" y2="130" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="196" y1="147" x2="284" y2="155" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="196" y1="211" x2="284" y2="180" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <!-- Few real connections out -->
+    <line x1="446" y1="140" x2="534" y2="140" stroke="#cfcfcf" stroke-width="3" marker-end="url(#arrow)"/>
+    <line x1="446" y1="170" x2="534" y2="170" stroke="#cfcfcf" stroke-width="3" marker-end="url(#arrow)"/>
+    <text x="490" y="226" font-size="12" fill="#a0a0a0" text-anchor="middle">a few real connections</text>
+
+    <text x="360" y="296" font-size="12" fill="#a0a0a0" text-anchor="middle">The pooler lends a real connection for each transaction, then takes it back.</text>
+  </g>
+</svg>

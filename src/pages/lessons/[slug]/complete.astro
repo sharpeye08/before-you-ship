@@ -1,7 +1,7 @@
 ---
-// Opened by "Mark as completed". Cloudflare Web Analytics counts views of these pages,
+// Lesson pages now toggle "Mark as completed" in place; this page stays for old links. Cloudflare Web Analytics counts views of these pages,
 // which gives lesson-completion numbers without custom events.
-import Base from '../../../layouts/Base.astro';
+import Reading from '../../../layouts/Reading.astro';
 import Icon from '../../../components/Icon.astro';
 import { getLessons, summarize } from '../../../lib/lessons';
 
@@ -16,94 +16,35 @@ export async function getStaticPaths() {
 const { lesson, next, all } = Astro.props;
 ---
 
-<Base title={`Completed: ${lesson.title}`} active="lessons">
-  <section class="done glass">
-    <div class="done-icon"><Icon name="check" size={34} /></div>
-    <p class="done-kicker">Lesson {lesson.order} complete</p>
-    <h1>{lesson.title}</h1>
+<Reading title={`Completed: ${lesson.title}`}>
+  <section class="pt-[6vh] text-center">
+    <div class="mx-auto mb-6 grid size-16 place-items-center rounded-full bg-mint/15 text-mint"><Icon name="check" size={30} /></div>
+    <p class="font-medium">Lesson {lesson.order} complete</p>
+    <h1 class="page-title mt-3">{lesson.title}</h1>
 
-    <div class="done-progress">
-      <div class="done-progress-label">
+    <div class="card mt-10 p-6 text-left">
+      <div class="mb-3 flex justify-between text-sm">
         <span>Your progress</span>
         <span data-count data-all={JSON.stringify(all)}>–</span>
       </div>
-      <div class="progress-track"><div class="progress-fill" data-fill></div></div>
+      <div class="h-1 overflow-hidden rounded-full bg-white/14"><div class="h-full w-0 bg-mint transition-[width] duration-400" data-fill></div></div>
     </div>
 
-    <div class="done-actions">
+    <div class="mt-10 flex flex-wrap justify-center gap-3">
       {
         next ? (
-          <a class="btn btn-accent" href={`/lessons/${next.slug}`}>
+          <a class="btn btn-light h-auto min-h-[46px] py-2.5" href={`/lessons/${next.slug}`}>
             Next: {next.title} <Icon name="arrow-right" size={18} />
           </a>
         ) : (
-          <p class="muted">That was the last lesson. You've finished the whole course.</p>
+          <p class="w-full">That was the last lesson. You've finished the whole course.</p>
         )
       }
-      <a class="btn" href="/lessons">All lessons</a>
+      <a class="btn btn-ghost" href="/lessons">All lessons</a>
     </div>
-    <p class="muted small">Progress is saved only in this browser.</p>
+    <p class="mt-8 text-sm">Progress is saved only in this browser.</p>
   </section>
-</Base>
-
-<style>
-  .done {
-    max-width: 620px;
-    margin: 8vh auto 0;
-    padding: 44px 36px;
-    text-align: center;
-  }
-  .done-icon {
-    display: grid;
-    place-items: center;
-    width: 72px;
-    height: 72px;
-    margin: 0 auto 18px;
-    border-radius: 50%;
-    background: var(--accent);
-    color: #fff;
-    box-shadow: 0 0 40px rgba(229, 72, 77, 0.45);
-  }
-  .done-kicker {
-    margin: 0 0 6px;
-    color: var(--accent-text);
-    font-weight: 600;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  h1 {
-    margin: 0 0 28px;
-    font-size: clamp(1.6rem, 4vw, 2.2rem);
-    line-height: 1.2;
-  }
-  .done-progress {
-    text-align: left;
-    margin-bottom: 28px;
-  }
-  .done-progress-label {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 8px;
-    font-size: 0.9rem;
-    color: var(--text-soft);
-  }
-  .done-actions {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-  }
-  .small {
-    margin: 20px 0 0;
-    font-size: 0.82rem;
-  }
-  @media (max-width: 760px) {
-    .done {
-      padding: 32px 20px;
-    }
-  }
-</style>
+</Reading>
 
 <script>
   import { getCompleted } from '../../../lib/progress';

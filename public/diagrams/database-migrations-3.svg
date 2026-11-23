@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" role="img" aria-labelledby="t d">
+  <title id="t">Expand and contract in four deploys</title>
+  <desc id="d">Step 1, expand: add full_name, and the code writes to both columns but reads name. Step 2, copy: copy name into full_name for old rows. Step 3, switch: the code reads and writes only full_name. Step 4, contract: later, remove name. At every step, the live code finds the columns it needs.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="300" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <text x="360" y="36" font-size="12" fill="#a0a0a0" text-anchor="middle">EACH STEP IS ITS OWN DEPLOY. THE LIVE CODE ALWAYS FINDS ITS COLUMNS.</text>
+
+    <rect x="20" y="56" width="156" height="140" rx="10" fill="#f2c94c"/>
+    <text x="98" y="88" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">1. Expand</text>
+    <text x="98" y="116" font-size="12" fill="#111111" text-anchor="middle">add full_name</text>
+    <text x="98" y="136" font-size="12" fill="#111111" text-anchor="middle">code writes both</text>
+    <text x="98" y="156" font-size="12" fill="#111111" text-anchor="middle">code reads name</text>
+
+    <rect x="196" y="56" width="156" height="140" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="274" y="88" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">2. Copy</text>
+    <text x="274" y="116" font-size="12" fill="#a0a0a0" text-anchor="middle">copy name into</text>
+    <text x="274" y="136" font-size="12" fill="#a0a0a0" text-anchor="middle">full_name</text>
+    <text x="274" y="156" font-size="12" fill="#a0a0a0" text-anchor="middle">for old rows</text>
+
+    <rect x="372" y="56" width="156" height="140" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="450" y="88" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">3. Switch</text>
+    <text x="450" y="116" font-size="12" fill="#a0a0a0" text-anchor="middle">code reads and</text>
+    <text x="450" y="136" font-size="12" fill="#a0a0a0" text-anchor="middle">writes only</text>
+    <text x="450" y="156" font-size="12" fill="#a0a0a0" text-anchor="middle">full_name</text>
+
+    <rect x="548" y="56" width="156" height="140" rx="10" fill="#1f9d6b"/>
+    <text x="626" y="88" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">4. Contract</text>
+    <text x="626" y="116" font-size="12" fill="#e6f6ef" text-anchor="middle">later, when nothing</text>
+    <text x="626" y="136" font-size="12" fill="#e6f6ef" text-anchor="middle">uses name,</text>
+    <text x="626" y="156" font-size="12" fill="#e6f6ef" text-anchor="middle">remove it</text>
+
+    <line x1="177" y1="126" x2="192" y2="126" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="353" y1="126" x2="368" y2="126" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="529" y1="126" x2="544" y2="126" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <text x="98" y="226" font-size="12" fill="#a0a0a0" text-anchor="middle">columns:</text>
+    <text x="98" y="244" font-size="12" fill="#a0a0a0" text-anchor="middle">name, full_name</text>
+    <text x="274" y="226" font-size="12" fill="#a0a0a0" text-anchor="middle">columns:</text>
+    <text x="274" y="244" font-size="12" fill="#a0a0a0" text-anchor="middle">name, full_name</text>
+    <text x="450" y="226" font-size="12" fill="#a0a0a0" text-anchor="middle">columns:</text>
+    <text x="450" y="244" font-size="12" fill="#a0a0a0" text-anchor="middle">name, full_name</text>
+    <text x="626" y="226" font-size="12" fill="#a0a0a0" text-anchor="middle">columns:</text>
+    <text x="626" y="244" font-size="12" fill="#a0a0a0" text-anchor="middle">full_name</text>
+  </g>
+</svg>

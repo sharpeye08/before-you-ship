@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 270" role="img" aria-labelledby="t d">
+  <title id="t">Position 3 moved</title>
+  <desc id="d">Bob's screen shows The cat, with positions 0 to 6 under the letters. Alice meant to insert s after cat, at the end. But position 3 is now before the space after The, so Bob's screen gets Thes cat while Alice's screen shows The cats.</desc>
+  <defs>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#e5484d"/>
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#1f9d6b"/>
+    </marker>
+  </defs>
+  <rect width="720" height="270" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <text x="30" y="40" font-size="12" fill="#a0a0a0">BOB'S SCREEN</text>
+
+    <!-- Letters -->
+    <rect x="170" y="56" width="44" height="44" rx="8" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="192" y="84" font-size="15" fill="#f2f2f2" text-anchor="middle">T</text>
+    <rect x="224" y="56" width="44" height="44" rx="8" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="246" y="84" font-size="15" fill="#f2f2f2" text-anchor="middle">h</text>
+    <rect x="278" y="56" width="44" height="44" rx="8" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="300" y="84" font-size="15" fill="#f2f2f2" text-anchor="middle">e</text>
+    <rect x="332" y="56" width="44" height="44" rx="8" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="354" y="84" font-size="12" fill="#a0a0a0" text-anchor="middle">space</text>
+    <rect x="386" y="56" width="44" height="44" rx="8" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="408" y="84" font-size="15" fill="#f2f2f2" text-anchor="middle">c</text>
+    <rect x="440" y="56" width="44" height="44" rx="8" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="462" y="84" font-size="15" fill="#f2f2f2" text-anchor="middle">a</text>
+    <rect x="494" y="56" width="44" height="44" rx="8" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="516" y="84" font-size="15" fill="#f2f2f2" text-anchor="middle">t</text>
+
+    <!-- Positions -->
+    <text x="30" y="122" font-size="12" fill="#a0a0a0">Position</text>
+    <text x="192" y="122" font-size="12" fill="#a0a0a0" text-anchor="middle">0</text>
+    <text x="246" y="122" font-size="12" fill="#a0a0a0" text-anchor="middle">1</text>
+    <text x="300" y="122" font-size="12" fill="#a0a0a0" text-anchor="middle">2</text>
+    <text x="354" y="122" font-size="12" fill="#a0a0a0" text-anchor="middle">3</text>
+    <text x="408" y="122" font-size="12" fill="#a0a0a0" text-anchor="middle">4</text>
+    <text x="462" y="122" font-size="12" fill="#a0a0a0" text-anchor="middle">5</text>
+    <text x="516" y="122" font-size="12" fill="#a0a0a0" text-anchor="middle">6</text>
+
+    <!-- Where "position 3" lands -->
+    <line x1="327" y1="168" x2="327" y2="108" stroke="#e5484d" stroke-width="2" marker-end="url(#arrow-red)"/>
+    <text x="327" y="186" font-size="12" fill="#e5484d" text-anchor="middle">"insert s at 3" lands here</text>
+
+    <!-- Where Alice meant -->
+    <line x1="543" y1="168" x2="543" y2="108" stroke="#1f9d6b" stroke-width="2" marker-end="url(#arrow-green)"/>
+    <text x="580" y="186" font-size="12" fill="#1f9d6b" text-anchor="middle">Alice meant: after "cat"</text>
+
+    <!-- Results -->
+    <text x="30" y="236" font-size="15" fill="#f2f2f2">Bob gets <tspan fill="#e5484d">"Thes cat"</tspan></text>
+    <text x="690" y="236" font-size="15" fill="#f2f2f2" text-anchor="end">Alice gets <tspan fill="#1f9d6b">"The cats"</tspan></text>
+  </g>
+</svg>

@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" role="img" aria-labelledby="t d">
+  <title id="t">Downloading a private file with a signed URL</title>
+  <desc id="d">The browser asks your server for a file. Your server checks that the user owns the file, then sends back a signed URL. The browser uses the signed URL to download the file from the private bucket. The bucket checks the signature and the expiry time before it sends the file.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="340" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Browser -->
+    <text x="105" y="40" font-size="12" fill="#a0a0a0" text-anchor="middle">THE USER</text>
+    <rect x="30" y="54" width="150" height="250" rx="10" fill="#f2c94c"/>
+    <text x="105" y="184" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Browser</text>
+
+    <!-- Server -->
+    <rect x="320" y="54" width="170" height="100" rx="10" fill="#4f6bd8"/>
+    <text x="405" y="98" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Your server</text>
+    <text x="405" y="120" font-size="12" fill="#e8ecff" text-anchor="middle">creates the link</text>
+    <text x="510" y="96" font-size="12" fill="#a0a0a0">Checks that the user</text>
+    <text x="510" y="112" font-size="12" fill="#a0a0a0">owns the file first.</text>
+
+    <!-- Bucket -->
+    <rect x="320" y="204" width="170" height="100" rx="10" fill="#1f9d6b"/>
+    <text x="405" y="248" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Private bucket</text>
+    <text x="405" y="270" font-size="12" fill="#e6f6ef" text-anchor="middle">in object storage</text>
+    <text x="510" y="246" font-size="12" fill="#a0a0a0">Checks the signature</text>
+    <text x="510" y="262" font-size="12" fill="#a0a0a0">and the expiry time.</text>
+
+    <!-- Arrows: browser and server -->
+    <line x1="182" y1="84" x2="312" y2="84" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="247" y="76" font-size="12" fill="#f2c94c" text-anchor="middle">1. Ask for a file</text>
+    <line x1="318" y1="126" x2="188" y2="126" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="253" y="146" font-size="12" fill="#8ea2ff" text-anchor="middle">2. Signed URL</text>
+
+    <!-- Arrows: browser and bucket -->
+    <line x1="182" y1="234" x2="312" y2="234" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="247" y="226" font-size="12" fill="#f2c94c" text-anchor="middle">3. Use the URL</text>
+    <line x1="318" y1="276" x2="188" y2="276" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="253" y="296" font-size="12" fill="#7fd4ad" text-anchor="middle">4. The file</text>
+  </g>
+</svg>

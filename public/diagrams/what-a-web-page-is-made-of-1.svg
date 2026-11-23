@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" role="img" aria-labelledby="t d">
+  <title id="t">Three files make one page</title>
+  <desc id="d">Three separate files go into one page. HTML says what is on the page, like the walls and rooms of a house. CSS says how it looks, like paint and furniture. JavaScript says what it does, like electricity. The browser builds the page on your screen from all three.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="300" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- HTML -->
+    <rect x="40" y="36" width="200" height="84" rx="10" fill="#f2c94c"/>
+    <text x="140" y="66" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">HTML</text>
+    <text x="140" y="88" font-size="12" fill="#111111" text-anchor="middle">What's on the page</text>
+    <text x="140" y="106" font-size="12" fill="#3a3a3a" text-anchor="middle">walls and rooms</text>
+
+    <!-- CSS -->
+    <rect x="260" y="36" width="200" height="84" rx="10" fill="#4f6bd8"/>
+    <text x="360" y="66" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">CSS</text>
+    <text x="360" y="88" font-size="12" fill="#f2f2f2" text-anchor="middle">How it looks</text>
+    <text x="360" y="106" font-size="12" fill="#d6ddff" text-anchor="middle">paint and furniture</text>
+
+    <!-- JavaScript -->
+    <rect x="480" y="36" width="200" height="84" rx="10" fill="#1f9d6b"/>
+    <text x="580" y="66" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">JavaScript</text>
+    <text x="580" y="88" font-size="12" fill="#f2f2f2" text-anchor="middle">What it does</text>
+    <text x="580" y="106" font-size="12" fill="#d2f2e4" text-anchor="middle">electricity</text>
+
+    <!-- Arrows -->
+    <line x1="140" y1="126" x2="284" y2="192" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="360" y1="126" x2="360" y2="192" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="580" y1="126" x2="436" y2="192" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <!-- Page -->
+    <rect x="200" y="200" width="320" height="70" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="360" y="230" font-size="15" fill="#f2f2f2" text-anchor="middle">The page on your screen</text>
+    <text x="360" y="252" font-size="12" fill="#a0a0a0" text-anchor="middle">Your browser builds it from all three</text>
+  </g>
+</svg>

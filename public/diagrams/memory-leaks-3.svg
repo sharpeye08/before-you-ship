@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 280" role="img" aria-labelledby="t d">
+  <title id="t">A listener and a timer keep a closed visit alive</title>
+  <desc id="d">The shared orderEvents emitter holds the send listener. The send listener refers to res, the response for a visitor who already left. The interval timer also refers to res. Nothing removes them, so each visit leaves one more chain in memory.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="280" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <rect x="30" y="40" width="180" height="70" rx="10" fill="#4f6bd8"/>
+    <text x="120" y="70" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">orderEvents</text>
+    <text x="120" y="91" font-size="12" fill="#e8ecff" text-anchor="middle">shared, lives forever</text>
+
+    <rect x="275" y="40" width="170" height="70" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="360" y="70" font-size="15" fill="#f2f2f2" text-anchor="middle">send listener</text>
+    <text x="360" y="91" font-size="12" fill="#a0a0a0" text-anchor="middle">never removed</text>
+
+    <rect x="275" y="150" width="170" height="70" rx="10" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <text x="360" y="180" font-size="15" fill="#f2f2f2" text-anchor="middle">Interval timer</text>
+    <text x="360" y="201" font-size="12" fill="#a0a0a0" text-anchor="middle">never cleared</text>
+
+    <rect x="515" y="90" width="175" height="80" rx="10" fill="#f08a4b"/>
+    <text x="602" y="125" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">res</text>
+    <text x="602" y="147" font-size="12" fill="#111111" text-anchor="middle">visitor already left</text>
+
+    <line x1="210" y1="75" x2="271" y2="75" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="240" y="66" font-size="12" fill="#a0a0a0" text-anchor="middle">holds</text>
+    <line x1="445" y1="85" x2="511" y2="115" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="478" y="78" font-size="12" fill="#a0a0a0" text-anchor="middle">refers to</text>
+    <line x1="445" y1="185" x2="511" y2="152" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="478" y="200" font-size="12" fill="#a0a0a0" text-anchor="middle">refers to</text>
+
+    <text x="360" y="258" font-size="12" fill="#a0a0a0" text-anchor="middle">Each visit adds one more chain like this. Nothing removes it, so memory grows.</text>
+  </g>
+</svg>

@@ -37,3 +37,12 @@ export const LEVELS = [
     blurb: 'How bigger systems stay reliable when many services talk to each other, and the calls AI can\'t make.',
   },
 ] as const;
+
+// One color per level, used by lesson covers and badges.
+export const LEVEL_COLORS: Record<number, string> = {
+  1: '#f2c94c',
+  2: '#4f6bd8',
+  3: '#1f9d6b',
+  4: '#e98da4',
+  5: '#f08a4b',
+};

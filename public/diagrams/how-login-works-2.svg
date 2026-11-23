@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" role="img" aria-labelledby="t d">
+  <title id="t">How a session keeps you logged in</title>
+  <desc id="d">The browser logs in one time. The server saves a session record that says session 9f3a7c belongs to user 17, and gives the browser the session ID in a cookie. After that, the browser sends the session ID with every request, and the server looks it up to know that it is user 17.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="320" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Browser -->
+    <rect x="30" y="50" width="150" height="150" rx="10" fill="#f2c94c"/>
+    <text x="105" y="118" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Browser</text>
+    <text x="105" y="140" font-size="12" fill="#111111" text-anchor="middle">keeps the cookie</text>
+
+    <!-- Server -->
+    <rect x="530" y="50" width="160" height="150" rx="10" fill="#4f6bd8"/>
+    <text x="610" y="128" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Server</text>
+
+    <!-- 1. Log in -->
+    <text x="200" y="82" font-size="12" fill="#f2c94c">1. Log in (email and password)</text>
+    <line x1="186" y1="90" x2="522" y2="90" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <!-- 2. Session ID -->
+    <text x="510" y="122" font-size="12" fill="#8ea2ff" text-anchor="end">2. Session ID in a cookie</text>
+    <line x1="524" y1="130" x2="188" y2="130" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <!-- 3. Every request -->
+    <text x="200" y="162" font-size="12" fill="#f2c94c">3. Every request + session ID</text>
+    <line x1="186" y1="170" x2="522" y2="170" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <!-- Session record -->
+    <line x1="610" y1="204" x2="610" y2="226" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="598" y="220" font-size="12" fill="#a0a0a0" text-anchor="end">4. Look it up</text>
+    <rect x="410" y="232" width="280" height="64" rx="10" fill="#1f9d6b"/>
+    <text x="550" y="259" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Session record</text>
+    <text x="550" y="281" font-size="12" fill="#e6f6ee" text-anchor="middle">"9f3a7c... is user 17, 7 days"</text>
+
+    <text x="30" y="250" font-size="12" fill="#a0a0a0">Anyone who copies the session ID</text>
+    <text x="30" y="270" font-size="12" fill="#a0a0a0">is "you" until the session ends.</text>
+  </g>
+</svg>

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" role="img" aria-labelledby="t d">
+  <title id="t">Two-way and one-way doors</title>
+  <desc id="d">Start with one question: is this decision easy to reverse? If yes, it is a two-way door: decide quickly and let the AI suggest. If no, it is a one-way door: slow down. Write your facts, ask for options with trade-offs, ask a human if needed, and write the decision in an ADR.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="340" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Question -->
+    <rect x="240" y="30" width="240" height="60" rx="10" fill="#4f6bd8"/>
+    <text x="360" y="58" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Easy to reverse?</text>
+    <text x="360" y="77" font-size="12" fill="#e8ecff" text-anchor="middle">ask this for every decision</text>
+
+    <!-- Branches -->
+    <line x1="300" y1="94" x2="180" y2="150" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="196" y="112" font-size="12" fill="#1f9d6b" text-anchor="middle">Yes: two-way door</text>
+    <line x1="420" y1="94" x2="540" y2="150" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="528" y="112" font-size="12" fill="#f08a4b" text-anchor="middle">No: one-way door</text>
+
+    <!-- Two-way door -->
+    <rect x="30" y="156" width="290" height="80" rx="10" fill="#1f9d6b"/>
+    <text x="175" y="190" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Decide quickly</text>
+    <text x="175" y="212" font-size="12" fill="#e6fff4" text-anchor="middle">let the AI suggest; change it later</text>
+
+    <!-- One-way door -->
+    <rect x="400" y="156" width="290" height="160" rx="10" fill="#f08a4b"/>
+    <text x="545" y="186" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Slow down</text>
+    <text x="424" y="216" font-size="12" fill="#111111">1. Write down your facts</text>
+    <text x="424" y="240" font-size="12" fill="#111111">2. Ask for options with trade-offs</text>
+    <text x="424" y="264" font-size="12" fill="#111111">3. Ask a human if needed</text>
+    <text x="424" y="288" font-size="12" fill="#111111">4. Write the decision in an ADR</text>
+
+    <text x="30" y="276" font-size="12" fill="#a0a0a0">Examples: a UI library, a caching rule,</text>
+    <text x="30" y="294" font-size="12" fill="#a0a0a0">an email provider, a background job.</text>
+  </g>
+</svg>

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" role="img" aria-labelledby="t d">
+  <title id="t">One error, two readers</title>
+  <desc id="d">An error on the server goes to one central error handler. The handler writes the full error, the stack trace and an error ID to your logs. It sends the user only a short message and the same error ID.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="340" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Error -->
+    <rect x="30" y="125" width="150" height="80" rx="10" fill="#f08a4b"/>
+    <text x="105" y="161" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">An error</text>
+    <text x="105" y="183" font-size="12" fill="#111111" text-anchor="middle">on the server</text>
+
+    <!-- Handler -->
+    <rect x="260" y="105" width="180" height="120" rx="10" fill="#f2c94c"/>
+    <text x="350" y="160" font-size="15" font-weight="600" fill="#111111" text-anchor="middle">Error handler</text>
+    <text x="350" y="182" font-size="12" fill="#111111" text-anchor="middle">one central place</text>
+
+    <!-- Logs -->
+    <text x="605" y="30" font-size="12" fill="#a0a0a0" text-anchor="middle">FOR YOU</text>
+    <rect x="520" y="40" width="170" height="100" rx="10" fill="#4f6bd8"/>
+    <text x="605" y="78" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">Your logs</text>
+    <text x="605" y="100" font-size="12" fill="#e8ecff" text-anchor="middle">full error, stack trace</text>
+    <text x="605" y="116" font-size="12" fill="#e8ecff" text-anchor="middle">and the error ID</text>
+
+    <!-- User -->
+    <rect x="520" y="190" width="170" height="100" rx="10" fill="#1f9d6b"/>
+    <text x="605" y="228" font-size="15" font-weight="600" fill="#f2f2f2" text-anchor="middle">The user</text>
+    <text x="605" y="250" font-size="12" fill="#e6f6ef" text-anchor="middle">short message</text>
+    <text x="605" y="266" font-size="12" fill="#e6f6ef" text-anchor="middle">and the error ID</text>
+    <text x="605" y="308" font-size="12" fill="#a0a0a0" text-anchor="middle">FOR THE USER</text>
+
+    <!-- Arrows -->
+    <line x1="182" y1="165" x2="252" y2="165" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="442" y1="140" x2="512" y2="96" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="442" y1="190" x2="512" y2="234" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <text x="30" y="300" font-size="12" fill="#a0a0a0">Never send the user table names,</text>
+    <text x="30" y="316" font-size="12" fill="#a0a0a0">file paths, SQL or stack traces.</text>
+  </g>
+</svg>

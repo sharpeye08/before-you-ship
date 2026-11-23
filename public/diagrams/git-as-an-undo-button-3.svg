@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 260" role="img" aria-labelledby="t d">
+  <title id="t">A branch for an experiment</title>
+  <desc id="d">The main branch is a line of commits. A new branch called try-high-scores starts from main with git switch -c. You work and commit on the branch while main stays as it was. If the experiment works, git merge brings its commits into main. If it fails, you delete the branch.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#cfcfcf"/>
+    </marker>
+  </defs>
+  <rect width="720" height="260" rx="16" fill="#141414"/>
+  <g font-family="Inter, system-ui, sans-serif">
+    <!-- Lines -->
+    <line x1="120" y1="84" x2="580" y2="84" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="252" y1="96" x2="328" y2="172" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="356" y1="184" x2="444" y2="184" stroke="#cfcfcf" stroke-width="2"/>
+    <line x1="474" y1="174" x2="584" y2="98" stroke="#cfcfcf" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <!-- Labels for the two lines -->
+    <text x="40" y="89" font-size="15" font-weight="600" fill="#f2f2f2">main</text>
+    <text x="40" y="189" font-size="15" font-weight="600" fill="#f2c94c">try-high-scores</text>
+
+    <!-- Commits on main -->
+    <circle cx="120" cy="84" r="14" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <circle cx="240" cy="84" r="14" fill="#1f1f1f" stroke="#3a3a3a" stroke-width="1.5"/>
+    <circle cx="600" cy="84" r="16" fill="#1f9d6b"/>
+
+    <!-- Commits on the branch -->
+    <circle cx="340" cy="184" r="14" fill="#f2c94c"/>
+    <circle cx="460" cy="184" r="14" fill="#f2c94c"/>
+
+    <!-- Notes -->
+    <text x="420" y="66" font-size="12" fill="#a0a0a0" text-anchor="middle">main stays as it was</text>
+    <text x="300" y="124" font-size="12" fill="#f2c94c">1. git switch -c</text>
+    <text x="400" y="222" font-size="12" fill="#a0a0a0" text-anchor="middle">2. Work and commit here. If it fails, delete the branch.</text>
+    <text x="600" y="56" font-size="12" fill="#1f9d6b" text-anchor="middle">3. git merge</text>
+  </g>
+</svg>
