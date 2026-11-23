@@ -70,7 +70,9 @@ const description = firstPara ? firstPara.replace(/[*_`]/g, '').slice(0, 155) : 
           info.concepts.length > 0 && (
             <ul class="mt-5 flex flex-wrap gap-2" aria-label="Concepts in this lesson">
               {info.concepts.map((c) => (
-                <li class="rounded-full border border-line px-3 py-1 text-sm">{c}</li>
+                <li>
+                  <a href={`/lessons?q=${encodeURIComponent(c)}`} class="block rounded-full border border-line px-3 py-1 text-sm hover:border-white/40 hover:bg-white/8" title={`Lessons about ${c}`}>{c}</a>
+                </li>
               ))}
             </ul>
           )
