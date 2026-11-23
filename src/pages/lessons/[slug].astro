@@ -66,6 +66,15 @@ const description = firstPara ? firstPara.replace(/[*_`]/g, '').slice(0, 155) : 
         <p class="text-sm">Level {info.level} · {info.levelName} · Lesson {info.order} of {total}</p>
         <h1 class="mt-4 text-[clamp(2rem,4.4vw,2.75rem)] leading-[1.15] font-medium tracking-[-0.03em] text-balance">{info.title}</h1>
         <p class="mt-4 text-sm">{info.minutes} min read</p>
+        {
+          info.concepts.length > 0 && (
+            <ul class="mt-5 flex flex-wrap gap-2" aria-label="Concepts in this lesson">
+              {info.concepts.map((c) => (
+                <li class="rounded-full border border-line px-3 py-1 text-sm">{c}</li>
+              ))}
+            </ul>
+          )
+        }
         <hr class="my-10 border-line" />
 
         <article class="prose-read" data-prose>
