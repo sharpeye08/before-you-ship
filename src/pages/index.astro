@@ -23,8 +23,8 @@ const tools = [
 ---
 
 <Editorial title="Know what you're building" description="Free, no-login lessons on the software fundamentals behind every app, from your first website to production.">
+  <PrismHero scroll />
   <section class="hero" aria-labelledby="hero-title">
-    <PrismHero />
     <div class="hero-shade" aria-hidden="true"></div>
     <div class="hero-content">
       <p class="kicker">{lessons.length} free lessons · {levels.length} levels · no login</p>
@@ -39,6 +39,31 @@ const tools = [
       </div>
     </div>
   </section>
+
+  <section class="story" aria-label="The five levels">
+    {
+      levels.map((lv) => (
+        <div class="story-step" data-story-level={lv.n}>
+          <div class="story-card">
+            <p class="story-kicker">
+              <span class="dot" style={`background:${LEVEL_COLORS[lv.n]}`} />
+              Level {lv.n} of {levels.length}
+            </p>
+            <h2>{lv.name}</h2>
+            <p class="story-text">{lv.blurb}</p>
+            <a class="story-link" href={`/lessons#level-${lv.n}`}>
+              {lv.lessons.length} lessons <Icon name="chevron-right" size={16} />
+            </a>
+          </div>
+        </div>
+      ))
+    }
+  </section>
+
+  <p class="level-chip" data-level-chip hidden aria-hidden="true"><span class="dot" data-chip-dot></span><span data-chip-text></span></p>
+  <script type="application/json" data-story-levels set:html={JSON.stringify(levels.map((l) => ({ n: l.n, name: l.name, c: LEVEL_COLORS[l.n] })))} />
+
+  <div class="after">
 
   <div class="search-row">
     <Search lessons={lessons} />
@@ -94,6 +119,7 @@ const tools = [
   </section>
 
   <script type="application/json" data-home-index set:html={JSON.stringify(clientIndex)} />
+  </div>
 </Editorial>
 
 <style>
@@ -106,7 +132,7 @@ const tools = [
     height: 100svh;
     min-height: 560px;
     margin-left: calc(50% - 50vw);
-    margin-top: calc(-1 * (var(--pad-top) + 40px + var(--top-gap)));
+    margin-top: calc(-1 * (var(--pad-top) + var(--top-h) + var(--top-gap)));
     margin-bottom: 56px;
   }
   .hero-shade {
@@ -150,6 +176,90 @@ const tools = [
     flex-wrap: wrap;
     justify-content: center;
     gap: 12px;
+  }
+  .story {
+    position: relative;
+    z-index: 1;
+  }
+  .story-step {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    min-height: 100svh;
+    padding-bottom: 9vh;
+  }
+  .story-card {
+    max-width: 560px;
+    padding: 26px 28px;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    text-align: center;
+  }
+  .story-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 8px;
+    font-size: 0.85rem;
+    color: var(--text-soft);
+  }
+  .dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  .story-card h2 {
+    margin: 0 0 10px;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+  }
+  .story-text {
+    margin: 0 0 16px;
+    color: var(--text-soft);
+    line-height: 1.6;
+  }
+  .story-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.92rem;
+  }
+  .level-chip {
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    z-index: 40;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 8px 14px;
+    border: 1px solid var(--line);
+    border-radius: 99px;
+    background: rgba(20, 20, 20, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    font-size: 0.82rem;
+    color: var(--text-soft);
+  }
+  .level-chip[hidden] {
+    display: none;
+  }
+  .after {
+    position: relative;
+    z-index: 1;
+    margin: 0 calc(50% - 50vw);
+    padding: 72px max(var(--pad-x), calc(50vw - 720px)) 0;
+    background-color: var(--frame);
+    background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 6px 6px;
+    padding-bottom: 72px;
+  }
+  :global(.foot) {
+    margin-top: 0 !important;
   }
   .search-row {
     max-width: 640px;
@@ -417,5 +527,37 @@ const tools = [
     a.textContent = `Lesson ${target.n}. ${target.t}`;
     line.append(a);
     line.hidden = false;
+  }
+
+  // Scroll story: each level section lights its colour in the prism and updates the chip.
+  {
+    const steps = [...document.querySelectorAll<HTMLElement>('[data-story-level]')];
+    const chip = document.querySelector<HTMLElement>('[data-level-chip]')!;
+    const chipText = document.querySelector<HTMLElement>('[data-chip-text]')!;
+    const chipDot = document.querySelector<HTMLElement>('[data-chip-dot]')!;
+    const info: { n: number; name: string; c: string }[] = JSON.parse(
+      document.querySelector('[data-story-levels]')!.textContent || '[]',
+    );
+    const update = () => {
+      const vh = window.innerHeight;
+      let p = 0;
+      let current = 0;
+      steps.forEach((el, i) => {
+        const r = el.getBoundingClientRect();
+        p += Math.min(1, Math.max(0, (vh * 0.8 - r.top) / (vh * 0.5)));
+        if (r.top < vh * 0.6 && r.bottom > vh * 0.4) current = i + 1;
+      });
+      (window as unknown as { __prismProgress?: number }).__prismProgress = p;
+      window.dispatchEvent(new Event('prism:progress'));
+      const lv = info[current - 1];
+      chip.hidden = !lv;
+      if (lv) {
+        chipText.textContent = `Level ${lv.n} · ${lv.name}`;
+        chipDot.style.background = lv.c;
+      }
+    };
+    document.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
   }
 </script>

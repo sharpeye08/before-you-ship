@@ -142,6 +142,7 @@ const repoUrl = `https://github.com/${SITE.githubRepo}`;
     --pad-x: clamp(18px, 5vw, 88px);
     --pad-top: 28px;
     --top-gap: 56px;
+    --top-h: 54px;
   }
   .frame {
     max-width: none;
@@ -153,13 +154,31 @@ const repoUrl = `https://github.com/${SITE.githubRepo}`;
     min-height: 100vh;
   }
   .top {
-    position: relative;
-    z-index: 5;
+    position: sticky;
+    top: 14px;
+    z-index: 50;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 40px;
-    margin-bottom: var(--top-gap);
+    height: var(--top-h);
+    margin: 0 auto var(--top-gap);
+    max-width: 1100px;
+    padding: 0 10px 0 22px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 99px;
+    background: rgba(18, 18, 18, 0.55);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  }
+  .top nav > a,
+  .menu summary {
+    padding: 8px 14px;
+    border-radius: 99px;
+  }
+  .top nav > a:hover,
+  .menu summary:hover {
+    background: rgba(255, 255, 255, 0.08);
   }
   main {
     max-width: 1440px;
@@ -234,6 +253,11 @@ const repoUrl = `https://github.com/${SITE.githubRepo}`;
     background: var(--glass-hover);
   }
   .foot {
+    position: relative;
+    z-index: 1;
+    background-color: var(--frame);
+    box-shadow: 0 0 0 100vmax var(--frame);
+    clip-path: inset(0 -100vmax -100vmax);
     display: flex;
     justify-content: space-between;
     gap: 16px;
