@@ -32,10 +32,10 @@
   type P = { x: number; y: number };
 
   function scene(cols: number) {
-    const narrow = cols < 120; // phones in portrait
-    const cx = cols * (narrow ? 0.55 : 0.64);
-    const A = { x: cx, y: ROWS * (narrow ? 0.38 : 0.2) };
-    const baseY = ROWS * (narrow ? 0.78 : 0.8);
+    const narrow = cols < 120; // phones in portrait: small prism, centred in the top half
+    const cx = cols * (narrow ? 0.5 : 0.64);
+    const A = { x: cx, y: ROWS * (narrow ? 0.12 : 0.2) };
+    const baseY = ROWS * (narrow ? 0.4 : 0.8);
     const half = (baseY - A.y) * 0.58;
     const L = { x: cx - half, y: baseY };
     const R = { x: cx + half, y: baseY };
@@ -46,8 +46,8 @@
     const IN = { x: leftFaceX(inY), y: inY };
     const OUT = { x: rightFaceX(outY), y: outY };
     const START = { x: -2, y: inY + (baseY - A.y) * 0.18 };
-    const top = Math.atan2(ROWS * 0.12 - OUT.y, cols - OUT.x);
-    const bottom = Math.atan2(ROWS * 1.02 - OUT.y, cols - OUT.x);
+    const top = Math.atan2(ROWS * (narrow ? 0.08 : 0.12) - OUT.y, cols - OUT.x);
+    const bottom = Math.atan2(ROWS * (narrow ? 0.5 : 1.02) - OUT.y, cols - OUT.x);
     return { A, L, R, IN, OUT, START, top, bottom, leftFaceX, rightFaceX, baseY };
   }
 
@@ -92,7 +92,7 @@
       }
     }
 
-    if (Math.abs(y - (g.baseY + 1)) < 0.6 && x > cols * 0.08 && x < cols * 0.95) return [0.16, '#9c9c9c'];
+    if (Math.abs(y - (g.baseY + 1)) < 0.6 && x > cols * 0.04 && x < cols * 0.96) return [0.16, '#9c9c9c'];
     if (hash(x, y) > 0.996) return [0.25 + 0.2 * Math.sin(t + x), '#7e7e7e'];
     return [0, '#000'];
   }
