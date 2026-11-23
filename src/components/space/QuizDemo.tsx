@@ -28,10 +28,10 @@ export default function QuizDemo({ items, href }: { items: QuizItem[]; href: str
                 onClick={() => setPicked(j)}
                 className={[
                   'w-full rounded-2xl border px-4 py-3 text-left text-[0.95rem] leading-snug transition-colors',
-                  state === 'idle' && 'border-line bg-white/[0.03] text-soft hover:border-white/35 hover:text-ink',
+                  state === 'idle' && 'border-line bg-white/[0.03] hover:border-white/35 hover:text-ink',
                   state === 'right' && 'border-l1/70 bg-l1/10 text-ink',
                   state === 'wrong' && 'border-l5/70 bg-l5/10 text-ink',
-                  state === 'other' && 'border-line text-faint',
+                  state === 'other' && 'border-line',
                 ]
                   .filter(Boolean)
                   .join(' ')}
@@ -46,7 +46,7 @@ export default function QuizDemo({ items, href }: { items: QuizItem[]; href: str
         {answered && (
           <>
             <p className="mb-1 font-medium">{right ? 'Correct.' : 'Not quite.'}</p>
-            <p className="text-[0.95rem] leading-relaxed text-soft">{q.explanation}</p>
+            <p className="text-[0.95rem] leading-relaxed">{q.explanation}</p>
           </>
         )}
       </div>
@@ -63,7 +63,7 @@ export default function QuizDemo({ items, href }: { items: QuizItem[]; href: str
             Next question
           </button>
         )}
-        <a href={href} className="text-sm text-soft underline decoration-white/30 underline-offset-4 hover:text-ink">
+        <a href={href} className="text-sm underline decoration-white/30 underline-offset-4 hover:text-ink">
           Read the full lesson
         </a>
       </div>

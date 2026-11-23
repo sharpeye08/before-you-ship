@@ -25,20 +25,20 @@ export default function LessonIndex({ levels }: { levels: IndexLevel[] }) {
             onClick={() => setActive(i)}
             className={[
               'flex shrink-0 items-center gap-2.5 rounded-full border px-4 py-2 text-sm transition-colors',
-              i === active ? 'border-white/40 bg-white/10 text-ink' : 'border-line text-soft hover:text-ink',
+              i === active ? 'border-white/40 bg-white/10 text-ink' : 'border-line hover:text-ink',
             ].join(' ')}
           >
             <span className="h-2 w-2 rounded-full" style={{ background: l.color, boxShadow: `0 0 10px ${l.color}` }} />
             {l.name}
-            <span className="label text-[0.68rem] text-faint">{l.lessons.length}</span>
+            <span className="text-xs tabular-nums">{l.lessons.length}</span>
           </button>
         ))}
       </div>
       <ol role="tabpanel" className="mt-8 grid gap-x-10 border-t border-line sm:grid-cols-2 lg:grid-cols-3">
         {lv.lessons.map((l) => (
           <li key={l.slug} className="border-b border-line">
-            <a href={`/lessons/${l.slug}`} className="group flex gap-4 py-4 text-soft hover:text-ink">
-              <span className="label pt-0.5 text-faint group-hover:text-ink">{pad(l.order)}</span>
+            <a href={`/lessons/${l.slug}`} className="group flex gap-4 py-4 hover:text-ink">
+              <span className="w-6 shrink-0 pt-px text-sm tabular-nums">{pad(l.order)}</span>
               <span className="leading-snug">{l.title}</span>
             </a>
           </li>
